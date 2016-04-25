@@ -14,11 +14,14 @@ And run this to install local modules
 ```javascript
  npm install
 ```
+## Development
 
 Run dev script to start development server
 ```javascript
  npm run dev
 ```
+
+## Production
 
 Run build script to build for production
 ```javascript
