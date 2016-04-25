@@ -3,17 +3,10 @@
 
 The following modules should be installed globally
 
-Concurrently
+Concurrently, Webpack, Webpack Development Server
 ```javascript
  npm install concurrently -g
-```
-Webpack
-```javascript
  npm install webpack -g
-```
-
-Webpack Development Server
-```javascript
  npm install webpack-dev-server -g
 ```
 
