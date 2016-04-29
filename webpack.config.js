@@ -1,10 +1,11 @@
 var path = require("path");
 
 module.exports = {
+  
   entry: './src/app.ts',
 
   output: {
-    path: path.join(__dirname, './game/build'),
+    path: path.join(__dirname, './public/assets/js'),
     filename: 'game.js'
   },
   resolve: {
