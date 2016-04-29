@@ -28,4 +28,8 @@ Run build script to build for production
  npm run build
 ```
 
+Then this comand to start app in production
+````javascript
+npm run start
+````
 
