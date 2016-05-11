@@ -1,5 +1,5 @@
 "use strict";
-var g = require('./Global');
+var d = require('./Defines');
 // SCORE
 // everything that has to do with gamescore is done here
 var GameScore = (function () {
@@ -15,7 +15,7 @@ var GameScore = (function () {
     };
     // draw it on screen
     GameScore.prototype.draw = function () {
-        g.el.innerHTML = String(this._points);
+        d.el.innerHTML = String(this._points);
     };
     return GameScore;
 }());

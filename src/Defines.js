@@ -13,4 +13,4 @@ var Animation_State = exports.Animation_State;
     Input_State[Input_State["Click"] = 2] = "Click";
 })(exports.Input_State || (exports.Input_State = {}));
 var Input_State = exports.Input_State;
-//# sourceMappingURL=Global.js.map
+//# sourceMappingURL=Defines.js.map
