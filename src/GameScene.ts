@@ -6,16 +6,15 @@ import GameScore from './GameScore';
 
 
 // GAMESCENE
-// Basically controls what is shown on screen
+// Controls what is shown on screen
 export default class GameScene
 {
-    /// FIELDS (class variables)
     _score: GameScore;
     _enemies: Enemy[] = [];
     _player: Player;
     _stage: any;
-
-    /// CONSTRUCTOR (called when creating new class)
+    
+    
     constructor() {
         this._score = new GameScore(0);
 
@@ -34,7 +33,7 @@ export default class GameScene
         this.loop();
     }
 
-    /// METHODS (class functions)
+    
     // update current game's score points
     updateScore(p: number) {
         this._score.update(p);

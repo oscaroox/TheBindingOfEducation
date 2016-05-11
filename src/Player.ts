@@ -4,7 +4,6 @@ import * as g from './Global';
 // all updates and movement is done in this class
 export default class Player
 {
-    /// FIELDS (class variables)
     _x: number;
     _y: number;
     _health: number;
@@ -14,7 +13,6 @@ export default class Player
     private _sprite: string;
 
 
-    /// CONSTRUCTOR (called when creating new class)
     constructor(pos_x: number, pos_y: number) {
         this._x = pos_x;
         this._y = pos_y;
@@ -23,7 +21,7 @@ export default class Player
         this._animation = g.Animation_State.Idle;
     }
 
-    /// METHODS (class functions)
+    
     jump() {
         this._animation = g.Animation_State.Jump;     // change back to run state after jump animation
 

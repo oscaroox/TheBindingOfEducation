@@ -3,7 +3,6 @@ var g = require('./Global');
 // PLAYER
 // all updates and movement is done in this class
 var Player = (function () {
-    /// CONSTRUCTOR (called when creating new class)
     function Player(pos_x, pos_y) {
         this._x = pos_x;
         this._y = pos_y;
@@ -11,7 +10,6 @@ var Player = (function () {
         this._health = 100;
         this._animation = g.Animation_State.Idle;
     }
-    /// METHODS (class functions)
     Player.prototype.jump = function () {
         this._animation = g.Animation_State.Jump; // change back to run state after jump animation
         // do some jump timing and positioning stuff

@@ -4,9 +4,8 @@ var Hamburger_1 = require('./Hamburger');
 var Player_1 = require('./Player');
 var GameScore_1 = require('./GameScore');
 // GAMESCENE
-// Basically controls what is shown on screen
+// Controls what is shown on screen
 var GameScene = (function () {
-    /// CONSTRUCTOR (called when creating new class)
     function GameScene() {
         this._enemies = [];
         this._score = new GameScore_1["default"](0);
@@ -21,7 +20,6 @@ var GameScene = (function () {
         // start update loop
         this.loop();
     }
-    /// METHODS (class functions)
     // update current game's score points
     GameScene.prototype.updateScore = function (p) {
         this._score.update(p);

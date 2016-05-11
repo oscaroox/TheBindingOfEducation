@@ -3,12 +3,10 @@ var g = require('./Global');
 // SCORE
 // everything that has to do with gamescore is done here
 var GameScore = (function () {
-    /// CONSTRUCTOR (called when creating new class)
     function GameScore(p) {
         this._points = p;
         this.draw();
     }
-    /// METHODS (class functions)
     // update score with some number
     GameScore.prototype.update = function (p) {
         if (p === void 0) { p = 0; }
