@@ -8,7 +8,7 @@ export enum Animation_State {
 }
 
 export enum Input_State {
-    No_Input,
+    None,
     Touch,
     Click
 }
