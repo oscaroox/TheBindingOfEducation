@@ -8,7 +8,7 @@ exports.el = document.body;
 })(exports.Animation_State || (exports.Animation_State = {}));
 var Animation_State = exports.Animation_State;
 (function (Input_State) {
-    Input_State[Input_State["No_Input"] = 0] = "No_Input";
+    Input_State[Input_State["None"] = 0] = "None";
     Input_State[Input_State["Touch"] = 1] = "Touch";
     Input_State[Input_State["Click"] = 2] = "Click";
 })(exports.Input_State || (exports.Input_State = {}));
