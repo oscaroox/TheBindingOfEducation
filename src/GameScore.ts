@@ -1,4 +1,4 @@
-import * as g from './Global';
+import * as d from './Defines';
 
 // SCORE
 // everything that has to do with gamescore is done here
@@ -19,6 +19,6 @@ export default class GameScore
 
     // draw it on screen
     draw() {
-        g.el.innerHTML = String(this._points);
+        d.el.innerHTML = String(this._points);
     }
 }

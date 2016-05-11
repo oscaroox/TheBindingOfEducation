@@ -1,4 +1,4 @@
-import * as g from './Global';
+import * as d from './Defines';
 
 // PLAYER
 // all updates and movement is done in this class
@@ -18,22 +18,22 @@ export default class Player
         this._y = pos_y;
         this._sprite = "player.png";
         this._health = 100;
-        this._animation = g.Animation_State.Idle;
+        this._animation = d.Animation_State.Idle;
     }
 
     
     jump() {
-        this._animation = g.Animation_State.Jump;     // change back to run state after jump animation
+        this._animation = d.Animation_State.Jump;     // change back to run state after jump animation
 
         // do some jump timing and positioning stuff
     }
 
     updateAnimation() {
-        if (this._animation == g.Animation_State.Run) {
+        if (this._animation == d.Animation_State.Run) {
             // loop through run animation
         }
 
-        if (this._animation == g.Animation_State.Jump) {
+        if (this._animation == d.Animation_State.Jump) {
             // loop through jump animation
         }
     }
@@ -44,7 +44,7 @@ export default class Player
 
         // EXAMPLE
         // if user is touching screen we increase _x by 5
-        if (g.Input_State.Touch || g.Input_State.Click) {
+        if (d.Input_State.Touch || d.Input_State.Click) {
             this._x += 5;
         }
     }
