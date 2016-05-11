@@ -1,8 +1,5 @@
-var str: String = "Hello World!";
+import GameScene from './GameScene';
 
-
-var test = function(number: String) {
-  console.log(str);
-};
-
-test(str);
+// START
+// initialize and start game scene
+var gameScene = new GameScene();
