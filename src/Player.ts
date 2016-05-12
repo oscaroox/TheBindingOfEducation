@@ -4,12 +4,12 @@ import * as d from './Defines';
 // all updates and movement is done in this class
 export default class Player
 {
-    private _x: number;
-    private _y: number;
-    private _health: number;
-    private _animation: number;
-    private _sprite: string;
-    private _stage: CanvasRenderingContext2D;
+    private _x: number;                         // x coordinate
+    private _y: number;                         // y coordinate
+    private _health: number;                    // health
+    private _animation: number;                 // animation state
+    private _sprite: string;                    // path to sprite(sheet) file
+    private _stage: CanvasRenderingContext2D;   // canvas target of this page
 
 
     constructor(pos_x: number, pos_y: number, stage: CanvasRenderingContext2D) 
@@ -25,6 +25,25 @@ export default class Player
     }
 
 
+    // __EXAMPLE METHODS__
+    // IF YOU DON'T USE THEM JUST DELETE THEM
+
+    // when enemy first enters the scene
+    spawn():void
+    {
+    }
+
+    // when enemy leaves the scene for whatever reason
+    despawn():void
+    {
+    }
+    
+    // when our hero dies
+    onDeath():void
+    {
+    }
+
+    // set animation state which will be used to determine the current or next animation cycle
     setAnimationState(input):void
     {
         // not moving
@@ -38,17 +57,18 @@ export default class Player
         }
     }
 
+    // loop through animations (spritesheets)
     updateAnimation():void
     {
+        // EXAMPLES
         if (this._animation == d.Animation_State.Run) {
-            // loop through run animation
         }
 
         if (this._animation == d.Animation_State.Jump) {
-            // loop through jump animation
         }
     }
 
+    // update our hero's position to some x and y coordinate on the scene
     updatePosition():void
     {
         // update our _x and _y according to some button presses and super complicated formulas like
@@ -61,6 +81,7 @@ export default class Player
         }
     }
 
+    // function for some kind of jump animation
     jump():void
     {
         this._animation = d.Animation_State.Jump;     // change back to run or idle state after jump animation
@@ -68,6 +89,7 @@ export default class Player
         // do some jump timing and positioning stuff
     }
 
+    // (re)draw our hero on the scene
     draw():void 
     {
         // temporarily renaming it because lazy
@@ -81,6 +103,8 @@ export default class Player
         ctx.closePath();
     }
 
+    // update everything that changed with our hero
+    // we get the input from GameScene, which gets it from the EventHandlers of GameController
     update(input):void 
     {
         this.setAnimationState(input);

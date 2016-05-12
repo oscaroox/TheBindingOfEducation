@@ -8,7 +8,9 @@ var Enemy_1 = require('./Enemy');
 var Hamburger = (function (_super) {
     __extends(Hamburger, _super);
     function Hamburger(x, y, stage) {
-        _super.call(this, x, y, "hamburger.png", 100, stage);
+        // static starting values
+        var hp = 100, sprite = "hamburger.png";
+        _super.call(this, x, y, sprite, hp, stage);
     }
     return Hamburger;
 }(Enemy_1["default"]));

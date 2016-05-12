@@ -14,7 +14,8 @@ export default class GameController
         this.eventHandler();
     }
 
-    getInputState():number {
+    getInputState():number
+    {
         return this._inputState;
     }
     

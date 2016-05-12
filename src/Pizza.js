@@ -8,7 +8,9 @@ var Enemy_1 = require('./Enemy');
 var Pizza = (function (_super) {
     __extends(Pizza, _super);
     function Pizza(x, y, stage) {
-        _super.call(this, x, y, "pizza.png", 75, stage);
+        // static starting values
+        var hp = 75, sprite = "pizza.png";
+        _super.call(this, x, y, sprite, hp, stage);
     }
     return Pizza;
 }(Enemy_1["default"]));

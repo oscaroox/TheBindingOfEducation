@@ -12,6 +12,18 @@ var Player = (function () {
         this._stage = stage;
         this.draw();
     }
+    // __EXAMPLE METHODS__
+    // IF YOU DON'T USE THEM JUST DELETE THEM
+    // when enemy first enters the scene
+    Player.prototype.spawn = function () {
+    };
+    // when enemy leaves the scene for whatever reason
+    Player.prototype.despawn = function () {
+    };
+    // when our hero dies
+    Player.prototype.onDeath = function () {
+    };
+    // set animation state which will be used to determine the current or next animation cycle
     Player.prototype.setAnimationState = function (input) {
         // not moving
         if (input == d.Input_State.None) {
@@ -22,12 +34,15 @@ var Player = (function () {
             this._animation = d.Animation_State.Run;
         }
     };
+    // loop through animations (spritesheets)
     Player.prototype.updateAnimation = function () {
+        // EXAMPLES
         if (this._animation == d.Animation_State.Run) {
         }
         if (this._animation == d.Animation_State.Jump) {
         }
     };
+    // update our hero's position to some x and y coordinate on the scene
     Player.prototype.updatePosition = function () {
         // update our _x and _y according to some button presses and super complicated formulas like
         // _x += 5
@@ -37,10 +52,12 @@ var Player = (function () {
             this._x += 5;
         }
     };
+    // function for some kind of jump animation
     Player.prototype.jump = function () {
         this._animation = d.Animation_State.Jump; // change back to run or idle state after jump animation
         // do some jump timing and positioning stuff
     };
+    // (re)draw our hero on the scene
     Player.prototype.draw = function () {
         // temporarily renaming it because lazy
         var ctx = this._stage;
@@ -51,6 +68,8 @@ var Player = (function () {
         ctx.fill();
         ctx.closePath();
     };
+    // update everything that changed with our hero
+    // we get the input from GameScene, which gets it from the EventHandlers of GameController
     Player.prototype.update = function (input) {
         this.setAnimationState(input);
         this.updateAnimation();

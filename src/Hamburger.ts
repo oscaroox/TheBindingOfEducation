@@ -4,6 +4,10 @@ export default class Hamburger extends Enemy
 {
     constructor(x, y, stage) 
     {
-        super(x, y, "hamburger.png", 100, stage);
+        // static starting values
+        var hp     = 100,
+            sprite = "hamburger.png";
+
+        super(x, y, sprite, hp, stage);
     }
 }
