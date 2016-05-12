@@ -13,6 +13,13 @@ var GameController = (function () {
     };
     // event listeners
     GameController.prototype.eventHandler = function () {
+        // save controller object
+        // the next time 'this' is called ANYWHERE in this project, 'this' gets replaced.
+        // We save 'this' into the variable 'that'
+        // so the code references to the correct object in the future.
+        // try changing that.setInput to this.setInput and look at the error in console.
+        //// "When do you save this in that?"
+        // If you get the 'undefined' error in the console you should try it first.
         var that = this;
         // mouse button pressed down
         d.canvas.addEventListener('mousedown', function () {
