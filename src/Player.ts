@@ -4,31 +4,36 @@ import * as d from './Defines';
 // all updates and movement is done in this class
 export default class Player
 {
-    _x: number;
-    _y: number;
-    _health: number;
-    _animation: number;
-
-    // do not change
+    private _x: number;
+    private _y: number;
+    private _health: number;
+    private _animation: number;
     private _sprite: string;
+    private _stage: CanvasRenderingContext2D;
 
 
-    constructor(pos_x: number, pos_y: number) {
+    constructor(pos_x: number, pos_y: number, stage: CanvasRenderingContext2D) 
+    {
         this._x = pos_x;
         this._y = pos_y;
         this._sprite = "player.png";
         this._health = 100;
         this._animation = d.Animation_State.Idle;
+        this._stage = stage;
+
+        this.draw();
     }
 
     
-    jump() {
+    jump():void 
+    {
         this._animation = d.Animation_State.Jump;     // change back to run state after jump animation
 
         // do some jump timing and positioning stuff
     }
 
-    updateAnimation() {
+    updateAnimation():void 
+    {
         if (this._animation == d.Animation_State.Run) {
             // loop through run animation
         }
@@ -38,24 +43,33 @@ export default class Player
         }
     }
 
-    updatePosition() {
+    updatePosition(input):void 
+    {
         // update our _x and _y according to some button presses and super complicated formulas like
         // _x += 5
 
         // EXAMPLE
         // if user is touching screen we increase _x by 5
-        if (d.Input_State.Touch || d.Input_State.Click) {
+        if (input == d.Input_State.Touch || input == d.Input_State.Click) {
             this._x += 5;
         }
     }
 
-    draw() {
-
+    draw():void 
+    {
+        var ctx = this._stage;
+        
+        ctx.beginPath();
+        ctx.rect(this._x, this._y, 100, 100);
+        ctx.fillStyle = "rgba(255,244,84,1)";
+        ctx.fill();
+        ctx.closePath();
     }
 
-    update() {
+    update(input):void 
+    {
         this.updateAnimation();
-        this.updatePosition();
+        this.updatePosition(input);
 
         // after updating everything we draw player sprite on screen with our new data
         this.draw();

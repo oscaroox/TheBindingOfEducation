@@ -1,6 +1,3 @@
-// element in which we add score info
-export var el = document.body;
-
 export enum Animation_State {
     Idle,
     Run,
@@ -12,3 +9,6 @@ export enum Input_State {
     Touch,
     Click
 }
+
+export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
+export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');

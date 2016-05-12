@@ -1,24 +1,28 @@
-import * as d from './Defines';
-
 // SCORE
 // everything that has to do with gamescore is done here
 export default class GameScore
 {
-    _points: number;
+    private _points: number;
+    private _displayElement: any;
     
-    constructor(p: number) {
+    constructor(p: number) 
+    {
         this._points = p;
+        this._displayElement = document.getElementById('score');
+
         this.draw();
     }
     
     // update score with some number
-    update(p: number = 0) {
+    update(p: number = 0):void 
+    {
         this._points += p;
         this.draw();
     }
 
     // draw it on screen
-    draw() {
-        d.el.innerHTML = String(this._points);
+    draw():void 
+    {
+        this._displayElement.innerHTML = String(this._points);
     }
 }

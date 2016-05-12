@@ -1,10 +1,10 @@
 "use strict";
-var d = require('./Defines');
 // SCORE
 // everything that has to do with gamescore is done here
 var GameScore = (function () {
     function GameScore(p) {
         this._points = p;
+        this._displayElement = document.getElementById('score');
         this.draw();
     }
     // update score with some number
@@ -15,7 +15,7 @@ var GameScore = (function () {
     };
     // draw it on screen
     GameScore.prototype.draw = function () {
-        d.el.innerHTML = String(this._points);
+        this._displayElement.innerHTML = String(this._points);
     };
     return GameScore;
 }());

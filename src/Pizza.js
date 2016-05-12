@@ -7,8 +7,8 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Enemy_1 = require('./Enemy');
 var Pizza = (function (_super) {
     __extends(Pizza, _super);
-    function Pizza(x, y) {
-        _super.call(this, x, y, "pizza.png", 75);
+    function Pizza(x, y, stage) {
+        _super.call(this, x, y, "pizza.png", 75, stage);
     }
     return Pizza;
 }(Enemy_1["default"]));

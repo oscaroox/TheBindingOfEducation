@@ -1,6 +1,4 @@
 "use strict";
-// element in which we add score info
-exports.el = document.body;
 (function (Animation_State) {
     Animation_State[Animation_State["Idle"] = 0] = "Idle";
     Animation_State[Animation_State["Run"] = 1] = "Run";
@@ -13,4 +11,6 @@ var Animation_State = exports.Animation_State;
     Input_State[Input_State["Click"] = 2] = "Click";
 })(exports.Input_State || (exports.Input_State = {}));
 var Input_State = exports.Input_State;
+exports.canvas = document.getElementById('canvas');
+exports.ctx = exports.canvas.getContext('2d');
 //# sourceMappingURL=Defines.js.map
