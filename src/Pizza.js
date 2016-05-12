@@ -9,8 +9,8 @@ var Pizza = (function (_super) {
     __extends(Pizza, _super);
     function Pizza(x, y, stage) {
         // static starting values
-        var hp = 75, sprite = "pizza.png";
-        _super.call(this, x, y, sprite, hp, stage);
+        var sprite = "pizza.png";
+        _super.call(this, x, y, sprite, stage);
     }
     return Pizza;
 }(Enemy_1["default"]));

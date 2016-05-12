@@ -5,11 +5,10 @@
 // there are multiple types of animals like dogs and cats, but there is no 'Animal'
 // so to prevent errors, bugs and headaches, we define this class as 'abstract'
 var Enemy = (function () {
-    function Enemy(pos_x, pos_y, s, hp, stage) {
+    function Enemy(pos_x, pos_y, s, stage) {
         this._x = pos_x;
         this._y = pos_y;
         this._sprite = s;
-        this._health = hp;
         this._stage = stage;
         this.spawn();
     }

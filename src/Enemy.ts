@@ -7,17 +7,15 @@ abstract class Enemy
 {
     private _x: number;                         // x coordinate
     private _y: number;                         // y coordinate
-    private _health: number;                    // current health
     private _sprite: string;                    // path to sprite(sheet) file
     private _stage: CanvasRenderingContext2D;   // canvas target of this page
 
     
-    constructor(pos_x: number, pos_y: number, s: string, hp: number, stage: CanvasRenderingContext2D) 
+    constructor(pos_x: number, pos_y: number, s: string, stage: CanvasRenderingContext2D) 
     {
         this._x = pos_x;
         this._y = pos_y;
         this._sprite = s;
-        this._health = hp;
         this._stage = stage;
 
         this.spawn();

@@ -5,9 +5,8 @@ export default class Pizza extends Enemy
     constructor(x, y, stage) 
     {
         // static starting values
-        var hp     = 75,
-            sprite = "pizza.png";
+        var sprite = "pizza.png";
 
-        super(x, y, sprite, hp, stage);
+        super(x, y, sprite, stage);
     }
 }
