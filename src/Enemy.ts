@@ -41,22 +41,13 @@ abstract class Enemy
     // Always specify what the return type is (if you know)! (:number, :string, :Array<number>, :Array<string>, etc)
     
     // return x and y coordinates
-    getPosition()
-    {
-        return {x: this._x, y: this._y};
-    }
+    getPosition() { return { x: this._x, y: this._y }; }
 
     // return only the x coordinate
-    getPositionX():number
-    {
-        return this._x;
-    }
+    getPositionX():number { return this._x; }
 
     // return only the y coordinate
-    getPositionY():number
-    {
-        return this._y;
-    }
+    getPositionY():number { return this._y; }
 
     // set position of enemy
     setPosition(x:number, y:number)

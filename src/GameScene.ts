@@ -22,6 +22,9 @@ export default class GameScene
         // canvas
         this._stage = d.ctx;
 
+        // add a game controller that handles player input events
+        this._gameController = new GameController();
+
         // score handler
         this._score = new GameScore(0);
 
@@ -31,9 +34,6 @@ export default class GameScene
 
         // add player to scene
         this._player = new Player(0, 0, this._stage);
-
-        // add a game controller
-        this._gameController = new GameController();
 
         // start update loop
         this.loop();

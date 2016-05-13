@@ -12,6 +12,8 @@ var GameScene = (function () {
         this._enemies = [];
         // canvas
         this._stage = d.ctx;
+        // add a game controller that handles player input events
+        this._gameController = new GameController_1["default"]();
         // score handler
         this._score = new GameScore_1["default"](0);
         // add two enemies to scene
@@ -19,8 +21,6 @@ var GameScene = (function () {
         this._enemies[1] = new Pizza_1["default"](0, 0, this._stage);
         // add player to scene
         this._player = new Player_1["default"](0, 0, this._stage);
-        // add a game controller
-        this._gameController = new GameController_1["default"]();
         // start update loop
         this.loop();
     }

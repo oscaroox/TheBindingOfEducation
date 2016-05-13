@@ -26,17 +26,11 @@ var Enemy = (function () {
     // It makes things safer and is good practice for future projects
     // Always specify what the return type is (if you know)! (:number, :string, :Array<number>, :Array<string>, etc)
     // return x and y coordinates
-    Enemy.prototype.getPosition = function () {
-        return { x: this._x, y: this._y };
-    };
+    Enemy.prototype.getPosition = function () { return { x: this._x, y: this._y }; };
     // return only the x coordinate
-    Enemy.prototype.getPositionX = function () {
-        return this._x;
-    };
+    Enemy.prototype.getPositionX = function () { return this._x; };
     // return only the y coordinate
-    Enemy.prototype.getPositionY = function () {
-        return this._y;
-    };
+    Enemy.prototype.getPositionY = function () { return this._y; };
     // set position of enemy
     Enemy.prototype.setPosition = function (x, y) {
         this._x = x;
