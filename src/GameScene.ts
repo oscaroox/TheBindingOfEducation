@@ -29,11 +29,11 @@ export default class GameScene
         this._score = new GameScore(0);
 
         // add two enemies to scene
-        this._enemies[0] = new Hamburger(90, 90, this._stage);
-        this._enemies[1] = new Pizza(200, 200, this._stage);
+        this._enemies[0] = new Hamburger(90, 90);
+        this._enemies[1] = new Pizza(200, 200);
 
         // add player to scene
-        this._player = new Player(0, 0, this._stage);
+        this._player = new Player(0, 0, this._gameController);
 
         // start update loop
         this.loop();
@@ -52,7 +52,7 @@ export default class GameScene
         }
 
         // update player
-        this._player.update(this._gameController.getInputState());
+        this._player.update();
 
         // update points
         this._score.update(1);

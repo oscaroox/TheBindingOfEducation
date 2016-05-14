@@ -2,19 +2,14 @@ import Enemy from './Enemy';
 
 export default class Pizza extends Enemy
 {
-    constructor(x, y, stage)
+    constructor(x, y)
     {
         // static starting values
         var sprite = "pizza.png",
             color  = "rgba(0,255,0,1)",
+            health = 1,
             width  = 75,
             height = 75;
-
-        super(x, y, sprite, width, height, color, stage);
-    }
-
-    spawn():void
-    {
-        super.spawn();
+        super(x, y, health, sprite, width, height, color);
     }
 }
