@@ -5,10 +5,13 @@
 // there are multiple types of animals like dogs and cats, but there is no 'Animal'
 // so to prevent errors, bugs and headaches, we define this class as 'abstract'
 var Enemy = (function () {
-    function Enemy(pos_x, pos_y, s, stage) {
-        this._x = pos_x;
-        this._y = pos_y;
-        this._sprite = s;
+    function Enemy(x, y, sprite, width, height, color, stage) {
+        this._x = y;
+        this._y = x;
+        this._sprite = sprite;
+        this._color = color;
+        this._width = width;
+        this._height = height;
         this._stage = stage;
         this.spawn();
     }
@@ -16,6 +19,7 @@ var Enemy = (function () {
     // IF YOU DON'T USE THEM JUST DELETE THEM
     // when enemy first enters the scene
     Enemy.prototype.spawn = function () {
+        this.draw();
     };
     // when enemy leaves the scene for whatever reason
     Enemy.prototype.despawn = function () {
@@ -36,14 +40,22 @@ var Enemy = (function () {
         this._x = x;
         this._y = y;
     };
+    Enemy.prototype.getStage = function () { return this._stage; };
     // loop through animations
     Enemy.prototype.updateAnimation = function () {
     };
     // draw enemy on screen
     Enemy.prototype.draw = function () {
+        var ctx = this._stage;
+        ctx.beginPath();
+        ctx.rect(this._x, this._y, this._width, this._height);
+        ctx.fillStyle = this._color;
+        ctx.fill();
+        ctx.closePath();
     };
     // update position, animation, etc.
     Enemy.prototype.update = function () {
+        this.draw();
     };
     return Enemy;
 }());

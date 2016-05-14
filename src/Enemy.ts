@@ -8,14 +8,20 @@ abstract class Enemy
     private _x: number;                         // x coordinate
     private _y: number;                         // y coordinate
     private _sprite: string;                    // path to sprite(sheet) file
+    private _color: string;                     // fill color
+    private _width: number;
+    private _height: number;
     private _stage: CanvasRenderingContext2D;   // canvas target of this page
 
     
-    constructor(pos_x: number, pos_y: number, s: string, stage: CanvasRenderingContext2D) 
+    constructor(x: number, y: number, sprite: string, width: number, height: number, color: string, stage: CanvasRenderingContext2D)
     {
-        this._x = pos_x;
-        this._y = pos_y;
-        this._sprite = s;
+        this._x = y;
+        this._y = x;
+        this._sprite = sprite;
+        this._color = color;
+        this._width = width;
+        this._height = height;
         this._stage = stage;
 
         this.spawn();
@@ -27,6 +33,7 @@ abstract class Enemy
     // when enemy first enters the scene
     spawn():void
     {
+        this.draw();
     }
 
     // when enemy leaves the scene for whatever reason
@@ -56,6 +63,8 @@ abstract class Enemy
         this._y = y;
     }
 
+    getStage():CanvasRenderingContext2D { return this._stage; }
+
     // loop through animations
     updateAnimation():void 
     {
@@ -64,11 +73,19 @@ abstract class Enemy
     // draw enemy on screen
     draw():void 
     {
+        var ctx = this._stage;
+
+        ctx.beginPath();
+        ctx.rect(this._x, this._y, this._width, this._height);
+        ctx.fillStyle = this._color;
+        ctx.fill();
+        ctx.closePath();
     }
 
     // update position, animation, etc.
     update():void 
     {
+        this.draw();
     }
 }
 

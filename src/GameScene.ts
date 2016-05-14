@@ -29,8 +29,8 @@ export default class GameScene
         this._score = new GameScore(0);
 
         // add two enemies to scene
-        this._enemies[0] = new Hamburger(0, 0, this._stage);
-        this._enemies[1] = new Pizza(0, 0, this._stage);
+        this._enemies[0] = new Hamburger(90, 90, this._stage);
+        this._enemies[1] = new Pizza(200, 200, this._stage);
 
         // add player to scene
         this._player = new Player(0, 0, this._stage);

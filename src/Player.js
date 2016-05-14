@@ -7,15 +7,19 @@ var Player = (function () {
         this._x = pos_x;
         this._y = pos_y;
         this._sprite = "player.png";
-        this._health = 100;
+        this._health = 2;
+        this._color = "rgba(255,244,84,1)";
+        this._width = 100;
+        this._height = 100;
         this._animation = d.Animation_State.Idle;
         this._stage = stage;
-        this.draw();
+        this.spawn();
     }
     // __EXAMPLE METHODS__
     // IF YOU DON'T USE THEM JUST DELETE THEM
     // when enemy first enters the scene
     Player.prototype.spawn = function () {
+        this.draw();
     };
     // when enemy leaves the scene for whatever reason
     Player.prototype.despawn = function () {
@@ -64,7 +68,7 @@ var Player = (function () {
         // the process of drawing something in canvas
         ctx.beginPath();
         ctx.rect(this._x, this._y, 100, 100); // x, y, width, height
-        ctx.fillStyle = "rgba(255,244,84,1)"; // color
+        ctx.fillStyle = this._color; // color
         ctx.fill();
         ctx.closePath();
     };

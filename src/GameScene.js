@@ -17,8 +17,8 @@ var GameScene = (function () {
         // score handler
         this._score = new GameScore_1["default"](0);
         // add two enemies to scene
-        this._enemies[0] = new Hamburger_1["default"](0, 0, this._stage);
-        this._enemies[1] = new Pizza_1["default"](0, 0, this._stage);
+        this._enemies[0] = new Hamburger_1["default"](90, 90, this._stage);
+        this._enemies[1] = new Pizza_1["default"](200, 200, this._stage);
         // add player to scene
         this._player = new Player_1["default"](0, 0, this._stage);
         // start update loop

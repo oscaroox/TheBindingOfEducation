@@ -9,9 +9,12 @@ var Pizza = (function (_super) {
     __extends(Pizza, _super);
     function Pizza(x, y, stage) {
         // static starting values
-        var sprite = "pizza.png";
-        _super.call(this, x, y, sprite, stage);
+        var sprite = "pizza.png", color = "rgba(0,255,0,1)", width = 75, height = 75;
+        _super.call(this, x, y, sprite, width, height, color, stage);
     }
+    Pizza.prototype.spawn = function () {
+        _super.prototype.spawn.call(this);
+    };
     return Pizza;
 }(Enemy_1["default"]));
 exports.__esModule = true;

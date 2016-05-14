@@ -9,21 +9,11 @@ var Hamburger = (function (_super) {
     __extends(Hamburger, _super);
     function Hamburger(x, y, stage) {
         // static starting values
-        var sprite = "hamburger.png";
-        _super.call(this, x, y, sprite, stage);
+        var sprite = "hamburger.png", color = "rgba(255,0,0,1)", width = 90, height = 90;
+        _super.call(this, x, y, sprite, width, height, color, stage);
     }
-    // __EXAMPLE__
-    // spawn is already a method of our parent class 'Enemy'
-    // but if needed, we can override it by just calling it the same (phpstorm will show an icon to the left when you
-    // override methods
     Hamburger.prototype.spawn = function () {
-        // this means to execute everything from our parent's class version of 'spawn'
-        // if you want to do this, do it FIRST!
-        // if not, just leave it out
         _super.prototype.spawn.call(this);
-        // here you can add things that need to happen for this specific class
-        // like positioning it or something
-        this.setPosition(10, 10);
     };
     return Hamburger;
 }(Enemy_1["default"]));
