@@ -55,16 +55,14 @@ export default class GameScene
         this._player.update(this._gameController.getInputState());
 
         // update points
-        this._score.update(50);
+        this._score.update(1);
     }
 
     // constant update loop
-    loop():void 
+    loop():void
     {
-        var that = this;
+        requestAnimationFrame(() => this.loop());
 
-        setInterval(function() {
-            that.update();
-        }, 500);
+        this.update();
     }
 }
