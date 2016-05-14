@@ -44,7 +44,8 @@ abstract class Enemy
     // GETTERS and SETTERS
     // When working in classes, try to always use PRIVATE class variables
     // You can not change or access these variables without making these 'get' and 'set' functions
-    // It makes things safer and is good practice for future projects
+    // It makes things safer because you can control their read/write properties
+    // and it is good practice for future projects
     // Always specify what the return type is (if you know)! (:number, :string, :Array<number>, :Array<string>, etc)
     
     // return x and y coordinates
