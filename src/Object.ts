@@ -48,12 +48,8 @@ abstract class __Object
         this._x = x;
         this._y = y;
     }
-
-    // get the stage, canvas, where content is drawn upon
-    getStage():CanvasRenderingContext2D { return this._stage; }
-
-
-
+    
+    
     // when unit first enters the scene
     spawn():void
     {

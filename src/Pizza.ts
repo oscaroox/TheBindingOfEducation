@@ -2,7 +2,7 @@ import Enemy from './Enemy';
 
 export default class Pizza extends Enemy
 {
-    constructor(x, y)
+    constructor(x: number, y: number)
     {
         // static starting values
         var sprite = "pizza.png",
