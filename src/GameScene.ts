@@ -38,8 +38,8 @@ export default class GameScene
         this._enemies[1] = new Pizza(200, 200);
 
         // add two fruits to scene
-        this._fruit[0] = new Banana(0, 0, this._stage);
-        this._fruit[1] = new Apple(0, 0, this._stage);
+        this._fruit[0] = new Banana(0, 0);
+        this._fruit[1] = new Apple(0, 0);
 
         console.log(this._fruit[0]);
 
