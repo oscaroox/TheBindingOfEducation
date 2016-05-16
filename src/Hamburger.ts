@@ -2,7 +2,11 @@ import Enemy from './Enemy';
 
 export default class Hamburger extends Enemy
 {
+<<<<<<< Updated upstream
     constructor(x, y) 
+=======
+    constructor(x: number, y: number, stage: CanvasRenderingContext2D) 
+>>>>>>> Stashed changes
     {
         // static starting values
         var sprite = "hamburger.png",

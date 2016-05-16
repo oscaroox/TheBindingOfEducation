@@ -5,6 +5,9 @@ import Hamburger from './Hamburger';
 import Player from './Player';
 import GameScore from './GameScore';
 import * as d from './Defines';
+import Banana from './Banana';
+import Apple from './Apple';
+import Fruit from './Fruit';
 
 
 // GAMESCENE
@@ -16,7 +19,8 @@ export default class GameScene
     private _gameController: GameController;
     private _player: Player;
     private _stage: CanvasRenderingContext2D;
-    
+    private _fruit: Fruit[] = [];
+
     constructor() 
     {
         // canvas
@@ -28,9 +32,16 @@ export default class GameScene
         // score handler
         this._score = new GameScore(0);
 
+
         // add two enemies to scene
         this._enemies[0] = new Hamburger(90, 90);
         this._enemies[1] = new Pizza(200, 200);
+
+        // add two fruits to scene
+        this._fruit[0] = new Banana(0, 0, this._stage);
+        this._fruit[1] = new Apple(0, 0, this._stage);
+
+        console.log(this._fruit[0]);
 
         // add player to scene
         this._player = new Player(0, 0, this._gameController);
