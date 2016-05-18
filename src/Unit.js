@@ -8,8 +8,8 @@ var d = require('./Defines');
 var Object_1 = require('./Object');
 var Unit = (function (_super) {
     __extends(Unit, _super);
-    function Unit(x, y, health, sprite, width, height, color) {
-        _super.call(this, x, y, sprite, width, height, color);
+    function Unit(x, y, health, sprite) {
+        _super.call(this, x, y, sprite);
         this._health = health;
         this._animation = d.Animation_State.Idle;
         this.spawn();

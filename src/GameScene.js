@@ -7,6 +7,7 @@ var GameScore_1 = require('./GameScore');
 var d = require('./Defines');
 var Banana_1 = require('./Banana');
 var Apple_1 = require('./Apple');
+var Playfield_1 = require('./Playfield');
 // GAMESCENE
 // Controls what is shown on screen
 var GameScene = (function () {
@@ -23,11 +24,11 @@ var GameScene = (function () {
         this._enemies[0] = new Hamburger_1.default(90, 90);
         this._enemies[1] = new Pizza_1.default(200, 200);
         // add two fruits to scene
-        this._fruit[0] = new Banana_1.default(0, 0, this._stage);
-        this._fruit[1] = new Apple_1.default(0, 0, this._stage);
-        console.log(this._fruit[0]);
+        this._fruit[0] = new Banana_1.default(0, 0);
+        this._fruit[1] = new Apple_1.default(0, 0);
         // add player to scene
         this._player = new Player_1.default(0, 0, this._gameController);
+        this._playfield = new Playfield_1.default(0, 0);
         // start update loop
         this.loop();
     }
@@ -35,6 +36,7 @@ var GameScene = (function () {
     GameScene.prototype.update = function () {
         // clear canvas for redraw
         this._stage.clearRect(0, 0, d.canvas.width, d.canvas.height);
+        this._playfield.update();
         // update all enemies on screen
         for (var i = 0; i < this._enemies.length; i++) {
             this._enemies[i].update();

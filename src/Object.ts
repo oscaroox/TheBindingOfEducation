@@ -4,21 +4,16 @@ abstract class __Object
 {
     private _x: number;                         // x coordinate
     private _y: number;                         // y coordinate
-    private _sprite: string;                    // path to sprite(sheet) file
-    private _color: string;                     // fill color
-    private _width: number;                     // width of sprite
-    private _height: number;                    // height if sprite
+    private _sprite: HTMLImageElement;                    // path to sprite(sheet) file
     private _stage: CanvasRenderingContext2D;   // canvas target of this page
 
-    constructor(x: number, y: number, sprite: string, width: number, height: number, color: string)
+    constructor(x: number, y: number, sprite: string)
     {
         this._x = x;
         this._y = y;
-        this._sprite = sprite;
-        this._color  = color;
-        this._width  = width;
-        this._height = height;
         this._stage  = d.ctx;
+        this._sprite = new Image();
+        this._sprite.src = sprite;
 
         this.spawn();
     }
@@ -49,6 +44,8 @@ abstract class __Object
         this._y = y;
     }
     
+    getSprite():HTMLImageElement { return this._sprite; }
+    
     
     // when unit first enters the scene
     spawn():void
@@ -69,13 +66,7 @@ abstract class __Object
     // draw enemy on screen
     draw():void
     {
-        var ctx = this._stage;
-
-        ctx.beginPath();
-        ctx.rect(this._x, this._y, this._width, this._height);
-        ctx.fillStyle = this._color;
-        ctx.fill();
-        ctx.closePath();
+        this._stage.drawImage(this._sprite, this._x, this._y);
     }
 
     // update position, animation, etc.

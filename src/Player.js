@@ -11,8 +11,8 @@ var Unit_1 = require('./Unit');
 var Player = (function (_super) {
     __extends(Player, _super);
     function Player(x, y, gameController) {
-        var sprite = "player.png", color = "rgba(255, 100, 150, 1)", health = 2, width = 100, height = 100;
-        _super.call(this, x, y, health, sprite, width, height, color);
+        var sprite = "images/player.png", health = 2;
+        _super.call(this, x, y, health, sprite);
         this._gameController = gameController;
         this.spawn();
     }

@@ -1,14 +1,12 @@
 "use strict";
 var d = require('./Defines');
 var __Object = (function () {
-    function __Object(x, y, sprite, width, height, color) {
+    function __Object(x, y, sprite) {
         this._x = x;
         this._y = y;
-        this._sprite = sprite;
-        this._color = color;
-        this._width = width;
-        this._height = height;
         this._stage = d.ctx;
+        this._sprite = new Image();
+        this._sprite.src = sprite;
         this.spawn();
     }
     // __EXAMPLE METHODS__
@@ -30,8 +28,7 @@ var __Object = (function () {
         this._x = x;
         this._y = y;
     };
-    // get the stage, canvas, where content is drawn upon
-    __Object.prototype.getStage = function () { return this._stage; };
+    __Object.prototype.getSprite = function () { return this._sprite; };
     // when unit first enters the scene
     __Object.prototype.spawn = function () {
         this.draw();
@@ -44,12 +41,7 @@ var __Object = (function () {
     };
     // draw enemy on screen
     __Object.prototype.draw = function () {
-        var ctx = this._stage;
-        ctx.beginPath();
-        ctx.rect(this._x, this._y, this._width, this._height);
-        ctx.fillStyle = this._color;
-        ctx.fill();
-        ctx.closePath();
+        this._stage.drawImage(this._sprite, this._x, this._y);
     };
     // update position, animation, etc.
     __Object.prototype.update = function () {

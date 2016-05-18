@@ -7,10 +7,10 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Fruit_1 = require('./Fruit');
 var Banana = (function (_super) {
     __extends(Banana, _super);
-    function Banana(x, y, stage) {
+    function Banana(x, y) {
         // static starting values
         var sprite = "banana.png", points = 5;
-        _super.call(this, x, y, sprite, stage, points);
+        _super.call(this, x, y, sprite, points);
     }
     return Banana;
 }(Fruit_1.default));

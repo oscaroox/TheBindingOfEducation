@@ -1,26 +1,38 @@
 import * as d from './Defines';
+import Object from './Object';
 
-export default class Playfield {
-
-    private _x: number;                         // x coordinate
-    private _y: number;                         // y coordinate
-    private _stage: CanvasRenderingContext2D;   // canvas target of this page
-    private _background: string;
-
-    constructor(x: number, y: number, background: string)
+export default class Playfield extends Object
+{
+    constructor(x: number, y: number)
     {
-        this._x = x;
-        this._y = y;
-        this._stage  = d.ctx;
-        this._background = background;
+        var sprite = "images/wlnd.jpg";
+        super(x, y, sprite);
+        super.draw();
     }
 
-
-    init(): void
+    updatePosition():void
     {
-        var img:HTMLImageElement = document.getElementById('wlnd');
+            var x = this.getPositionX(),
+                y = this.getPositionY() +5;
+            this.setPosition(x, y);
 
-        this._stage.drawImage(img, 10, 10);
+        this.shuffle();
     }
 
+    shuffle():void
+    {
+        var bottomOfScreen = d.canvas.height;
+        var spriteHeight = this.getSprite().height;
+        
+        if (spriteHeight < bottomOfScreen) {
+            
+        }
+    }
+
+    update():void
+    {
+        super.update();
+
+        this.updatePosition();
+    }
 }

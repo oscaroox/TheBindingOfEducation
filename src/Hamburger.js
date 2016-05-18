@@ -9,8 +9,8 @@ var Hamburger = (function (_super) {
     __extends(Hamburger, _super);
     function Hamburger(x, y) {
         // static starting values
-        var sprite = "hamburger.png", color = "rgba(255,0,0,1)", health = 1, width = 90, height = 90;
-        _super.call(this, x, y, health, sprite, width, height, color);
+        var sprite = "images/hamburger.gif", health = 1;
+        _super.call(this, x, y, health, sprite);
     }
     return Hamburger;
 }(Enemy_1.default));

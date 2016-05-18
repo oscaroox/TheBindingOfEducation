@@ -21,6 +21,7 @@ export default class GameScene
     private _player: Player;
     private _stage: CanvasRenderingContext2D;
     private _fruit: Fruit[] = [];
+    private _playfield: Playfield;
 
     constructor() 
     {
@@ -42,10 +43,12 @@ export default class GameScene
         this._fruit[0] = new Banana(0, 0);
         this._fruit[1] = new Apple(0, 0);
 
-        console.log(this._fruit[0]);
 
         // add player to scene
         this._player = new Player(0, 0, this._gameController);
+
+        this._playfield = new Playfield(0, 0);
+
 
         // start update loop
         this.loop();
@@ -55,8 +58,11 @@ export default class GameScene
     // update current game scene
     update():void 
     {
+
         // clear canvas for redraw
         this._stage.clearRect(0, 0, d.canvas.width, d.canvas.height);
+
+        this._playfield.update();
 
         // update all enemies on screen
         for (let i = 0; i < this._enemies.length; i++) {

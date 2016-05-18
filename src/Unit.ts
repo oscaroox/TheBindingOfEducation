@@ -6,9 +6,9 @@ abstract class Unit extends Object
     private _health: number;
     private _animation: number;
     
-    constructor(x: number, y: number, health: number, sprite: string, width: number, height: number, color: string)
+    constructor(x: number, y: number, health: number, sprite: string)
     {
-        super(x, y, sprite, width, height, color);
+        super(x, y, sprite);
         
         this._health = health;
         this._animation = d.Animation_State.Idle;

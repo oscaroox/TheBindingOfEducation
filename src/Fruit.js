@@ -1,10 +1,9 @@
 "use strict";
 var Fruit = (function () {
-    function Fruit(x, y, sprite, stage, points) {
+    function Fruit(x, y, sprite, points) {
         this._x = x;
         this._y = y;
         this._sprite = sprite;
-        this._stage = stage;
         this._points = points;
     }
     return Fruit;

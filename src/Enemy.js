@@ -7,9 +7,17 @@ var __extends = (this && this.__extends) || function (d, b) {
 var Unit_1 = require('./Unit');
 var Enemy = (function (_super) {
     __extends(Enemy, _super);
-    function Enemy(x, y, health, sprite, width, height, color) {
-        _super.call(this, x, y, health, sprite, width, height, color);
+    function Enemy(x, y, health, sprite) {
+        _super.call(this, x, y, health, sprite);
     }
+    Enemy.prototype.updatePosition = function () {
+        var x = this.getPositionX(), y = this.getPositionY() + 5;
+        this.setPosition(x, y);
+    };
+    Enemy.prototype.update = function () {
+        _super.prototype.update.call(this);
+        this.updatePosition();
+    };
     return Enemy;
 }(Unit_1.default));
 Object.defineProperty(exports, "__esModule", { value: true });

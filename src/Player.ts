@@ -10,12 +10,9 @@ export default class Player extends Unit
 
     constructor(x: number, y: number, gameController: GameController)
     {
-        var sprite = "player.png",
-            color  = "rgba(255, 100, 150, 1)",
-            health = 2,
-            width  = 100,
-            height = 100;
-        super(x, y, health, sprite, width, height, color);
+        var sprite = "images/player.png",
+            health = 2;
+        super(x, y, health, sprite);
 
         this._gameController = gameController;
         this.spawn();
