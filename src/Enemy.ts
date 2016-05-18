@@ -2,7 +2,7 @@ import Unit from './Unit';
 
 abstract class Enemy extends Unit
 {
-    constructor(x: number, y: number, health: number, sprite: string[])
+    constructor(x: number, y: number, health: number, sprite: string)
     {
         super(x, y, health, sprite);
     }

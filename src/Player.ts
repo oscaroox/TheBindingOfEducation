@@ -10,9 +10,8 @@ export default class Player extends Unit
 
     constructor(x: number, y: number, gameController: GameController)
     {
-        var sprite = [];
-        sprite[0] = "images/player.png";
-        var health = 2;
+        var sprite = "images/player.png",
+            health = 2;
         
         super(x, y, health, sprite);
 
