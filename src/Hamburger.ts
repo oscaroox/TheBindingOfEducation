@@ -2,7 +2,14 @@ import Enemy from './Enemy';
 
 export default class Hamburger extends Enemy
 {
+<<<<<<< Updated upstream
     constructor(x: number, y: number)
+=======
+
+
+    constructor (x: number, y: number) 
+
+>>>>>>> Stashed changes
     {
         // static starting values
         var sprite = "hamburger.png",

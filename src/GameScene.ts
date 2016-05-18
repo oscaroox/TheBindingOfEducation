@@ -8,6 +8,7 @@ import * as d from './Defines';
 import Banana from './Banana';
 import Apple from './Apple';
 import Fruit from './Fruit';
+import Playfield from './Playfield';
 
 
 // GAMESCENE
