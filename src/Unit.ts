@@ -6,7 +6,7 @@ abstract class Unit extends Object
     private _health: number;
     private _animation: number;
     
-    constructor(x: number, y: number, health: number, sprite: string)
+    constructor(x: number, y: number, health: number, sprite: string[])
     {
         super(x, y, sprite);
         

@@ -4,17 +4,30 @@ abstract class __Object
 {
     private _x: number;                         // x coordinate
     private _y: number;                         // y coordinate
-    private _sprite: HTMLImageElement;                    // path to sprite(sheet) file
+    private _sprite: HTMLImageElement;          // path to sprite(sheet) file
     private _stage: CanvasRenderingContext2D;   // canvas target of this page
+    private _sprites: HTMLImageElement[];
 
-    constructor(x: number, y: number, sprite: string)
+    constructor(x: number, y: number, sprite: string[])
     {
         this._x = x;
         this._y = y;
-        this._stage  = d.ctx;
-        this._sprite = new Image();
-        this._sprite.src = sprite;
+        this._stage = d.ctx;
+        this._sprites = [];
 
+        if (sprite.constructor === Array && sprite.length > 0) {
+            for(var i = 0; i < sprite.length; i += 1) {
+                var s = new Image();
+                s.src = sprite[i];
+
+                this._sprites.push(s);
+            }
+        } else {
+            this._sprite = new Image();
+            this._sprite.src = sprite[0];
+        }
+
+        console.log(this._sprites);
         this.spawn();
     }
 
@@ -44,7 +57,7 @@ abstract class __Object
         this._y = y;
     }
     
-    getSprite():HTMLImageElement { return this._sprite; }
+    getSpritesArray():HTMLImageElement[] { return this._sprites; }
     
     
     // when unit first enters the scene
@@ -66,7 +79,9 @@ abstract class __Object
     // draw enemy on screen
     draw():void
     {
-        this._stage.drawImage(this._sprite, this._x, this._y);
+        for (var i = 0; i < this._sprites.length; i += 1) {
+            this._stage.drawImage(this._sprites[i], this._x, this._y);
+        }
     }
 
     // update position, animation, etc.

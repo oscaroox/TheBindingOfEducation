@@ -16,11 +16,11 @@ import Playfield from './Playfield';
 export default class GameScene
 {
     private _score: GameScore;
-    private _enemies: Enemy[] = [];
+    private _enemies: Enemy[];
     private _gameController: GameController;
     private _player: Player;
     private _stage: CanvasRenderingContext2D;
-    private _fruit: Fruit[] = [];
+    private _fruits: Fruit[];
     private _playfield: Playfield;
 
     constructor() 
@@ -36,12 +36,14 @@ export default class GameScene
 
 
         // add two enemies to scene
+        this._enemies = [];
         this._enemies[0] = new Hamburger(90, 90);
         this._enemies[1] = new Pizza(200, 200);
 
         // add two fruits to scene
-        this._fruit[0] = new Banana(0, 0);
-        this._fruit[1] = new Apple(0, 0);
+        this._fruits = [];
+        this._fruits[0] = new Banana(0, 0);
+        this._fruits[1] = new Apple(0, 0);
 
 
         // add player to scene
