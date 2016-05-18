@@ -1,35 +1,50 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
 var d = require('./Defines');
-var Object_1 = require('./Object');
-var Playfield = (function (_super) {
-    __extends(Playfield, _super);
-    function Playfield(x, y) {
-        var sprite = "images/wlnd.jpg";
-        _super.call(this, x, y, sprite);
-        _super.prototype.draw.call(this);
+var Playfield = (function () {
+    function Playfield() {
+        this._stage = d.ctx;
+        this._sprites = [];
+        var tempSprites = new Image();
+        tempSprites.src = "images/wlnd.jpg";
+        var tempSprites2 = new Image();
+        tempSprites2.src = "images/wlnd.jpg";
+        this._sprites[0] = tempSprites;
+        this._sprites[1] = tempSprites2;
+        this._x = [];
+        this._y = [];
+        this._x[0] = d.canvas.width / 2;
+        this._y[0] = d.canvas.height / 2;
+        this._x[1] = this._x[0];
+        this._y[1] = this._y[0] - this._sprites[0].height;
+        // this._x[0] = 0;
+        // this._y[0] = 0;
+        // this._x[1] = this._x[0];
+        // this._y[1] = this._y[0] - this._sprites[0].height;
+        this.draw();
     }
     Playfield.prototype.updatePosition = function () {
-        var x = this.getPositionX(), y = this.getPositionY() + 5;
-        this.setPosition(x, y);
+        this._y[0] += 5;
+        this._y[1] += 5;
         this.shuffle();
     };
     Playfield.prototype.shuffle = function () {
-        var bottomOfScreen = d.canvas.height;
-        var spriteHeight = this.getSprite().height;
-        if (spriteHeight < bottomOfScreen) {
+        for (var i = 0; i < this._sprites.length; i += 1) {
+            var bottomOfScreen = d.canvas.height;
+            var spriteHeight = this._sprites[i].height;
+            if (spriteHeight < bottomOfScreen) {
+            }
         }
     };
+    Playfield.prototype.draw = function () {
+        this._stage.drawImage(this._sprites[0], this._x[0], this._y[0]);
+        this._stage.drawImage(this._sprites[1], this._x[1], this._y[1]);
+    };
     Playfield.prototype.update = function () {
-        _super.prototype.update.call(this);
         this.updatePosition();
+        this.draw();
     };
     return Playfield;
-}(Object_1.default));
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Playfield;
 //# sourceMappingURL=Playfield.js.map

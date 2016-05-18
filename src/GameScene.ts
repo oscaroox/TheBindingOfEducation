@@ -49,7 +49,7 @@ export default class GameScene
         // add player to scene
         this._player = new Player(0, 0, this._gameController);
 
-        this._playfield = new Playfield(0, 0);
+        this._playfield = new Playfield();
 
 
         // start update loop

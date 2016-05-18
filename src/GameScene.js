@@ -12,8 +12,6 @@ var Playfield_1 = require('./Playfield');
 // Controls what is shown on screen
 var GameScene = (function () {
     function GameScene() {
-        this._enemies = [];
-        this._fruit = [];
         // canvas
         this._stage = d.ctx;
         // add a game controller that handles player input events
@@ -21,14 +19,16 @@ var GameScene = (function () {
         // score handler
         this._score = new GameScore_1.default(0);
         // add two enemies to scene
+        this._enemies = [];
         this._enemies[0] = new Hamburger_1.default(90, 90);
         this._enemies[1] = new Pizza_1.default(200, 200);
         // add two fruits to scene
-        this._fruit[0] = new Banana_1.default(0, 0);
-        this._fruit[1] = new Apple_1.default(0, 0);
+        this._fruits = [];
+        this._fruits[0] = new Banana_1.default(0, 0);
+        this._fruits[1] = new Apple_1.default(0, 0);
         // add player to scene
         this._player = new Player_1.default(0, 0, this._gameController);
-        this._playfield = new Playfield_1.default(0, 0);
+        this._playfield = new Playfield_1.default();
         // start update loop
         this.loop();
     }
