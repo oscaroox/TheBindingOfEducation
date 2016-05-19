@@ -11,7 +11,7 @@ abstract class Unit extends Object
         super(x, y, sprite);
         
         this._health = health;
-        this._animation = d.Animation_State.Idle;
+        this._animation = d.Animation_State.ANIM_IDLE;
         this.spawn();
     }
 
@@ -22,13 +22,13 @@ abstract class Unit extends Object
     setAnimationState(input):void
     {
         // not moving
-        if (input == d.Input_State.None) {
-            this._animation = d.Animation_State.Idle;
+        if (input == d.Input_State.INPUT_NONE) {
+            this._animation = d.Animation_State.ANIM_IDLE;
         }
 
         // move
-        if (input == d.Input_State.Touch || input == d.Input_State.Click) {
-            this._animation = d.Animation_State.Run;
+        if (input == d.Input_State.INPUT_TOUCH || input == d.Input_State.INPUT_CLICK) {
+            this._animation = d.Animation_State.ANIM_RUN;
         }
     }
 
@@ -36,10 +36,10 @@ abstract class Unit extends Object
     updateAnimation():void
     {
         // EXAMPLES
-        if (this._animation == d.Animation_State.Run) {
+        if (this._animation == d.Animation_State.ANIM_RUN) {
         }
 
-        if (this._animation == d.Animation_State.Jump) {
+        if (this._animation == d.Animation_State.ANIM_RUN) {
         }
     }
 }

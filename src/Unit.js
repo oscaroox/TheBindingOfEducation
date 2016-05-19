@@ -11,7 +11,7 @@ var Unit = (function (_super) {
     function Unit(x, y, health, sprite) {
         _super.call(this, x, y, sprite);
         this._health = health;
-        this._animation = d.Animation_State.Idle;
+        this._animation = d.Animation_State.ANIM_IDLE;
         this.spawn();
     }
     // get current animation
@@ -19,20 +19,20 @@ var Unit = (function (_super) {
     // set animation state which will be used to determine the current or next animation cycle
     Unit.prototype.setAnimationState = function (input) {
         // not moving
-        if (input == d.Input_State.None) {
-            this._animation = d.Animation_State.Idle;
+        if (input == d.Input_State.INPUT_NONE) {
+            this._animation = d.Animation_State.ANIM_IDLE;
         }
         // move
-        if (input == d.Input_State.Touch || input == d.Input_State.Click) {
-            this._animation = d.Animation_State.Run;
+        if (input == d.Input_State.INPUT_TOUCH || input == d.Input_State.INPUT_CLICK) {
+            this._animation = d.Animation_State.ANIM_RUN;
         }
     };
     // loop through animations (spritesheets)
     Unit.prototype.updateAnimation = function () {
         // EXAMPLES
-        if (this._animation == d.Animation_State.Run) {
+        if (this._animation == d.Animation_State.ANIM_RUN) {
         }
-        if (this._animation == d.Animation_State.Jump) {
+        if (this._animation == d.Animation_State.ANIM_RUN) {
         }
     };
     return Unit;

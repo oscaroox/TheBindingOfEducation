@@ -4,7 +4,7 @@ var d = require('./Defines');
 //handles player input
 var GameController = (function () {
     function GameController() {
-        this._inputState = d.Input_State.None;
+        this._inputState = d.Input_State.INPUT_NONE;
         // add event handlers
         this.eventHandler();
     }
@@ -23,15 +23,15 @@ var GameController = (function () {
         var that = this;
         // mouse button pressed down
         d.canvas.addEventListener('mousedown', function () {
-            that.setInput(d.Input_State.Click);
+            that.setInput(d.Input_State.INPUT_CLICK);
         });
         // mouse button pressed down
         d.canvas.addEventListener('touch', function () {
-            that.setInput(d.Input_State.Touch);
+            that.setInput(d.Input_State.INPUT_TOUCH);
         });
         // mouse button released
         d.canvas.addEventListener('mouseup', function () {
-            that.setInput(d.Input_State.None);
+            that.setInput(d.Input_State.INPUT_NONE);
         });
     };
     GameController.prototype.setInput = function (input) {

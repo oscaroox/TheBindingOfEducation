@@ -21,7 +21,7 @@ var Player = (function (_super) {
         // EXAMPLE
         // if user is touching screen animation state is set to RUN
         // if our animation state is run then increase our x position by 5 pixels every update
-        if (this.getAnimationState() == d.Animation_State.Run) {
+        if (this.getAnimationState() == d.Animation_State.ANIM_RUN) {
             var x = this.getPositionX() + 5, y = this.getPositionY();
             this.setPosition(x, y);
         }
