@@ -26,7 +26,7 @@ export enum Lane {
 
 export var Lane_Position = [
     494,
-    617,
+    639,
     744
 ];
 
@@ -41,3 +41,15 @@ export enum Fruits {
     FRUIT_BANANA = 1,
     FRUIT_APPLE
 }
+
+// export var Fruits_Info = {
+//     banana: {
+//         points: 5,
+//         sprite: 'images/banana.jpeg'
+//     },
+//   
+//     apple: {
+//         points: 10,
+//         sprite: 'images/apple.jpg'
+//     }
+// };
