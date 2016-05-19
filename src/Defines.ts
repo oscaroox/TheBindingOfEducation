@@ -29,3 +29,15 @@ export var Lane_Position = [
     617,
     744
 ];
+
+export var enemiesAmount = 2;
+export enum Enemies {
+    ENEMY_HAMBURGER = 1,
+    ENEMY_PIZZA
+}
+
+export var fruitAmount = 2;
+export enum Fruits {
+    FRUIT_BANANA = 1,
+    FRUIT_APPLE
+}
