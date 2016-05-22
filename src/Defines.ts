@@ -1,6 +1,8 @@
 export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
 export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
+export var BACKGROUND_SPEED = 5; 
+
 export enum Animation_State {
     ANIM_IDLE,
     ANIM_RUN,
@@ -25,9 +27,9 @@ export enum Lane {
 }
 
 export var Lane_Position = [
-    494,
+    510,
     639,
-    744
+    760
 ];
 
 export var enemiesAmount = 2;
