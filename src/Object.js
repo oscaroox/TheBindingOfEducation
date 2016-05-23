@@ -28,6 +28,10 @@ var __Object = (function () {
         this._x = x;
         this._y = y;
     };
+    __Object.prototype.updatePosition = function (speed) {
+        var x = this._x, y = this._y + speed;
+        this.setPosition(x, y);
+    };
     __Object.prototype.getSprite = function () { return this._sprite; };
     // when unit first enters the scene
     __Object.prototype.spawn = function () {

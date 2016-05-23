@@ -9,7 +9,7 @@ var Apple = (function (_super) {
     __extends(Apple, _super);
     function Apple(x, y) {
         // static starting values
-        var sprite = "apple.png", points = 8;
+        var sprite = "images/apple.png", points = 8;
         _super.call(this, x, y, sprite, points);
     }
     return Apple;

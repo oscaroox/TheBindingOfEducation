@@ -44,6 +44,14 @@ abstract class __Object
         this._y = y;
     }
     
+    updatePosition(speed: number)
+    {
+        var x = this._x,
+            y = this._y + speed;
+        
+        this.setPosition(x, y);
+    }
+    
     getSprite():HTMLImageElement { return this._sprite; }
     
     

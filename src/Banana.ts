@@ -5,7 +5,7 @@ export default class Banana extends Fruit
     constructor(x: number, y: number)
     {
         // static starting values
-        var sprite = "banana.png",
+        var sprite = "images/banana.png",
             points = 5;
 
         super(x, y, sprite, points);

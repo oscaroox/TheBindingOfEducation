@@ -6,33 +6,55 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var d = require('./Defines');
 var Unit_1 = require('./Unit');
+var Defines_1 = require("./Defines");
 // PLAYER
 // all updates and movement is done in this class
 var Player = (function (_super) {
     __extends(Player, _super);
-    function Player(x, y, gameController) {
-        var sprite = "images/player.png", health = 2;
+    function Player() {
+        var sprite = "images/player_50.png", health = 2;
+        var x = d.canvas.width / 2;
+        var y = d.canvas.height;
         _super.call(this, x, y, health, sprite);
-        this._gameController = gameController;
+        this._curLane = d.Lane.LANE_MIDDLE;
+        this.addEventHandlers();
+        this.init();
         this.spawn();
     }
-    // update our hero's position to some x and y coordinate on the scene
-    Player.prototype.updatePosition = function () {
-        // EXAMPLE
-        // if user is touching screen animation state is set to RUN
-        // if our animation state is run then increase our x position by 5 pixels every update
-        if (this.getAnimationState() == d.Animation_State.ANIM_RUN) {
-            var x = this.getPositionX() + 5, y = this.getPositionY();
-            this.setPosition(x, y);
+    Player.prototype.init = function () {
+        var x = this.getPositionX() - (this.getSprite().width / 2), y = this.getPositionY() - (this.getSprite().height * 1.5);
+        this.setPosition(x, y);
+    };
+    //voeg een event toe aan click, geef door de x waarde van de muis
+    // geeft door aan handleCLick
+    Player.prototype.addEventHandlers = function () {
+        var _this = this;
+        d.canvas.addEventListener('click', function (e) { _this.handleClick(e.clientX); });
+    };
+    // kijkt of de x kleiner dan de helft van canvas is
+    Player.prototype.handleClick = function (x) {
+        if (x < d.canvas.width / 2) {
+            this.updatePosition(d.Click_Position.POS_LEFT);
+        }
+        else {
+            this.updatePosition(d.Click_Position.POS_RIGHT);
         }
     };
+    // update our hero's position to some x and y coordinate on the scene
+    Player.prototype.updatePosition = function (clickPosition) {
+        if (clickPosition == Defines_1.Click_Position.POS_LEFT) {
+            if (this._curLane > d.Lane.LANE_LEFT)
+                this._curLane -= 1;
+        }
+        else {
+            if (this._curLane < d.Lane.LANE_RIGHT)
+                this._curLane += 1;
+        }
+        var x = d.Lane_Position[this._curLane] - this.getSprite().width / 2, y = this.getPositionY();
+        this.setPosition(x, y);
+    };
     // update everything that changed with our hero
-    // we get the input from GameScene, which gets it from the EventHandlers of GameController
     Player.prototype.update = function () {
-        var inputState = this._gameController.getInputState();
-        this.setAnimationState(inputState);
-        this.updateAnimation();
-        this.updatePosition();
         // after updating everything we redraw player sprite on screen with our new data
         _super.prototype.update.call(this);
     };

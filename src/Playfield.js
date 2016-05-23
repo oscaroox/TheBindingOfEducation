@@ -12,14 +12,10 @@ var Playfield = (function () {
         this._sprites[1] = tempSprites2; // second image is set into the _sprites array
         this._x = []; // create an _x position array
         this._y = []; // create an _y position array
-        this._x[0] = d.canvas.width / 2; // first position _x is set to the width from canvas divided by 2
+        this._x[0] = d.canvas.width / 2 - this._sprites[0].width / 2; // first position _x is set to the width from canvas divided by 2
         this._y[0] = d.canvas.height / 2; // first position _y is set to the width from canvas divided by 2
         this._x[1] = this._x[0]; // Second _x position is the same as the first _x position
         this._y[1] = this._y[0] - this._sprites[0].height; // second _y position is set as the first _y position minus the height from the first image
-        // this._x[0] = 0;
-        // this._y[0] = 0;
-        // this._x[1] = this._x[0];
-        // this._y[1] = this._y[0] - this._sprites[0].height;
         this.draw();
     }
     Playfield.prototype.updatePosition = function () {

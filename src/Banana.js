@@ -9,7 +9,7 @@ var Banana = (function (_super) {
     __extends(Banana, _super);
     function Banana(x, y) {
         // static starting values
-        var sprite = "banana.png", points = 5;
+        var sprite = "images/banana.png", points = 5;
         _super.call(this, x, y, sprite, points);
     }
     return Banana;
