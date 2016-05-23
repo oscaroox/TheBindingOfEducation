@@ -34,6 +34,6 @@ export enum Enemies {
 
 export var fruitAmount = 2;
 export enum Fruits{
-   FRUIT_BANANA = 1,
+    FRUIT_BANANA = 1,
     FRUIT_APPLE
 }

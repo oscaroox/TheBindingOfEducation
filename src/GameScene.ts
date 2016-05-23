@@ -5,7 +5,7 @@ import * as d from './Defines';
 import Fruit from './Fruit';
 import Playfield from './Playfield';
 import EnemiesMgr from "./EnemiesMgr";
-
+import FruitMgr from "./FruitMgr";
 
 // GAMESCENE
 // Controls what is shown on screen
@@ -16,6 +16,7 @@ export default class GameScene
     private _stage: CanvasRenderingContext2D;
     private _playfield: Playfield;
     private _enemiesMgr: EnemiesMgr;
+    private _fruitMgr: FruitMgr;
 
     constructor() 
     {
@@ -32,7 +33,7 @@ export default class GameScene
         this._enemiesMgr = new EnemiesMgr();
         
         // add two fruits to scene
-
+        this._fruitMgr = new FruitMgr();
         
         // add player to scene
         this._player = new Player();
@@ -56,6 +57,9 @@ export default class GameScene
 
         // background
         this._playfield.update();
+
+        // fruit manager
+        this._fruitMgr.update();
 
         // enemies manager
         this._enemiesMgr.update();

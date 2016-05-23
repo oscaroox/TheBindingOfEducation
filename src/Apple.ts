@@ -2,12 +2,15 @@ import Fruit from './Fruit';
 
 export default class Apple extends Fruit
 {
-    constructor(x: number, y: number)
+    constructor(id: number, x: number)
     {
         // static starting values
         var sprite = "images/apple.png",
-            points = 8;
+            points = 8,
+            y = 0 - 1000;
 
-        super(x, y, sprite, points);
+        super(id, x, y, sprite, points);
+        
+        this.setInitPosition();
     }
 }

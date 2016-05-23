@@ -19,11 +19,17 @@ export default class EnemiesMgr
     
     updatePosition():void 
     {
+        var removeEnemiesList: number[] = [];
+
         for (var i = 0; i < this._enemies.length; i += 1) {
             var e = this._enemies[i];
             
             e.update();
+
+            if (e.getPositionY() > canvas.height) { removeEnemiesList.push(i) }
         }
+
+        if (removeEnemiesList.length > 0) { this.despawn(removeEnemiesList); }
     }
     
 
@@ -53,8 +59,13 @@ export default class EnemiesMgr
             this._enemies.push(e);
             
             this._time = curTime;
+        }
+    }
 
-            console.log('enemy spawned');
+    despawn(indextList: number[]):void
+    {
+        for(var i = this._enemies.length - 1; i >= 0; i -= 1) {
+            if(i === indextList[i]) { this._enemies.splice(i, 1);   }
         }
     }
 
