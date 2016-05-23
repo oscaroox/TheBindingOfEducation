@@ -76,6 +76,7 @@ export default class GameScene
 
         // update points
         this._score.update(1);
+        
     }
 
     // constant update loop

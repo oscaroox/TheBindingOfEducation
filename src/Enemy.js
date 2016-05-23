@@ -11,7 +11,7 @@ var Enemy = (function (_super) {
         _super.call(this, x, y, health, sprite);
     }
     Enemy.prototype.updatePosition = function () {
-        var x = this.getPositionX(), y = this.getPositionY() + 5;
+        var x = this.getPositionX(), y = this.getPositionY();
         this.setPosition(x, y);
     };
     Enemy.prototype.update = function () {

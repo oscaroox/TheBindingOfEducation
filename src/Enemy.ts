@@ -11,7 +11,7 @@ abstract class Enemy extends Unit
     {
 
         var x = this.getPositionX(),
-            y = this.getPositionY() +5;
+            y = this.getPositionY() ;
         this.setPosition(x, y);
     }
 
