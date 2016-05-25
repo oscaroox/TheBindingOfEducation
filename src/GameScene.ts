@@ -6,6 +6,7 @@ import Fruit from './Fruit';
 import Playfield from './Playfield';
 import EnemiesMgr from "./EnemiesMgr";
 import FruitMgr from "./FruitMgr";
+import ObjectsMgr from "./ObjectsMgr";
 
 // GAMESCENE
 // Controls what is shown on screen
@@ -17,6 +18,7 @@ export default class GameScene
     private _playfield: Playfield;
     private _enemiesMgr: EnemiesMgr;
     private _fruitMgr: FruitMgr;
+    private _objectsMgr: ObjectsMgr;
 
     constructor() 
     {
@@ -34,6 +36,9 @@ export default class GameScene
         
         // add two fruits to scene
         this._fruitMgr = new FruitMgr();
+
+        this._objectsMgr = new ObjectsMgr(this._fruitMgr, this._enemiesMgr);
+        this._enemiesMgr.addObjectsMgr(this._objectsMgr);
         
         // add player to scene
         this._player = new Player();
