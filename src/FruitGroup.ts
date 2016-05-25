@@ -3,6 +3,8 @@ import * as g from './global'
 import Fruit from './Fruit'
 import Apple from './Apple'
 import Banana from './Banana'
+import Strawberry from './Strawberry'
+import Watermelon from './Watermelon'
 
 export default class FruitGroup
 {
@@ -44,6 +46,14 @@ export default class FruitGroup
                     var f = new Banana(uniqueID, this._lanePos);
                     break;
 
+                case d.Fruits.FRUIT_STRAWBERRY:
+                    var f = new Strawberry(uniqueID, this._lanePos);
+                    break;
+
+                case d.Fruits.FRUIT_WATERMELON:
+                    var f = new Watermelon(uniqueID, this._lanePos);
+                    break;
+                
                 default:
                     console.log('ERROR: generateGroup defaulted');
             }

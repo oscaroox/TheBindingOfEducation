@@ -1,7 +1,8 @@
 export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
 export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
-export var BACKGROUND_SPEED = 5;
+export var BACKGROUND_SPEED = 8;
+
 
 export enum Animation_State {
     ANIM_IDLE = 0,
@@ -32,8 +33,10 @@ export enum Enemies {
     ENEMY_PIZZA
 }
 
-export var fruitAmount = 2;
+export var fruitAmount = 4;
 export enum Fruits{
     FRUIT_BANANA = 1,
-    FRUIT_APPLE
+    FRUIT_APPLE,
+    FRUIT_STRAWBERRY,
+    FRUIT_WATERMELON
 }

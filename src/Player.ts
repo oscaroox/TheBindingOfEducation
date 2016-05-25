@@ -8,7 +8,7 @@ import {Click_Position} from "./Defines";
 export default class Player extends Unit
 {
     private _curLane: number ;
-
+    
     constructor() {
 
         var sprite = "images/player_50.png",
