@@ -1,7 +1,8 @@
 export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
 export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
-export var BACKGROUND_SPEED = 8;
+export var BACKGROUND_SPEED = 5;
+export var PLAYER_SPEED = 80;
 
 
 export enum Animation_State {

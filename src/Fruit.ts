@@ -1,4 +1,5 @@
 import Object from './Object'
+import {BACKGROUND_SPEED} from "./Defines";
 
 abstract class Fruit extends Object
 {
@@ -12,7 +13,7 @@ abstract class Fruit extends Object
         super(x, y, sprite);
         this._id         = id;
         this._points     = points;
-        this._speed = 5;
+        this._speed = BACKGROUND_SPEED;
         this._modOffSetY = 0.4;
     }
 

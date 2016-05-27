@@ -1,4 +1,5 @@
 import * as d from './Defines';
+import {BACKGROUND_SPEED} from "./Defines";
 
 export default class Playfield
 {
@@ -35,8 +36,8 @@ export default class Playfield
 
     updatePosition():void
     {
-        this._y[0] += 5;
-        this._y[1] += 5;
+        this._y[0] += BACKGROUND_SPEED;
+        this._y[1] += BACKGROUND_SPEED;
 
         this.shuffle();
     }

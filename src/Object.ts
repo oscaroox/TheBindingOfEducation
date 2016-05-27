@@ -35,7 +35,7 @@ abstract class __Object
     getPositionX():number { return this._x; }
 
     // return only the y coordinate
-    getPositionY():number { return this._y; }
+    getPositionY():number { return this._y }
 
     // set position of unit
     setPosition(x:number, y:number)

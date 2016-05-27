@@ -1,5 +1,6 @@
 "use strict";
 var d = require('./Defines');
+var Defines_1 = require("./Defines");
 var Playfield = (function () {
     function Playfield() {
         this._stage = d.ctx; // defines canvas set to _stage
@@ -19,8 +20,8 @@ var Playfield = (function () {
         this.draw();
     }
     Playfield.prototype.updatePosition = function () {
-        this._y[0] += 5;
-        this._y[1] += 5;
+        this._y[0] += Defines_1.BACKGROUND_SPEED;
+        this._y[1] += Defines_1.BACKGROUND_SPEED;
         this.shuffle();
     };
     Playfield.prototype.shuffle = function () {

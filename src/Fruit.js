@@ -5,13 +5,14 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var Object_1 = require('./Object');
+var Defines_1 = require("./Defines");
 var Fruit = (function (_super) {
     __extends(Fruit, _super);
     function Fruit(id, x, y, sprite, points) {
         _super.call(this, x, y, sprite);
         this._id = id;
         this._points = points;
-        this._speed = 5;
+        this._speed = Defines_1.BACKGROUND_SPEED;
         this._modOffSetY = 0.4;
     }
     Fruit.prototype.setInitPosition = function () {

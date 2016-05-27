@@ -1,13 +1,18 @@
 import * as d from './Defines';
 import Unit from './Unit';
 import {Click_Position} from "./Defines";
+import {PLAYER_SPEED} from "./Defines";
+import {BACKGROUND_SPEED} from "./Defines";
+
 
 
 // PLAYER
 // all updates and movement is done in this class
 export default class Player extends Unit
 {
-    private _curLane: number ;
+    private _curLane: number;           // slaat baan positie op (0, 1, 2)
+    private _speedX: number;            // snelheid van X verandering
+    private _clickedPosition: number;   // positie waar er is geklikt (waarde links of rechts)
     
     constructor() {
 
@@ -19,6 +24,8 @@ export default class Player extends Unit
         super(x, y, health, sprite);
 
         this._curLane = d.Lane.LANE_MIDDLE;
+
+        this._speedX = 5;
 
         this.addEventHandlers();
         this.init();
@@ -38,29 +45,33 @@ export default class Player extends Unit
     addEventHandlers():void { d.canvas.addEventListener('click', (e)=> { this.handleClick(e.clientX) }); }
 
     // kijkt of de x kleiner dan de helft van canvas is
-    handleClick(x): void
+    handleClick(clickX: number): void
     {
-        if (x < d.canvas.width / 2) {
-            this.updatePosition(d.Click_Position.POS_LEFT);
+        if (clickX < d.canvas.width / 2) {
+            if (this._curLane > d.Lane.LANE_LEFT) this._curLane -= 1;
+
+            this._clickedPosition = Click_Position.POS_LEFT;
         } else {
-            this.updatePosition(d.Click_Position.POS_RIGHT);
+            if (this._curLane < d.Lane.LANE_RIGHT) this._curLane += 1;
+
+            this._clickedPosition = Click_Position.POS_RIGHT;
         }
     }
 
-    // update our hero's position to some x and y coordinate on the scene
-    updatePosition(clickPosition: number):void
+    animationMove(): void
     {
-        if (clickPosition == Click_Position.POS_LEFT) {
-            if (this._curLane > d.Lane.LANE_LEFT) this._curLane -= 1;
-        } else {
-            if (this._curLane < d.Lane.LANE_RIGHT) this._curLane += 1;
+        var goal = d.Lane_Position[this._curLane] - this.getSprite().width / 2;
+
+        if (this.getPositionX() != goal) {
+            if (this._clickedPosition == Click_Position.POS_LEFT)
+                var x = this.getPositionX() - this._speedX;
+            else
+                var x = this.getPositionX() + this._speedX;
+
+            var y = this.getPositionY();
+
+            this.setPosition(x, y);
         }
-
-        var x = d.Lane_Position[this._curLane] - this.getSprite().width / 2,
-            y = this.getPositionY();
-
-        this.setPosition(x, y);
-
     }
 
     // update everything that changed with our hero
@@ -68,5 +79,7 @@ export default class Player extends Unit
     {
         // after updating everything we redraw player sprite on screen with our new data
         super.update();
+
+        this.animationMove();
     }
 }
