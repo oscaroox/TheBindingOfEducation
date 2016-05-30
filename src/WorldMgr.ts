@@ -1,7 +1,7 @@
 import FruitMgr from './FruitMgr';
 import EnemiesMgr from './EnemiesMgr';
 
-export default class ObjectsMgr
+export default class WorldMgr
 {
     public _fruitMgr: FruitMgr;
     public _enemiesMgr: EnemiesMgr;

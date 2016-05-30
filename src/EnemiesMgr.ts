@@ -3,14 +3,14 @@ import {getRandomInt, isCollision} from './global'
 import Enemy from './Enemy'
 import Hamburger from './Hamburger'
 import Pizza from './Pizza'
-import ObjectsMgr from './ObjectsMgr'
+import WorldMgr from "./WorldMgr";
 
 export default class EnemiesMgr
 {
     private _enemies: Enemy[];
     private _time: number;
     private _timeDiff: { min: number, max: number };
-    private _objectsMgr: ObjectsMgr;
+    private _worldMgr: WorldMgr;
     
     constructor()
     {
@@ -19,7 +19,7 @@ export default class EnemiesMgr
         this._timeDiff = { min: 2500, max: 5000 };
     }
 
-    addObjectsMgr(objectsMgr: ObjectsMgr):void { this._objectsMgr = objectsMgr; }
+    addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
 
     updatePosition():void
     {
@@ -40,7 +40,7 @@ export default class EnemiesMgr
 
     generatePositionY(enemy: Enemy):void
     {
-        var fruitMgr = this._objectsMgr._fruitMgr,
+        var fruitMgr = this._worldMgr._fruitMgr,
             x1       = enemy.getPositionX(),
             x2       = enemy.getPositionX() + enemy.getSprite().width,
             y1       = enemy.getPositionY(),

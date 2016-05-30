@@ -72,7 +72,7 @@ abstract class __Object
     }
 
     // draw enemy on screen
-    draw():void
+    protected draw():void
     {
         this._stage.drawImage(this._sprite, this._x, this._y);
     }

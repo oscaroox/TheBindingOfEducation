@@ -5,7 +5,7 @@ var d = require('./Defines');
 var Playfield_1 = require('./Playfield');
 var EnemiesMgr_1 = require("./EnemiesMgr");
 var FruitMgr_1 = require("./FruitMgr");
-var ObjectsMgr_1 = require("./ObjectsMgr");
+var WorldMgr_1 = require("./WorldMgr");
 // GAMESCENE
 // Controls what is shown on screen
 var GameScene = (function () {
@@ -19,8 +19,8 @@ var GameScene = (function () {
         this._enemiesMgr = new EnemiesMgr_1.default();
         // add two fruits to scene
         this._fruitMgr = new FruitMgr_1.default();
-        this._objectsMgr = new ObjectsMgr_1.default(this._fruitMgr, this._enemiesMgr);
-        this._enemiesMgr.addObjectsMgr(this._objectsMgr);
+        this._worldMgr = new WorldMgr_1.default(this._fruitMgr, this._enemiesMgr);
+        this._enemiesMgr.addWorldMgr(this._worldMgr);
         // add player to scene
         this._player = new Player_1.default();
         this._playfield = new Playfield_1.default();
