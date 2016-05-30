@@ -1,88 +1,99 @@
-import GameController from './GameController';
-import Enemy from './Enemy';
-import Pizza from './Pizza';
-import Hamburger from './Hamburger';
 import Player from './Player';
 import GameScore from './GameScore';
-import * as d from './Defines';
-import Banana from './Banana';
-import Apple from './Apple';
-import Fruit from './Fruit';
+import {canvas, ctx} from './Defines';
 import Playfield from './Playfield';
-
+import EnemiesMgr from "./EnemiesMgr";
+import FruitMgr from "./FruitMgr";
+import CookingOil from "./CookingOil";
+import PowerupMgr from "./PowerupMgr";
+import WorldMgr from "./WorldMgr";
 
 // GAMESCENE
 // Controls what is shown on screen
 export default class GameScene
 {
     private _score: GameScore;
-    private _enemies: Enemy[];
-    private _gameController: GameController;
+    private _enemiesMgr: EnemiesMgr;
+    private _fruitsMgr: FruitMgr;
     private _player: Player;
-    private _stage: CanvasRenderingContext2D;
-    private _fruits: Fruit[];
     private _playfield: Playfield;
+    private _worldMgr: WorldMgr;
+    private _cookingOil: CookingOil;
+    private _powerupMgr: PowerupMgr;
 
     constructor() 
     {
-        // canvas
-        this._stage = d.ctx;
-
-        // add a game controller that handles player input events
-        this._gameController = new GameController();
+        // add background
+        this._playfield = new Playfield();
+        
+        // add player to scene
+        this._player = new Player(this._playfield);
 
         // score handler
-        this._score = new GameScore(0);
+        this._score = new GameScore(0, this._playfield);
+        
+        // add cooking oil
+        this._cookingOil = new CookingOil();
 
-
-        // add two enemies to scene
-        this._enemies = [];
-        this._enemies[0] = new Hamburger(90, 90);
-        this._enemies[1] = new Pizza(200, 200);
-
-        // add two fruits to scene
-        this._fruits = [];
-        this._fruits[0] = new Banana(0, 0);
-        this._fruits[1] = new Apple(0, 0);
-
-
-        // add player to scene
-        this._player = new Player(0, 0, this._gameController);
-
-        this._playfield = new Playfield();
-
-
+        // fruits manager
+        this._fruitsMgr = new FruitMgr();
+        
+        // enemies manager
+        this._enemiesMgr = new EnemiesMgr();
+        
+        // power up manager
+        this._powerupMgr = new PowerupMgr();
+        
+        // objects manager and objects holder
+        this._worldMgr = new WorldMgr(this._player, this._fruitsMgr, this._enemiesMgr, this._powerupMgr, this._cookingOil, this._score);
+        this._enemiesMgr.addWorldMgr(this._worldMgr);
+        this._fruitsMgr.addWorldMgr(this._worldMgr);
+        this._powerupMgr.addWorldMgr(this._worldMgr);
+        this._player.addWorldMgr(this._worldMgr);
+        this._playfield.addWorldMgr(this._worldMgr);
+        
         // start update loop
         this.loop();
     }
     
 
     // update current game scene
-    update():void 
+    // update in order of Z-axis
+    // what should be drawn in the background first and what should be drawn up front last
+    private update():void 
     {
+        // if (this._player.getHealth() == 0)
+        //     return;
 
         // clear canvas for redraw
-        this._stage.clearRect(0, 0, d.canvas.width, d.canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // background
         this._playfield.update();
+        
+        // fruit manager
+        this._fruitsMgr.update();
 
-        // update all enemies on screen
-        for (let i = 0; i < this._enemies.length; i++) {
-            this._enemies[i].update();
-        }
+        // powerups manager
+        this._powerupMgr.update();
+
+        // enemy manager
+        this._enemiesMgr.update();
 
         // update player
         this._player.update();
+        
+        // update cooking oil
+        this._cookingOil.update();
 
         // update points
-        this._score.update(1);
+        this._score.update();
     }
 
     // constant update loop
-    loop():void
+    private loop():void
     {
         requestAnimationFrame(() => this.loop());
-
         this.update();
     }
 }

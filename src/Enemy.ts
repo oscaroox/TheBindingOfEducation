@@ -1,25 +1,29 @@
+import {BACKGROUND_SPEED, DEBUG_SHOW_ENEMY_HITBOX} from "./Defines";
 import Unit from './Unit';
 
 abstract class Enemy extends Unit
 {
-    constructor(x: number, y: number, health: number, sprite: string)
+    protected _speed: number;   // the speed this enemy will travel across the screen
+    
+    constructor(x: number, y: number, health: number, sprite: string, lane: number)
     {
-        super(x, y, health, sprite);
+        super(x, y, health, sprite, lane);
+        this._speed = BACKGROUND_SPEED;
     }
-
-    updatePosition():void
+    
+    protected setInitPosition():void
     {
-
-        var x = this.getPositionX(),
-            y = this.getPositionY() +5;
+        var y = 0 - this.getSprite().height,
+            x = this.getPositionX() - this.getSprite().width / 2;
+        
         this.setPosition(x, y);
     }
 
-    update():void
+    public update():void
     {
+        this.updatePosition(BACKGROUND_SPEED);
+        if (DEBUG_SHOW_ENEMY_HITBOX) this.drawHitbox();
         super.update();
-
-        this.updatePosition();
     }
 }
 

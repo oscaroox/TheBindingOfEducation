@@ -1,48 +1,570 @@
-import * as d from './Defines';
+import {
+    canvas, ctx, Lane, Lane_Position, Cooking_Oil_State,
+    DEBUG_SHOW_PLAYER_HITBOX, DEBUG_STROKE_WIDTH, DEBUG_COLOR, Powerup_Flags, DEBUG_SHOW_MAGNET_HITBOX, BACKGROUND_SPEED
+} from "./Defines";
+import {isCollision} from './Globals'
 import Unit from './Unit';
-import GameController from "./GameController";
+import WorldMgr from "./WorldMgr";
+import Playfield from "./Playfield";
 
 // PLAYER
 // all updates and movement is done in this class
 export default class Player extends Unit
 {
-    private _gameController: GameController;
-
-    constructor(x: number, y: number, gameController: GameController)
-    {
-        var sprite = "images/player.png",
-            health = 2;
+    public _isInvulnerable: boolean;
+    
+    private _worldMgr: WorldMgr;
+    private _playfield: Playfield;
+    
+    public _isMounted: boolean; 
         
-        super(x, y, health, sprite);
+    private _animationStep: number;
+    private _spriteWidth: number;
+    private _spriteHeight: number;
+    private _spriteAnimations: number;
+    private _spriteDrawTime: number;
+    private _spriteDrawTimeDiff: number;
+    
+    private _speedX: number;
+    private _speedY: number;
+    
+    private _timeHit: number;
+    private _maxInvulnerableTimer: number;
+    private _tick: number;
+    private _tickStartValue: number;
+    
+    private _powerupFlags: number;
+    private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];
+    
+    constructor(playfield: Playfield)
+    {
+        var sprite = "images/character_walking_big.png",
+            health = 2,
+            x      = (canvas.width / 2),
+            y      = canvas.height,
+            lane   = Lane.LANE_MIDDLE;
+        super(x, y, health, sprite, lane);
+        
+        this._playfield = playfield;
+        
+        this._isMounted = false;
 
-        this._gameController = gameController;
+        this._animationStep      = 0;
+        this._spriteAnimations   = 1;
+        this._spriteWidth        = 45;
+        this._spriteHeight       = 72;
+        this._spriteDrawTime     = Date.now();
+        this._spriteDrawTimeDiff = 150;
+
+        this._speedY = 1;
+        this._speedX = 8;
+
+        this._maxInvulnerableTimer = 3000;  // 3 seconds
+        this._isInvulnerable = false;
+        this._tickStartValue = 30;
+        this._tick = this._tickStartValue;
+
+        this._powerupFlags = Powerup_Flags.FLAG_NONE;
+        this._powerups = [];
+    
+        this.addEventHandlers();
+    }
+    
+    public getPowerupFlags():Powerup_Flags { return this._powerupFlags; }
+    
+    public addPowerupFlag(flag: Powerup_Flags):void
+    {
+        this._powerupFlags |= flag;
+
+        if (flag & Powerup_Flags.FLAG_DOUBLE_POINTS) console.log('double points');
+        if (flag & Powerup_Flags.FLAG_INVULNERABLE) console.log('invul');
+        if (flag & Powerup_Flags.FLAG_MAGNET) console.log('magnet');
+    }
+    
+    public removePowerupFlag(flag: Powerup_Flags):void { this._powerupFlags &= ~flag; }
+
+    public getHitbox():{ x1: number, y1: number, x2: number, y2: number }
+    {
+        var y2 = this.getPositionY() + this.getSprite().height;
+        return {
+            x1: this.getPositionX(),
+            y1: y2 - this.getSprite().height * 0.3,
+            x2: this.getPositionX() + this.getSprite().width / (this._spriteAnimations+1),
+            y2: y2
+        }
+    }
+    
+    public addWorldMgr(worldMgr: WorldMgr):void
+    {
+        this._worldMgr = worldMgr;
+        this.init();
+    }
+    
+    // initialize
+    private init():void
+    {
+        // adjust position to middle
+        var oil = this._worldMgr.getCookingOil().getSprite(),
+            x   = this.getPositionX() - this._spriteWidth / 2,
+            y   = canvas.height - oil.height / 2 - this.getSprite().height * 1.5;
+
+        this.setPosition(x, y);
         this.spawn();
     }
 
-
-    // update our hero's position to some x and y coordinate on the scene
-    updatePosition():void
+    // add event listeners
+    private addEventHandlers():void
     {
-        // EXAMPLE
-        // if user is touching screen animation state is set to RUN
-        // if our animation state is run then increase our x position by 5 pixels every update
-        if (this.getAnimationState() == d.Animation_State.Run) {
-            let x = this.getPositionX() + 5,
-                y = this.getPositionY();
+        canvas.addEventListener('click', (e)=> { this.handleClick(e.clientX) });
+        window.addEventListener('keydown', (e)=> { this.keyboardInput(e) });
+        
+        window.addEventListener('keyup', (e)=> { 
+            // this.keyboardInputUp(e) 
+            
+            // up arrow and W key
+            if (e.keyCode == 38 || e.keyCode == 87) {
+                // back to regular speed
+                BACKGROUND_SPEED = 5;
+            }
+        });
+    }
+    
+    // private keyboardInputUp(event: KeyboardEvent):void
+    // {
+    //    
+    // }
+
+    // what to do with certain keypresses
+    private keyboardInput(event: KeyboardEvent):void
+    {
+        // up arrow and W key
+        if (event.keyCode == 38 || event.keyCode == 87) {
+            // go twice as fast
+            BACKGROUND_SPEED = 10;
+        }
+
+        // left arrow and A key
+        if (event.keyCode == 37 || event.keyCode == 65) {
+            if (this._curLane > Lane.LANE_LEFT) this._curLane -= 1;
+        }
+
+        // right arrow and D key
+        if (event.keyCode == 39 || event.keyCode == 68) {
+            if (this._curLane < Lane.LANE_RIGHT) this._curLane += 1;
+        }
+    }
+
+    // what to do when screen is clicked
+    private handleClick(clickX: number):void
+    {
+        if (clickX < canvas.width / 2) {
+            if (this._curLane > Lane.LANE_LEFT) this._curLane -= 1;
+        } else {
+            if (this._curLane < Lane.LANE_RIGHT) this._curLane += 1;
+        }
+    }
+    
+    private powerup():void
+    {
+        // count down in case any powerup gets removed from array
+        for (var i = this._powerups.length-1; i >= 0; i -= 1)
+        {
+            var power = this._powerups[i],
+                flag  = power.flag;
+
+            if (flag & Powerup_Flags.FLAG_MAGNET && this._powerupFlags & Powerup_Flags.FLAG_MAGNET) {
+                this.magnet(i);
+            }
+
+            if (flag & Powerup_Flags.FLAG_INVULNERABLE && this._powerupFlags & Powerup_Flags.FLAG_INVULNERABLE) {
+                this.invulnerability(i);
+            }
+
+            if (flag & Powerup_Flags.FLAG_DOUBLE_POINTS && this._powerupFlags & Powerup_Flags.FLAG_DOUBLE_POINTS) {
+                this.doublePoints(i);
+            }
+        }
+
+        // TEST
+        // this.magnet(0);
+    }
+
+    public removePowerup(index: number):void
+    {
+        var length = this._powerups.length - 1;
+
+        // count down because we are removing array indexes while iterating through this array
+        for(var i = length; i >= 0; i -= 1) {
+            if(i === index) this._powerups.splice(i, 1);
+        }
+    }
+    
+    private collisionCheck():void
+    {
+        var fruitsMgr   = this._worldMgr.getFruitsMgr(),
+            enemiesMgr  = this._worldMgr.getEnemiesMgr(),
+            powerupsMgr = this._worldMgr.getPowerUpsMgr(),
+            fruitGroups = fruitsMgr.getFruitGroups(),
+            enemies     = enemiesMgr.getEnemySprites(),
+            powerups    = powerupsMgr.getPowerupSprites(),
+            hitbox      = this.getHitbox();
+        
+        // fruits
+        for (var i = 0; i < fruitGroups.length; i += 1) 
+        {
+            var fruitGroup = fruitGroups[i];
+            if (fruitGroup) {
+                var fruits = fruitGroups[i].getFruitSprites();
+                for (var j = fruits.length - 1; j >= 0; j -= 1) 
+                {
+                    var fruit = fruits[j];
+                    if (fruit) {
+                        var fx1 = fruit.getPositionX(),
+                            fx2 = fruit.getPositionX() + fruit.getSprite().width,
+                            fy1 = fruit.getPositionY(),
+                            fy2 = fruit.getPositionY() + fruit.getSprite().height;
+
+                        if (isCollision(hitbox.x1, hitbox.x2, hitbox.y1, hitbox.y2, fx1, fx2, fy1, fy2)) {
+                            fruitGroups[i].collided(fruit.getId());
+                        }
+                    }
+                }
+            }
+        }
+
+        // enemies
+        for (var i = 0; i < enemies.length; i += 1)
+        {
+            var enemy = enemies[i];
+            if (enemy) {
+                var ex1 = enemy.getPositionX(),
+                    ex2 = enemy.getPositionX() + enemy.getSprite().width,
+                    ey1 = enemy.getPositionY(),
+                    ey2 = enemy.getPositionY() + enemy.getSprite().height;
+
+                if (isCollision(hitbox.x1, hitbox.x2, hitbox.y1, hitbox.y2, ex1, ex2, ey1, ey2)) {
+                    if (!this._isInvulnerable)
+                        this.collidedWithEnemy();
+                }
+            }
+        }
+        
+        //powerups
+        for (var i = powerups.length-1; i >= 0; i -= 1)
+        {
+            var power = powerups[i];
+            if (power) {
+                var px1 = power.getPositionX(),
+                    px2 = power.getPositionX() + power.getSprite().width,
+                    py1 = power.getPositionY(),
+                    py2 = power.getPositionY() + power.getSprite().height;
+
+                if (isCollision(hitbox.x1, hitbox.x2, hitbox.y1, hitbox.y2, px1, px2, py1, py2)) {
+                    powerupsMgr.collided(i);
+
+                    // grab and add powerup flag to player
+                    var flag = power.getFlag();
+                    this.addPowerupFlag(flag);
+
+                    // add powerup data (duration, startTime, etc) to player's powerup list
+                    this._powerups.push(power.getData());
+                }
+            }
+        }
+        
+        // playfield objects
+        var object = this._playfield.getPlayfieldObject();
+        if (object != null) {
+            var ox1 = object.getHitbox().x1,
+                oy1 = object.getHitbox().y1,
+                ox2 = object.getHitbox().x2,
+                oy2 = object.getHitbox().y2;
+
+            if (isCollision(hitbox.x1, hitbox.x2, hitbox.y1, hitbox.y2, ox1, ox2, oy1, oy2)) {
+                if (object._isMountable) {
+                    this._isMounted = true;
+                } else {
+                    this._isMounted = false;
+                }
+            }
+        }
+    }
+
+    private collidedWithEnemy():void
+    {
+        this.removeHealth(1);
+
+        if (this.getHealth() == 0) {
+            // GAME OVER
+        } else {
+            this._timeHit = Date.now();
+            this._isInvulnerable = true;
+
+            this.moveUp();
+            this._worldMgr.getCookingOil().setState(Cooking_Oil_State.STATE_HIGH);
+        }
+    }
+
+    private move():void
+    {
+        var oilState = this._worldMgr.getCookingOil().getState();
+
+        if (oilState == Cooking_Oil_State.STATE_HIGH) {
+            this.moveUp();
+        } else {
+            this.moveDown();
+        }
+    }
+
+    private moveUp():void
+    {
+        var oil  = this._worldMgr.getCookingOil(),
+            endY = canvas.height - oil.getSprite().height - this.getSprite().height * 1.5;
+
+        if (oil.getState() == Cooking_Oil_State.STATE_HIGH) {
+            if (this.getPositionY() > endY) {
+                var x = this.getPositionX(),
+                    y = this.getPositionY() - this._speedY;
+
+                this.setPosition(x, y);
+            }
+        }
+    }
+
+    private moveDown():void
+    {
+        var oil  = this._worldMgr.getCookingOil(),
+            endY = canvas.height - oil.getSprite().height / 2 - this.getSprite().height * 1.5;
+
+        if (oil.getState() == Cooking_Oil_State.STATE_LOW) {
+            if (this.getPositionY() < endY) {
+                var x = this.getPositionX(),
+                    y = this.getPositionY() + this._speedY;
+
+                this.setPosition(x, y);
+            }
+        }
+    }
+
+    private animationMove():void
+    {
+                                                              // divide by half of spritesheet and half of sprite
+        var goal = Math.floor(Lane_Position[this._curLane] - (this.getSprite().width / 2) / 2),
+            x    = this.getPositionX(),
+            y    = this.getPositionY();
+
+        if (this.getPositionX() != goal) {
+            if (this.getPositionX() >= goal) {
+                // in case we over- or undershoot our goal
+                if (this.getPositionX() - this._speedX < goal) {
+                    x = goal;
+                } else {
+                    x = this.getPositionX() - this._speedX;
+                }
+            }
+            
+            if (this.getPositionX() <= goal) {
+                // in case we over- or undershoot our goal
+                if (this.getPositionX() + this._speedX > goal) {
+                    x = goal;
+                } else {
+                    x = this.getPositionX() + this._speedX;
+                }
+            }
+            
             this.setPosition(x, y);
         }
     }
 
-    // update everything that changed with our hero
-    // we get the input from GameScene, which gets it from the EventHandlers of GameController
-    update():void
+    private invulnerable():void
     {
-        let inputState = this._gameController.getInputState();
-        this.setAnimationState(inputState);
-        this.updateAnimation();
-        this.updatePosition();
+        if (this._powerupFlags & Powerup_Flags.FLAG_INVULNERABLE)
+            return;
 
-        // after updating everything we redraw player sprite on screen with our new data
-        super.update();
+        var curTime = Date.now(),
+            diff    = curTime - this._timeHit;
+
+        if (diff > this._maxInvulnerableTimer) {
+            this._isInvulnerable = false;
+            this._tick = this._tickStartValue;
+        }
+    }
+
+    protected drawBlinking():void
+    {
+        var alpha = 1 + Math.sin(this._tick / 10);
+        this._tick += 1;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        this.drawImage();
+        ctx.restore();
+
+        this.animateSprite();
+        this.invulnerable();
+    }
+
+    protected draw():void
+    {
+        this.drawImage();
+        this.animateSprite();
+    }
+
+    private drawImage(rounds:number = 1):void
+    {
+        for (var i = 0; i < rounds; ++i) {
+            ctx.drawImage(
+                this.getSprite(),
+                this._spriteWidth * this._animationStep,
+                i,
+                this._spriteWidth,
+                this._spriteHeight,
+                this.getPositionX(),
+                this.getPositionY(),
+                this._spriteWidth,
+                this._spriteHeight
+            );
+        }
+    }
+
+    private animateSprite():void
+    {
+        if (this._isMounted)
+            return;
+        
+        var curTime = Date.now(),
+            diff    = curTime - this._spriteDrawTime;
+
+        if (diff > this._spriteDrawTimeDiff) {
+            this._animationStep  = (this._animationStep < this._spriteAnimations) ? this._animationStep += 1 : 0;
+            this._spriteDrawTime = curTime;
+        }
+    }
+
+    // a bit different because it is a spritesheet
+    // so we have to divide our sprite with by the amount of sprite animations it contains
+    // to get a single sprite's width
+    protected drawHitbox(x1?: number, y1?: number, width?: number, height?: number):void {
+        ctx.beginPath();
+        ctx.strokeStyle = DEBUG_COLOR;
+        ctx.lineWidth = DEBUG_STROKE_WIDTH;
+
+        if (arguments.length < 4) {
+            var hitbox = this.getHitbox(),
+                w = this.getSprite().width / (this._spriteAnimations + 1),
+                h = this.getHitbox().y2 - this.getHitbox().y1;
+
+            ctx.strokeRect(hitbox.x1, hitbox.y1, w, h);
+        } else {
+            var w = width,
+                h = height;
+
+            ctx.strokeRect(x1, y1, w, h);
+        }
+
+        ctx.closePath();
+    }
+
+    private magnet(index: number):void
+    {
+        // attraction stuff
+        var radius = 120,
+            radx1  = this.getHitbox().x1 - radius,
+            radx2  = this.getHitbox().x2 + radius,
+            rady1  = this.getHitbox().y1 - radius,
+            rady2  = this.getHitbox().y2 + radius;
+
+        var fruitgroups = this._worldMgr.getFruitsMgr().getFruitGroups();
+        for (var i = 0; i < fruitgroups.length; i += 1) {
+            var group  = fruitgroups[i],
+                fruits = group.getFruitSprites();
+
+            for (var j = 0; j < fruits.length; j += 1) {
+                var fruit = fruits[j],
+                    fx1   = fruit.getHitbox().x1,
+                    fx2   = fruit.getHitbox().x2,
+                    fy1   = fruit.getHitbox().y1,
+                    fy2   = fruit.getHitbox().y2;
+
+                if (isCollision(radx1, radx2, rady1, rady2, fx1, fx2, fy1, fy2)) {
+                    fruit.moveToPlayer(this);
+                }
+            }
+        }
+
+        // timing stuff
+        var power     = this._powerups[index],
+            startTime = power.startTime,
+            duration  = power.duration,
+            flag      = power.flag;
+
+        var curTime = Date.now(),
+            diff    = curTime - startTime;
+
+        if (diff > duration) {
+            this.removePowerupFlag(flag);
+            this.removePowerup(index);
+        }
+
+        // debug hitbox
+        if (DEBUG_SHOW_MAGNET_HITBOX) {
+            var width  = radx2 - radx1,
+                height = rady2 - rady1;
+
+            this.drawHitbox(radx1, rady1, width, height);
+        }
+    }
+    
+    private invulnerability(index: number):void
+    {
+        this._isInvulnerable = true;
+
+        var power     = this._powerups[index],
+            startTime = power.startTime,
+            duration  = power.duration,
+            flag      = power.flag;
+
+        var curTime = Date.now(),
+            diff    = curTime - startTime;
+
+        if (diff > duration) {
+            this._isInvulnerable = false;
+            this.removePowerupFlag(flag);
+            this.removePowerup(index);
+        }
+    }
+
+    // modifier is done at the collided function of GroupMgr
+    // this function is just for the flag timer
+    private doublePoints(index: number):void
+    {
+        var power     = this._powerups[index],
+            startTime = power.startTime,
+            duration  = power.duration,
+            flag      = power.flag;
+        
+        var curTime = Date.now(),
+            diff    = curTime - startTime;
+
+        if (diff > duration) {
+            this.removePowerupFlag(flag);
+            this.removePowerup(index);
+        }
+    }
+
+    // update everything that changed with our hero
+    public update():void
+    {
+        this.collisionCheck();
+        this.move();
+        this.animationMove();
+        this.powerup();
+
+        if (!this._isInvulnerable)
+            this.draw();
+        else
+            this.drawBlinking();
+
+        if (DEBUG_SHOW_PLAYER_HITBOX) this.drawHitbox();
     }
 }

@@ -1,76 +1,101 @@
-import * as d from './Defines';
+import {ctx, Lane, DEBUG_COLOR, DEBUG_STROKE_WIDTH} from './Defines';
 
 abstract class __Object
 {
-    private _x: number;                         // x coordinate
-    private _y: number;                         // y coordinate
-    private _sprite: HTMLImageElement;          // path to sprite(sheet) file
-    private _stage: CanvasRenderingContext2D;   // canvas target of this page
+    private _x: number;                 // x coordinate
+    private _y: number;                 // y coordinate
+    private _sprite: HTMLImageElement;  // path to sprite(sheet) file
+    protected _curLane: number;         // lane identifier
 
-    constructor(x: number, y: number, sprite: string)
+    constructor(x: number, y: number, sprite: string, laneID: number)
     {
+        // wait for sprite image to load before we do anything else
+        this.loadSprite(sprite);
         this._x = x;
         this._y = y;
-        this._stage = d.ctx;
-        this._sprite = new Image();
-        this._sprite.src = sprite;
-
-        this.spawn();
+        this._curLane = laneID;
     }
-
-    // __EXAMPLE METHODS__
-    // IF YOU DON'T USE THEM JUST DELETE THEM
-
-    // GETTERS and SETTERS
-    // When working in classes, try to always use PRIVATE class variables
-    // You can not change or access these variables without making these 'get' and 'set' functions
-    // It makes things safer because you can control their read/write properties
-    // and it is good practice for future projects
-    // Always specify what the return type is (if you know)! (:number, :string, :Array<number>, :Array<string>, etc)
-
+    
+    public setCurLane(lane: Lane):void { this._curLane = lane; }
+    public getCurLane():Lane { return this._curLane; }
+    
     // return x and y coordinates
-    getPosition() { return { x: this._x, y: this._y }; }
+    public getPosition():{x:number, y:number} { return { x: this._x, y: this._y }; }
 
     // return only the x coordinate
-    getPositionX():number { return this._x; }
+    public getPositionX():number { return this._x; }
 
     // return only the y coordinate
-    getPositionY():number { return this._y; }
+    public getPositionY():number { return this._y; }
 
     // set position of unit
-    setPosition(x:number, y:number)
+    public setPosition(x: number, y: number):void
     {
-        this._x = x;
-        this._y = y;
+        this._x = Math.floor(x);
+        this._y = Math.floor(y);
+    }
+
+    public getSprite():HTMLImageElement { return this._sprite; }
+
+    public getHitbox():{x1: number, y1: number, x2: number, y2: number}
+    {
+        return {
+            x1: this.getPositionX(),
+            y1: this.getPositionY(),
+            x2: this.getPositionX() + this._sprite.width,
+            y2: this.getPositionY() + this._sprite.height
+        }
+    }
+
+    private loadSprite(src) {
+        this._sprite = new Image();
+        // this._sprite.onload = function() {
+        //     console.log('loaded sprite ' + src);
+        // };
+        this._sprite.src = src;
     }
     
-    getSprite():HTMLImageElement { return this._sprite; }
-    
+    public updatePosition(speed: number):void
+    {
+        var x = this._x,
+            y = this._y + speed;
+        this.setPosition(x, y);
+    }
     
     // when unit first enters the scene
-    spawn():void
+    protected spawn():void
     {
         this.draw();
     }
 
-    // when unit leaves the scene for whatever reason
-    despawn():void
+    protected drawMotionBlur():void
     {
+        for (var i = 0; i < 10; ++i) {
+            ctx.drawImage(this._sprite, this._x, this._y, i);
+        }
     }
 
-    // when unit dies
-    onDeath():void
+    protected drawHitbox():void
     {
+        var hitbox = this.getHitbox(),
+            width  = this.getHitbox().x2 - this.getHitbox().x1,
+            height = this.getHitbox().y2 - this.getHitbox().y1;
+
+        ctx.beginPath();
+        ctx.strokeStyle = DEBUG_COLOR;
+        ctx.lineWidth   = DEBUG_STROKE_WIDTH;
+        ctx.strokeRect(hitbox.x1, hitbox.y1, width, height);
+        ctx.closePath();
     }
 
     // draw enemy on screen
-    draw():void
+    protected draw():void
     {
-        this._stage.drawImage(this._sprite, this._x, this._y);
+        ctx.drawImage(this._sprite, this._x, this._y);
     }
 
     // update position, animation, etc.
-    update():void
+    protected update(arg1?: any, arg2?: any):void
     {
         this.draw();
     }
