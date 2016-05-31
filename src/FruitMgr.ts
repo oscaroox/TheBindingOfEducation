@@ -32,11 +32,16 @@ export default class FruitMgr extends ObjectsMgr
             var randFruit = getRandomInt(1, fruitAmount),
                 randLane  = getRandomInt(0, 2);
 
-            var group = new FruitGroup(randFruit, randLane, this.getWorldMgr());
-            this._fruitGroups.push(group);
+            var group = new FruitGroup(randFruit, randLane, this.getWorldMgr()),
+                fruit = group.getFruitSprites()[0];
 
-            this.generateRandomSpawnTime();
-            this._time = curTime;
+            // check if we are not colliding with anything, delay spawning otherwise
+            if (!this.getWorldMgr().collisionCheck(fruit)) {
+                this._fruitGroups.push(group);
+
+                this.generateRandomSpawnTime();
+                this._time = curTime;
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-import {BACKGROUND_SPEED, canvas, ctx, Theme, Lane_Position} from "./Defines";
+import {BACKGROUND_SPEED, canvas, ctx, Theme, Lane_Position, Lane} from "./Defines";
 import Mount from "./Mount";
 import {getRandomInt} from "./Globals";
 import WorldMgr from "./WorldMgr";
@@ -46,6 +46,8 @@ export default class Playfield
     // }
 
     public getPlayfieldObject():Mount { return this._playfieldObject; }
+
+    public getSprite(index: number):HTMLImageElement { return this._sprites[index]; }
     
     public getWorldMgr():WorldMgr { return this._worldMgr; }
     
@@ -57,6 +59,7 @@ export default class Playfield
     
     public getSpriteTheme(index: number):Theme { return this._spriteTheme[index]; }
 
+    
     public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
 
     private loadSprite(src):void {
@@ -80,7 +83,7 @@ export default class Playfield
         this.draw();
     }
     
-    public getSprite(index: number):HTMLImageElement { return this._sprites[index]; }
+    
 
     private spawnBoat(index: number):void
     {
@@ -89,8 +92,8 @@ export default class Playfield
 
         var sprite = "images/boat.png",
             x      = Lane_Position[randLane],
-            y      = this._y[otherbg];
-
+            y      = this._y[otherbg] - 90;     // 90 = boat height
+        
         this._lastThemeSprite = null;
         this._playfieldObject = new Mount(sprite, x, y, randLane);
     }

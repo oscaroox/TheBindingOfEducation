@@ -17,7 +17,7 @@ export default class Mount extends Object
     protected setInitPosition():void
     {
         var x = this.getPositionX() - this.getSprite().width / 2,
-            y = this.getPositionY() - this.getSprite().height;
+            y = this.getPositionY();
 
         this.setPosition(x, y);
     }
@@ -40,8 +40,6 @@ export default class Mount extends Object
                 if (sy > this.getPositionY()) {
                     this._isMountable = false;
                     player._isMounted = false;
-
-                    console.log('edge of theme');
                 }
             }
         }

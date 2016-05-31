@@ -67,19 +67,23 @@ export default class PowerupMgr extends ObjectsMgr
 
             // checks if our initial Y position is within other objects
             // this.generatePositionY(power);
-            
-            // check if it needs a lilypad
-            if (this._lilypadsMgr == null)
-                this._lilypadsMgr = new LilypadsMgr(this.getWorldMgr());
 
-            this._lilypadsMgr.spawnLilypads(power, "powerup");
-            
-            // add to array
-            this._powerupSprites.push(power);
+            // check if we are not colliding with anything, delay spawning otherwise
+            if (!this.getWorldMgr().collisionCheck(power)) {
 
-            // generate new spawn time
-            this.generateRandomSpawnTime();
-            this._time = curTime;
+                // check if it needs a lilypad
+                if (this._lilypadsMgr == null)
+                    this._lilypadsMgr = new LilypadsMgr(this.getWorldMgr());
+
+                this._lilypadsMgr.spawnLilypads(power, "powerup");
+
+                // add to array
+                this._powerupSprites.push(power);
+
+                // generate new spawn time
+                this.generateRandomSpawnTime();
+                this._time = curTime;
+            }
         }
     }
 

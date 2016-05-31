@@ -71,9 +71,9 @@ export default class Player extends Unit
     {
         this._powerupFlags |= flag;
 
-        if (flag & Powerup_Flags.FLAG_DOUBLE_POINTS) console.log('double points');
-        if (flag & Powerup_Flags.FLAG_INVULNERABLE) console.log('invul');
-        if (flag & Powerup_Flags.FLAG_MAGNET) console.log('magnet');
+        // if (flag & Powerup_Flags.FLAG_DOUBLE_POINTS) console.log('double points');
+        // if (flag & Powerup_Flags.FLAG_INVULNERABLE) console.log('invul');
+        // if (flag & Powerup_Flags.FLAG_MAGNET) console.log('magnet');
     }
     
     public removePowerupFlag(flag: Powerup_Flags):void { this._powerupFlags &= ~flag; }

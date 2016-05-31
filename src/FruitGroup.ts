@@ -73,51 +73,9 @@ export default class FruitGroup
             // check if it needs a lilypad
             this._lilypadsMgr.spawnLilypads(fruit, "fruit");
             
-            // this.generatePositionY(fruit);
-            // offSetY = this.generatePositionY(fruit);
+            // add fruit to array
             this._fruitSprites.push(fruit);
         }
-    }
-
-    private generatePositionY(fruit: Fruit):number
-    {
-        var enemyMgr   = this._worldMgr.getEnemiesMgr(),
-            enemies    = enemyMgr.getEnemySprites(),
-            newY       = 0;
-
-        // loop through collection of fruitGroups
-        for(var i = 0; i < enemies.length; i += 1) {
-            var enemy = enemies[i];
-
-            // skip enemies not in our lane
-            if (enemy.getCurLane() != this._curLane)
-                continue;
-
-            // get enemy's coordinates
-            var x1    = enemy.getPositionX(),
-                x2    = enemy.getPositionX() + enemy.getSprite().width,
-                y1    = enemy.getPositionY(),
-                y2    = enemy.getPositionY() + enemy.getSprite().height;
-
-            // get fruit coordinates
-            var fruitY1 = Math.floor(fruit.getPositionY()),
-                fruitY2 = Math.floor(fruit.getPositionY() + fruit.getSprite().height),
-                fruitX1 = Math.floor(fruit.getPositionX()),
-                fruitX2 = Math.floor(fruit.getPositionX() + fruit.getSprite().width);
-
-            // check for collision and adjust position accordingly
-            if (isCollision(x1, x2, y1, y2, fruitX1, fruitX2, fruitY1, fruitY2)) {
-                // set new position starting from enemy's Y position
-                newY = Math.floor(enemy.getPositionY() - Math.random() * (fruit.getSprite().height * 2));
-
-                // set new position
-                fruit.setPosition(fruit.getPositionX(), newY);
-
-                console.log('spawn collision for fruitgroup! new Y set.');
-            }
-        }
-        
-        return newY;
     }
 
     private removeFromArray(array: any[], indexList: number[]):void
