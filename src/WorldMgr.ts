@@ -4,6 +4,7 @@ import GameScore from './GameScore';
 import CookingOil from "./CookingOil";
 import Player from './Player';
 import PowerupMgr from "./PowerupMgr";
+import Playfield from "./Playfield";
 
 export default class WorldMgr
 {
@@ -13,8 +14,11 @@ export default class WorldMgr
     private _powerupsMgr: PowerupMgr;
     private _cookingOil: CookingOil;
     private _score: GameScore;
+    private _playfield: Playfield;
     
-    constructor(player: Player, fruitsMgr: FruitMgr, enemiesMgr: EnemiesMgr, powerupsMgr: PowerupMgr, cookingOil: CookingOil, score: GameScore)
+    constructor(player: Player, fruitsMgr: FruitMgr, enemiesMgr: EnemiesMgr, 
+                powerupsMgr: PowerupMgr, cookingOil: CookingOil, score: GameScore,
+                playfield: Playfield)
     {
         this._player      = player;
         this._fruitsMgr   = fruitsMgr;
@@ -22,6 +26,7 @@ export default class WorldMgr
         this._powerupsMgr = powerupsMgr;
         this._cookingOil  = cookingOil;
         this._score       = score;
+        this._playfield   = playfield;
     }
     
     public getPlayer():Player { return this._player; }
@@ -35,4 +40,6 @@ export default class WorldMgr
     public getPowerUpsMgr():PowerupMgr { return this._powerupsMgr; }
     
     public getScore():GameScore { return this._score; }
+    
+    public getPlayfield():Playfield { return this._playfield; }
 }

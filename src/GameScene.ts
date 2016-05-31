@@ -27,7 +27,7 @@ export default class GameScene
         this._playfield = new Playfield();
         
         // add player to scene
-        this._player = new Player(this._playfield);
+        this._player = new Player();
 
         // score handler
         this._score = new GameScore(0, this._playfield);
@@ -45,7 +45,7 @@ export default class GameScene
         this._powerupMgr = new PowerupMgr();
         
         // objects manager and objects holder
-        this._worldMgr = new WorldMgr(this._player, this._fruitsMgr, this._enemiesMgr, this._powerupMgr, this._cookingOil, this._score);
+        this._worldMgr = new WorldMgr(this._player, this._fruitsMgr, this._enemiesMgr, this._powerupMgr, this._cookingOil, this._score, this._playfield);
         this._enemiesMgr.addWorldMgr(this._worldMgr);
         this._fruitsMgr.addWorldMgr(this._worldMgr);
         this._powerupMgr.addWorldMgr(this._worldMgr);

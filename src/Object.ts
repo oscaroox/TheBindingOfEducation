@@ -1,6 +1,6 @@
 import {ctx, Lane, DEBUG_COLOR, DEBUG_STROKE_WIDTH} from './Defines';
 
-abstract class __Object
+export default class __Object
 {
     private _x: number;                 // x coordinate
     private _y: number;                 // y coordinate
@@ -40,14 +40,14 @@ abstract class __Object
     public getHitbox():{x1: number, y1: number, x2: number, y2: number}
     {
         return {
-            x1: this.getPositionX(),
-            y1: this.getPositionY(),
-            x2: this.getPositionX() + this._sprite.width,
-            y2: this.getPositionY() + this._sprite.height
+            x1: this._x,
+            y1: this._y,
+            x2: this._x + this._sprite.width,
+            y2: this._y + this._sprite.height
         }
     }
 
-    private loadSprite(src) {
+    private loadSprite(src):void {
         this._sprite = new Image();
         // this._sprite.onload = function() {
         //     console.log('loaded sprite ' + src);
@@ -95,10 +95,10 @@ abstract class __Object
     }
 
     // update position, animation, etc.
-    protected update(arg1?: any, arg2?: any):void
+    public update(arg1?: any, arg2?: any):void
     {
         this.draw();
     }
 }
 
-export default __Object;
+// export default __Object;

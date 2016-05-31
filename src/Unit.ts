@@ -1,13 +1,12 @@
 import Object from './Object';
-import {BACKGROUND_SPEED} from "./Defines";
 
-abstract class Unit extends Object
+export default class Unit extends Object
 {
     private _health: number;
     
-    constructor(x: number, y: number, health: number, sprite: string, lane: number)
+    constructor(x: number, y: number, health: number, sprite: string, laneID: number)
     {
-        super(x, y, sprite, lane);
+        super(x, y, sprite, laneID);
         
         this._health = health;
         this.spawn();
@@ -16,6 +15,6 @@ abstract class Unit extends Object
     public getHealth():number { return this._health; }
     
     protected removeHealth(amount):void { this._health -= amount; }
+    
+    protected setHealth(amount):void { this._health = amount; }
 }
-
-export default Unit;

@@ -28,7 +28,7 @@ export default class Fruit extends Object
     protected setInitPosition(offSet: number):void
     {
         var offSetY = this._id * (this.getSprite().height * this._modOffSetY),
-            y       = offSet - (this._id * this.getSprite().height) - this.getSprite().height + offSetY,
+            y       = offSet - (this._id * this.getSprite().height) - (this.getSprite().height * 1.25) + offSetY,
             x       = this.getPositionX() - this.getSprite().width / 2;
 
         this.setPosition(x, y);

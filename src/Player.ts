@@ -5,38 +5,35 @@ import {
 import {isCollision} from './Globals'
 import Unit from './Unit';
 import WorldMgr from "./WorldMgr";
-import Playfield from "./Playfield";
 
 // PLAYER
 // all updates and movement is done in this class
 export default class Player extends Unit
 {
-    public _isInvulnerable: boolean;
-    
-    private _worldMgr: WorldMgr;
-    private _playfield: Playfield;
-    
-    public _isMounted: boolean; 
+    public _isInvulnerable: boolean;            // can player be hit by enemies or not
+    public _isMounted: boolean;                 // is player on a vehicle
+
+    private _worldMgr: WorldMgr;                // holds various objects and managers
         
-    private _animationStep: number;
-    private _spriteWidth: number;
-    private _spriteHeight: number;
-    private _spriteAnimations: number;
-    private _spriteDrawTime: number;
-    private _spriteDrawTimeDiff: number;
+    private _animationStep: number;             // number of step the animation of the sprite is in
+    private _spriteAnimations: number;          // max number of steps in an animation
+    private _spriteWidth: number;               // how wide is a SINGLE sprite
+    private _spriteHeight: number;              // how high is a SINGLE sprite
+    private _spriteDrawTime: number;            // when we last drawn the animation
+    private _spriteDrawTimeDiff: number;        // how often the animation should be redrawn
     
-    private _speedX: number;
-    private _speedY: number;
+    private _speedX: number;                    // speed on X-axis
+    private _speedY: number;                    // speed on Y-axis
     
-    private _timeHit: number;
-    private _maxInvulnerableTimer: number;
-    private _tick: number;
-    private _tickStartValue: number;
+    private _timeHit: number;                   // time when we were hit by an object
+    private _maxInvulnerableTimer: number;      // how long we can not be hit for
+    private _tick: number;                      // ticker for cos function for opacity change when we are invulnerable
+    private _tickStartValue: number;            // what value should the ticker start at
     
-    private _powerupFlags: number;
-    private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];
+    private _powerupFlags: number;              // bitwise powerup flag holder
+    private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];  // holds information about powerups the player has
     
-    constructor(playfield: Playfield)
+    constructor()
     {
         var sprite = "images/character_walking_big.png",
             health = 2,
@@ -44,8 +41,6 @@ export default class Player extends Unit
             y      = canvas.height,
             lane   = Lane.LANE_MIDDLE;
         super(x, y, health, sprite, lane);
-        
-        this._playfield = playfield;
         
         this._isMounted = false;
 
@@ -117,22 +112,10 @@ export default class Player extends Unit
     {
         canvas.addEventListener('click', (e)=> { this.handleClick(e.clientX) });
         window.addEventListener('keydown', (e)=> { this.keyboardInput(e) });
-        
-        window.addEventListener('keyup', (e)=> { 
-            // this.keyboardInputUp(e) 
-            
-            // up arrow and W key
-            if (e.keyCode == 38 || e.keyCode == 87) {
-                // back to regular speed
-                BACKGROUND_SPEED = 5;
-            }
+        window.addEventListener('keyup', (e)=> {
+            if (e.keyCode == 38 || e.keyCode == 87) BACKGROUND_SPEED = 5;
         });
     }
-    
-    // private keyboardInputUp(event: KeyboardEvent):void
-    // {
-    //    
-    // }
 
     // what to do with certain keypresses
     private keyboardInput(event: KeyboardEvent):void
@@ -273,7 +256,7 @@ export default class Player extends Unit
         }
         
         // playfield objects
-        var object = this._playfield.getPlayfieldObject();
+        var object = this._worldMgr.getPlayfield().getPlayfieldObject();
         if (object != null) {
             var ox1 = object.getHitbox().x1,
                 oy1 = object.getHitbox().y1,
@@ -281,11 +264,7 @@ export default class Player extends Unit
                 oy2 = object.getHitbox().y2;
 
             if (isCollision(hitbox.x1, hitbox.x2, hitbox.y1, hitbox.y2, ox1, ox2, oy1, oy2)) {
-                if (object._isMountable) {
-                    this._isMounted = true;
-                } else {
-                    this._isMounted = false;
-                }
+                this._isMounted = (object._isMountable) ? true : false;
             }
         }
     }
@@ -333,6 +312,8 @@ export default class Player extends Unit
 
     private moveDown():void
     {
+        if (this.getHealth() != 2) this.setHealth(2);
+            
         var oil  = this._worldMgr.getCookingOil(),
             endY = canvas.height - oil.getSprite().height / 2 - this.getSprite().height * 1.5;
 

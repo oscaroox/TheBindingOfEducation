@@ -22,7 +22,7 @@ export default class GameScore
         this._lastUpdateTime = Date.now();
         this._background = background;
 
-        this._x = 10 + canvas.width / 2 + this._background.getSprite().width / 2;
+        this._x = 10 + canvas.width / 2 + this._background.getSprite(0).width / 2;
         this._y = this._fontSize;
 
         this.draw();

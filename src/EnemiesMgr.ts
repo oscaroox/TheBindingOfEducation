@@ -1,13 +1,15 @@
-import {canvas, enemiesAmount, Enemies, Lane_Position} from './Defines'
+import {canvas, enemiesAmount, Enemies, Lane_Position, Theme, BACKGROUND_SPEED} from './Defines'
 import {getRandomInt, isCollision} from './Globals'
 import Enemy from './Enemy'
 import Hamburger from './Hamburger'
 import Pizza from './Pizza'
 import ObjectsMgr from "./ObjectsMgr";
+import LilypadsMgr from "./LilypadsMgr";
 
 export default class EnemiesMgr extends ObjectsMgr
 {
-    private _enemies: Enemy[];
+    private _enemySprites: Enemy[];
+    private _lilypadsMgr: LilypadsMgr;
     
     constructor()
     {
@@ -16,28 +18,12 @@ export default class EnemiesMgr extends ObjectsMgr
             timeDiffMax = 1500;
         super(time, timeDiffMin, timeDiffMax);
         
-        this._enemies = [];
+        this._enemySprites = [];
+        
+        this._lilypadsMgr = null;
     }
     
-    public getEnemySprites():Enemy[] { return this._enemies; }
-
-    public updatePosition():void
-    {
-        var removeEnemiesList: number[] = [];
-
-        for (var i = 0; i < this._enemies.length; i += 1) {
-            var e = this._enemies[i];
-            
-            // update each enemy on screen
-            e.update();
-
-            // add to our safe remove array
-            if (e.getPositionY() > canvas.height) removeEnemiesList.push(i);
-        }
-
-        // safely remove enemy from our enemies array
-        if (removeEnemiesList.length > 0) this.remove(removeEnemiesList);
-    }
+    public getEnemySprites():Enemy[] { return this._enemySprites; }
 
     private generatePositionY(enemy: Enemy):void
     {
@@ -85,7 +71,7 @@ export default class EnemiesMgr extends ObjectsMgr
         }
 
         // shift a lane left or right when we encounter another enemy
-        var enemies = this._enemies;
+        var enemies = this._enemySprites;
         for (var i = 0; i < enemies.length; i += 1) {
             var e = enemies[i];
             var ex1 = e.getPositionX(),
@@ -127,11 +113,11 @@ export default class EnemiesMgr extends ObjectsMgr
             switch(randEnemy)
             {
                 case Enemies.ENEMY_HAMBURGER:
-                    var e = new Hamburger(Lane_Position[randLane], randLane);
+                    var enemy = new Hamburger(Lane_Position[randLane], randLane);
                     break;
 
                 case Enemies.ENEMY_PIZZA:
-                    var e = new Pizza(Lane_Position[randLane], randLane);
+                    var enemy = new Pizza(Lane_Position[randLane], randLane);
                     break;
 
                 default:
@@ -140,25 +126,57 @@ export default class EnemiesMgr extends ObjectsMgr
 
             // checks if our initial Y position is within other objects
             // if so, change Y position
-            this.generatePositionY(e);
-            this._enemies.push(e);
+            this.generatePositionY(enemy);
 
+
+            // check if it needs a lilypad
+            if (this._lilypadsMgr == null)
+                this._lilypadsMgr = new LilypadsMgr(this.getWorldMgr());
+
+            this._lilypadsMgr.spawnLilypads(enemy, "enemy");
+
+            // add new enemy to our array
+            this._enemySprites.push(enemy);
+
+            // new time for next spawn
             this.generateRandomSpawnTime();
             this._time = curTime;
         }
     }
 
-    // remove enemies from our array that are off screen
-    private remove(indexList: number[]):void
+    public updatePosition():void
     {
-        for(var i = this._enemies.length - 1; i >= 0; i -= 1) {
-            if(i === indexList[i]) { this._enemies.splice(i, 1); }
+        var removeEnemiesList: number[] = [];
+
+        for (var i = 0; i < this._enemySprites.length; i += 1) {
+            var e = this._enemySprites[i];
+
+            // update each enemy on screen
+            e.update();
+
+            // add to our safe remove array
+            if (e.getPositionY() > canvas.height) removeEnemiesList.push(i);
+        }
+
+        // safely remove enemy from our enemies array
+        if (removeEnemiesList.length > 0) this.removeFromArray(this._enemySprites, removeEnemiesList);
+    }
+
+    // remove enemies from our array that are off screen
+    private removeFromArray(array: any[], indexList: number[]):void
+    {
+        for(var i = array.length - 1; i >= 0; i -= 1) {
+            if(i === indexList[i]) array.splice(i, 1);
         }
     }
 
     public update():void
     {
         this.spawn();
+
+        if (this._lilypadsMgr)
+            this._lilypadsMgr.update();
+        
         this.updatePosition();
     }
 }

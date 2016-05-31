@@ -8,8 +8,9 @@ export default class Playfield
     private _x: number[] = [];                          // x coordinates
     private _y: number[] = [];                          // y coordinates
     private _sprites: HTMLImageElement[] = [];          // path to sprite(sheet) files
+    private _spriteTheme: Theme[];                      // holds theme ID for each individual sprite
     private _speed: number;                             // speed the background will travel along the canvas
-    private _theme: number;                             // determines what playfield theme sprite to load
+    private _theme: Theme;                              // determines what playfield theme sprite to load
     private _time: number;                              // holds time of when we last changed theme
     // private _loaded: number;                         // sprite loading states
     private _playfieldObject: Mount;
@@ -24,11 +25,14 @@ export default class Playfield
         this.loadSprite(source);
         
         this._speed = BACKGROUND_SPEED;
-        this._theme = Theme.THEME_FORREST;
         this._time  = Date.now();
 
         this._playfieldObject = null;
         this._lastThemeSprite = null;
+
+        // we start in the forrest
+        this._theme = Theme.THEME_FORREST;
+        this._spriteTheme = [Theme.THEME_FORREST, Theme.THEME_FORREST];
 
         this.init();
     }
@@ -48,6 +52,10 @@ export default class Playfield
     public getLastThemeSprite():number { return this._lastThemeSprite; }
     
     public getPosition(index: number):{ x: number, y: number } { return { x: this._x[index], y: this._y[index] }; }
+    
+    public getPositionYArray():number[] { return this._y; }
+    
+    public getSpriteTheme(index: number):Theme { return this._spriteTheme[index]; }
 
     public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
 
@@ -72,57 +80,70 @@ export default class Playfield
         this.draw();
     }
     
-    public getSprite():HTMLImageElement { return this._sprites[0]; }
+    public getSprite(index: number):HTMLImageElement { return this._sprites[index]; }
 
-    private changeScenery(index:number):void
+    private spawnBoat(index: number):void
+    {
+        var randLane = getRandomInt(0, 2),
+            otherbg  = (index) ? 0 : 1;
+
+        var sprite = "images/boat.png",
+            x      = Lane_Position[randLane],
+            y      = this._y[otherbg] - 90;
+
+        this._lastThemeSprite = null;
+        this._playfieldObject = new Mount(sprite, x, y, randLane);
+    }
+
+    private changeScenery(index: number):void
     {
         var diff = Date.now() - this._time;
 
         // forrest playfield (start, mid and end)
         if (this._theme == Theme.THEME_FORREST) {
-            var tempSprites = new Image();
-            tempSprites.src = "images/bg_540_960.png";
+            var tempSprite = new Image();
+            tempSprite.src = "images/bg_540_960.png";
 
-            this._sprites[index] = tempSprites;
+            this._sprites[index] = tempSprite;
+            this._spriteTheme[index] = Theme.THEME_FORREST;
         }
 
         // mid river playfield
         if (this._theme == Theme.THEME_RIVER) {
-            var tempSprites = new Image();
-            tempSprites.src = "images/bg_2_mid_540_960.png";
+            var tempSprite = new Image();
+            tempSprite.src = "images/bg_2_mid_540_960.png";
 
-            this._sprites[index] = tempSprites;
+            this._sprites[index] = tempSprite;
+            this._spriteTheme[index] = Theme.THEME_RIVER;
         }
 
         // start river playfield
         if (diff > 10000 && this._theme == Theme.THEME_FORREST) {
-            var tempSprites = new Image();
-            tempSprites.src = "images/bg_2_start_540_960.png";
+            var tempSprite = new Image();
+            tempSprite.src = "images/bg_2_start_540_960.png";
 
-            this._sprites[index] = tempSprites;
+            this._sprites[index] = tempSprite;
             this._theme = Theme.THEME_RIVER;
+            this._spriteTheme[index] = Theme.THEME_RIVER;
+
+            // reset timer
             this._time  = Date.now();
 
             // add boat to start of river
-            var randLane = getRandomInt(0, 2),
-                otherbg  = (index) ? 0 : 1;
-
-            var sprite = "images/boat.png",
-                x      = Lane_Position[randLane],
-                y      = this._y[otherbg] - 90;
-
-            this._lastThemeSprite = null;
-            this._playfieldObject = new Mount(sprite, x, y, randLane);
+            this.spawnBoat(index);
         }
 
         // end river playfield
         else if (diff > 10000 && this._theme == Theme.THEME_RIVER) {
-            var tempSprites = new Image();
-            tempSprites.src = "images/bg_2_end_540_960.png";
-            this._sprites[index] = tempSprites;
+            var tempSprite = new Image();
+            tempSprite.src = "images/bg_2_end_540_960.png";
+            this._sprites[index] = tempSprite;
 
             this._lastThemeSprite = index;
-            this._theme = Theme.THEME_FORREST;
+            this._theme = Theme.THEME_FORREST;              // next sprite should be forrest
+            this._spriteTheme[index] = Theme.THEME_RIVER;   // but current sprite is still river
+
+            // reset timer
             this._time  = Date.now();
         }
     }

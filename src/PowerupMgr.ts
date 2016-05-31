@@ -2,10 +2,12 @@ import {Powerups, powerupAmount, canvas, Powerup_Flags} from "./Defines";
 import {getRandomInt} from "./Globals";
 import ObjectsMgr from "./ObjectsMgr";
 import Powerup from "./Powerup";
+import LilypadsMgr from "./LilypadsMgr";
 
 export default class PowerupMgr extends ObjectsMgr
 {
     private _powerupSprites: Powerup[];
+    private _lilypadsMgr: LilypadsMgr;
     
     constructor()
     {
@@ -15,6 +17,7 @@ export default class PowerupMgr extends ObjectsMgr
         super(time, timeDiffMin, timeDiffMax);
         
         this._powerupSprites = [];
+        this._lilypadsMgr = null;
     }
 
     public getPowerupSprites():Powerup[] { return this._powerupSprites; }
@@ -64,8 +67,17 @@ export default class PowerupMgr extends ObjectsMgr
 
             // checks if our initial Y position is within other objects
             // this.generatePositionY(power);
+            
+            // check if it needs a lilypad
+            if (this._lilypadsMgr == null)
+                this._lilypadsMgr = new LilypadsMgr(this.getWorldMgr());
+
+            this._lilypadsMgr.spawnLilypads(power, "powerup");
+            
+            // add to array
             this._powerupSprites.push(power);
 
+            // generate new spawn time
             this.generateRandomSpawnTime();
             this._time = curTime;
         }
@@ -112,6 +124,10 @@ export default class PowerupMgr extends ObjectsMgr
     public update():void
     {
         this.spawn();
+
+        if (this._lilypadsMgr != null)
+            this._lilypadsMgr.update();
+
         this.updatePosition();
     }
 }

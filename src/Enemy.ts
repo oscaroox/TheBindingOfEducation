@@ -13,8 +13,8 @@ abstract class Enemy extends Unit
     
     protected setInitPosition():void
     {
-        var y = 0 - this.getSprite().height,
-            x = this.getPositionX() - this.getSprite().width / 2;
+        var x = this.getPositionX() - this.getSprite().width / 2,
+            y = 0 - this.getSprite().height * 1.25;                  // 25% more in case lilypads are spawning with us 
         
         this.setPosition(x, y);
     }

@@ -1,27 +1,31 @@
-import {BACKGROUND_SPEED, Lane_Position, Fruits, canvas} from "./Defines";
+import {BACKGROUND_SPEED, Lane_Position, Fruits, canvas, Theme} from "./Defines";
 import {getRandomInt, isCollision} from './Globals'
 import Fruit from './Fruit'
 import {Powerup_Flags} from "./Defines";
 import WorldMgr from "./WorldMgr";
+import Unit from "./Unit"
+import LilypadsMgr from "./LilypadsMgr";
 
 export default class FruitGroup
 {
     private _size: number;                              // max size of this group
     private _groupSizes: { min: number, max: number };  // min and max group size
     private _fruitID: number;                           // identifier of the fruit we have in this group
-    private _fruitSprites: Fruit[];                     // fruit array to hold our fruits
+    private _fruitSprites: Fruit[];                     // array to hold our fruits
     private _curLane: number;                           // identifier of our lane
     private _x: number;                                 // what X this group will travel along
     private _worldMgr: WorldMgr;                        // holds all object managers
+    private _lilypadsMgr: LilypadsMgr;                  // manages lilypads of our fruits
     
     constructor(fruitID: number, lanePos: number, worldMgr: WorldMgr)
     {
-        this._fruitSprites = [];
-        this._fruitID      = fruitID;
-        this._groupSizes   = { min: 5, max: 10 };
-        this._curLane      = lanePos;
-        this._x            = Lane_Position[lanePos];
-        this._worldMgr     = worldMgr;
+        this._fruitSprites   = [];
+        this._fruitID        = fruitID;
+        this._groupSizes     = { min: 5, max: 10 };
+        this._curLane        = lanePos;
+        this._x              = Lane_Position[lanePos];
+        this._worldMgr       = worldMgr;
+        this._lilypadsMgr    = new LilypadsMgr(this._worldMgr);
 
         this.generateSize();
         this.generateGroup();
@@ -66,6 +70,9 @@ export default class FruitGroup
 
             var fruit = new Fruit(uniqueID, this._x, sprite, points, speed, this._curLane, offSetY);
 
+            // check if it needs a lilypad
+            this._lilypadsMgr.spawnLilypads(fruit, "fruit");
+            
             // this.generatePositionY(fruit);
             // offSetY = this.generatePositionY(fruit);
             this._fruitSprites.push(fruit);
@@ -113,10 +120,12 @@ export default class FruitGroup
         return newY;
     }
 
-    private remove(indexList:number[]):void
+    private removeFromArray(array: any[], indexList: number[]):void
     {
-        for(var i = this._fruitSprites.length - 1; i >= 0; i -= 1) {
-            if(i === indexList[i]) { this._fruitSprites.splice(i, 1); }
+        for(var i = array.length - 1; i >= 0; i -= 1) {
+            if(i === indexList[i]) {
+                array.splice(i, 1);
+            }
         }
     }
 
@@ -149,23 +158,27 @@ export default class FruitGroup
         this.removeSingleFruit(fruitID);
     }
     
-    public update():void
+    private updatePosition():void
     {
-        var removeFruitsList: number[] = [],
-            length = this._fruitSprites.length - 1;
-
+        var removeFruitsList: number[] = [];
+        
         // render them last to first so depth is correct
-        for(var i = length; i >= 0; i -= 1) {
+        length = this._fruitSprites.length - 1;
+        for (var i = length; i >= 0; i -= 1) {
             var f = this._fruitSprites[i];
-            
+
             f.update();
-            
+
             // remove fruit from list if out of screen
-            if (f.getPositionY() > canvas.height) {
-                removeFruitsList.push(i);
-            }
+            if (f.getPositionY() > canvas.height) removeFruitsList.push(i);
         }
 
-        if (removeFruitsList.length > 0) { this.remove(removeFruitsList); }
+        if (removeFruitsList.length > 0) this.removeFromArray(this._fruitSprites, removeFruitsList);
+    }
+    
+    public update():void
+    {
+        this._lilypadsMgr.update();
+        this.updatePosition();
     }
 }
