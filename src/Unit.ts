@@ -2,7 +2,7 @@ import Object from './Object';
 
 export default class Unit extends Object
 {
-    private _health: number;
+    private _health: number;        // amount of time a unit can be hit before dying
     
     constructor(x: number, y: number, health: number, sprite: string, laneID: number)
     {
