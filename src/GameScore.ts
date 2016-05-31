@@ -1,6 +1,6 @@
 // SCORE
 // everything that has to do with gamescore is done here
-import {ctx, canvas} from "./Defines";
+import {ctx, canvas, BACKGROUND_SPEED} from "./Defines";
 import Playfield from "./Playfield";
 import {splice} from "./Globals";
 
@@ -32,6 +32,14 @@ export default class GameScore
     {
         var curTime = Date.now(),
             diff    = curTime - this._lastUpdateTime;
+
+        if (BACKGROUND_SPEED > 5) {
+            var mod = BACKGROUND_SPEED / 5;
+
+            this._updateTimer = 250 / mod;
+        } else {
+            this._updateTimer = 250;
+        }
 
         if (diff > this._updateTimer) {
             this._points += 1;
