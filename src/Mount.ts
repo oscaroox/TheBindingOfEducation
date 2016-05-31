@@ -17,7 +17,7 @@ export default class Mount extends Object
     protected setInitPosition():void
     {
         var x = this.getPositionX() - this.getSprite().width / 2,
-            y = this.getPositionY();
+            y = this.getPositionY() - this.getSprite().height;
 
         this.setPosition(x, y);
     }

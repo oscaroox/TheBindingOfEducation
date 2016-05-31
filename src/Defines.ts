@@ -5,7 +5,7 @@ export var
     DEBUG_SHOW_FRUIT_HITBOX   = 0,
     DEBUG_SHOW_POWERUP_HITBOX = 0,
     DEBUG_SHOW_MAGNET_HITBOX  = 1,
-    DEBUG_SHOW_MOUNT_HITBOX   = 1;
+    DEBUG_SHOW_MOUNT_HITBOX   = 0;
 
 // debug marker styling
 export var DEBUG_COLOR        = "#fb31fd",  // purple/pink

@@ -89,7 +89,7 @@ export default class Playfield
 
         var sprite = "images/boat.png",
             x      = Lane_Position[randLane],
-            y      = this._y[otherbg] - 90;
+            y      = this._y[otherbg];
 
         this._lastThemeSprite = null;
         this._playfieldObject = new Mount(sprite, x, y, randLane);
