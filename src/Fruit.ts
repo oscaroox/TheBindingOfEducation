@@ -4,10 +4,10 @@ import Player from "./Player";
 
 export default class Fruit extends Object
 {
-    private _id: number;         // unique number for this object
-    private _points: number;     // points per fruit
-    public  _speed: number;      // speed this object travels on Y-axis
-    private _modOffSetY: number; // percentage of offset in Y position to create overlapping/depth effect
+    private _id: number;            // unique number for this object
+    private _points: number;        // points per fruit
+    public  _speed: number;         // speed this object travels on Y-axis
+    private _modOffSetY: number;    // percentage of offset in Y position to create overlapping/depth effect
     
     constructor(id: number, x: number, sprite: string, points: number, speed: number, lane: number, offsetY: number = 0)
     {

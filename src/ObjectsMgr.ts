@@ -4,10 +4,10 @@ import {BACKGROUND_SPEED} from "./Defines";
 
 abstract class ObjectsMgr
 {
-    protected _time: number;                              
-    protected _timeDiff: { min: number, max: number };    
-    private _nextSpawnTime: number;                     
-    private _worldMgr: WorldMgr;                    
+    protected _time: number;                                // last time since we spawned an object                   
+    protected _timeDiff: { min: number, max: number };      // min and max time between spawning objects
+    private _nextSpawnTime: number;                         // difference in time between previous and next spawn
+    private _worldMgr: WorldMgr;                            // connection hub between all objects
     
     constructor(time: number, timeDiffMin: number, timeDiffMax: number)
     {

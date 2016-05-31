@@ -1,9 +1,8 @@
-import {BACKGROUND_SPEED, Lane_Position, Fruits, canvas, Theme} from "./Defines";
-import {getRandomInt, isCollision} from './Globals'
+import {BACKGROUND_SPEED, Lane_Position, Fruits, canvas} from "./Defines";
+import {getRandomInt} from './Globals'
 import Fruit from './Fruit'
 import {Powerup_Flags} from "./Defines";
 import WorldMgr from "./WorldMgr";
-import Unit from "./Unit"
 import LilypadsMgr from "./LilypadsMgr";
 
 export default class FruitGroup

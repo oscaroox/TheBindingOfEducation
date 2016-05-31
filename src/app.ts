@@ -28,10 +28,12 @@ var imagesArray = [
     'images/bg_540_960.png',
     'images/bg_720_1280.png',
     'images/bg_1080_1920.png',
+    'images/boat.png',
     'images/character_walking.png',
     'images/character_walking_big.png',
     'images/cookingoil.png',
     'images/hamburger.png',
+    'images/lilypad.gif',
     'images/pizza.png',
     'images/strawberry.png',
     'images/watermelon.png'

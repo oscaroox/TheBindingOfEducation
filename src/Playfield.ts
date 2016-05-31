@@ -13,9 +13,9 @@ export default class Playfield
     private _theme: Theme;                              // determines what playfield theme sprite to load
     private _time: number;                              // holds time of when we last changed theme
     // private _loaded: number;                         // sprite loading states
-    private _playfieldObject: Mount;
-    private _lastThemeSprite: number;
-    private _worldMgr: WorldMgr;
+    private _playfieldObject: Mount;                    // objects that spawn with certain themes
+    private _lastThemeSprite: number;                   // last background sprite where playfield objects should stop
+    private _worldMgr: WorldMgr;                        // connection hub between all objects
 
     constructor()
     {

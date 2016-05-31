@@ -25,12 +25,6 @@ export enum Animation_State {
     ANIM_JUMP
 }
 
-// differentiate between left and right clicks
-export enum Click_Position {
-    POS_LEFT = 0,
-    POS_RIGHT
-}
-
 // background theme/level ID
 export enum Theme {
     THEME_FORREST = 0,

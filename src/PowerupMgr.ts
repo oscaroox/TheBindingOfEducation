@@ -6,8 +6,8 @@ import LilypadsMgr from "./LilypadsMgr";
 
 export default class PowerupMgr extends ObjectsMgr
 {
-    private _powerupSprites: Powerup[];
-    private _lilypadsMgr: LilypadsMgr;
+    private _powerupSprites: Powerup[];     // save all powerups we are keeping track of
+    private _lilypadsMgr: LilypadsMgr;      // keeps track of and controls lilypads
     
     constructor()
     {

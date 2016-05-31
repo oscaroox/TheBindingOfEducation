@@ -35,7 +35,7 @@ export default class LilypadsMgr
 
                     var lilypad = new Unit(x, y, 0, sprite, laneID);
 
-                    // center
+                    // position correction
                     switch(type) 
                     {
                         case "enemy":

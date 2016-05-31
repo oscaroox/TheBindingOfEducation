@@ -1,5 +1,5 @@
-import {canvas, enemiesAmount, Enemies, Lane_Position, Theme, BACKGROUND_SPEED} from './Defines'
-import {getRandomInt, isCollision} from './Globals'
+import {canvas, enemiesAmount, Enemies, Lane_Position} from './Defines'
+import {getRandomInt} from './Globals'
 import Enemy from './Enemy'
 import Hamburger from './Hamburger'
 import Pizza from './Pizza'
@@ -8,8 +8,8 @@ import LilypadsMgr from "./LilypadsMgr";
 
 export default class EnemiesMgr extends ObjectsMgr
 {
-    private _enemySprites: Enemy[];
-    private _lilypadsMgr: LilypadsMgr;
+    private _enemySprites: Enemy[];         // save all powerups we are keeping track of
+    private _lilypadsMgr: LilypadsMgr;      // keeps track of and controls lilypads
     
     constructor()
     {

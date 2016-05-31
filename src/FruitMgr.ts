@@ -5,7 +5,7 @@ import ObjectsMgr from "./ObjectsMgr";
 
 export default class FruitMgr extends ObjectsMgr
 {
-    private _fruitGroups: FruitGroup[];                 // save all fruit groups we are managing
+    private _fruitGroups: FruitGroup[];     // save all fruit groups we are keeping track of
     
     constructor()
     {

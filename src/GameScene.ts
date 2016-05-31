@@ -12,14 +12,14 @@ import WorldMgr from "./WorldMgr";
 // Controls what is shown on screen
 export default class GameScene
 {
-    private _score: GameScore;
-    private _enemiesMgr: EnemiesMgr;
-    private _fruitsMgr: FruitMgr;
-    private _player: Player;
-    private _playfield: Playfield;
-    private _worldMgr: WorldMgr;
-    private _cookingOil: CookingOil;
-    private _powerupMgr: PowerupMgr;
+    private _score: GameScore;              // keeps track of and controls the score
+    private _enemiesMgr: EnemiesMgr;        // keeps track of and spawns enemies
+    private _fruitsMgr: FruitMgr;           // keeps track of and spawns group of fruits
+    private _player: Player;                // keeps track of and controls the player character 
+    private _playfield: Playfield;          // keeps track of the background and its themes and theme objects
+    private _cookingOil: CookingOil;        // keeps track of and controls the oil on the bottom
+    private _powerupMgr: PowerupMgr;        // keeps track of and controls the powerup sprites (effects in player class)
+    private _worldMgr: WorldMgr;            // connection hub between all objects
 
     constructor() 
     {

@@ -10,12 +10,12 @@ import {isCollision} from "./Globals";
 
 export default class WorldMgr
 {
-    private _player: Player;
-    private _fruitsMgr: FruitMgr;
-    private _enemiesMgr: EnemiesMgr;
-    private _powerupsMgr: PowerupMgr;
-    private _cookingOil: CookingOil;
-    private _score: GameScore;
+    private _player: Player;                // keeps track of and controls the player character
+    private _fruitsMgr: FruitMgr;           // keeps track of and spawns group of fruits
+    private _enemiesMgr: EnemiesMgr;        // keeps track of and spawns enemies
+    private _powerupsMgr: PowerupMgr;       // keeps track of and controls the powerup sprites (effects in player class)
+    private _cookingOil: CookingOil;        // keeps track of and controls the oil on the bottom
+    private _score: GameScore;              // keeps track of and controls the score
     private _playfield: Playfield;
     
     constructor(player: Player, fruitsMgr: FruitMgr, enemiesMgr: EnemiesMgr, 

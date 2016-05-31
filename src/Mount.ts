@@ -4,7 +4,7 @@ import Playfield from "./Playfield";
 
 export default class Mount extends Object
 {
-    public _isMountable: boolean;
+    public _isMountable: boolean;       // determines if player and mount can connect
 
     constructor(sprite: string, x: number, y: number, laneID: Lane)
     {
