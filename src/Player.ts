@@ -281,6 +281,7 @@ export default class Player extends Unit
             var sprite = bg.getSprite(firstSpriteIndex),
                 spritePos = bg.getPosition(firstSpriteIndex);
 
+            // if player reaches edge of first theme sprite, player dies
             var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.5);
 
             if (this.getPositionY() < edge) {
@@ -506,20 +507,6 @@ export default class Player extends Unit
             }
         }
 
-        // timing stuff
-        var power     = this._powerups[index],
-            startTime = power.startTime,
-            duration  = power.duration,
-            flag      = power.flag;
-
-        var curTime = Date.now(),
-            diff    = curTime - startTime;
-
-        if (diff > duration) {
-            this.removePowerupFlag(flag);
-            this.removePowerup(index);
-        }
-
         // debug hitbox
         if (DEBUG_SHOW_MAGNET_HITBOX) {
             var width  = radx2 - radx1,
@@ -527,36 +514,28 @@ export default class Player extends Unit
 
             this.drawHitbox(radx1, rady1, width, height);
         }
+
+        // powerup timing
+        this.powerUpTimer(index);
     }
     
     private invulnerability(index: number):void
     {
         this._isInvulnerable = true;
-
-        var power     = this._powerups[index],
-            startTime = power.startTime,
-            duration  = power.duration,
-            flag      = power.flag;
-
-        var curTime = Date.now(),
-            diff    = curTime - startTime;
-
-        if (diff > duration) {
-            this._isInvulnerable = false;
-            this.removePowerupFlag(flag);
-            this.removePowerup(index);
-        }
+        this.powerUpTimer(index);
     }
 
     // modifier is done at the collided function of GroupMgr
     // this function is just for the flag timer
-    private doublePoints(index: number):void
+    private doublePoints(index: number):void { this.powerUpTimer(index); }
+
+    private powerUpTimer(index: number):void
     {
         var power     = this._powerups[index],
             startTime = power.startTime,
             duration  = power.duration,
             flag      = power.flag;
-        
+
         var curTime = Date.now(),
             diff    = curTime - startTime;
 
