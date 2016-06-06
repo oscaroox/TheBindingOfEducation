@@ -3,13 +3,15 @@ import {getRandomInt} from "./Globals";
 import ObjectsMgr from "./ObjectsMgr";
 import Powerup from "./Powerup";
 import LilypadsMgr from "./LilypadsMgr";
+import GameScene from "./GameScene";
 
 export default class PowerupMgr extends ObjectsMgr
 {
     private _powerupSprites: Powerup[];     // save all powerups we are keeping track of
     private _lilypadsMgr: LilypadsMgr;      // keeps track of and controls lilypads
+    private _gameScene: GameScene;
     
-    constructor()
+    constructor(gameScene: GameScene)
     {
         var time        = Date.now(),
             timeDiffMin = 20000,    // spawn powerup between 20 and 30 seconds
@@ -18,6 +20,8 @@ export default class PowerupMgr extends ObjectsMgr
         
         this._powerupSprites = [];
         this._lilypadsMgr = null;
+        
+        this._gameScene = gameScene;
     }
 
     public getPowerupSprites():Powerup[] { return this._powerupSprites; }
@@ -87,13 +91,13 @@ export default class PowerupMgr extends ObjectsMgr
         }
     }
 
-    private updatePosition():void
+    private updatePosition(isGameOver: boolean):void
     {
         for (var i = 0; i < this._powerupSprites.length; i += 1) {
             var p = this._powerupSprites[i];
 
             // update each powerup on screen
-            p.update();
+            p.update(isGameOver);
 
             // remove if we are out of screen
             if (p.getPositionY() > canvas.height) this.remove(i);
@@ -127,11 +131,12 @@ export default class PowerupMgr extends ObjectsMgr
     
     public update():void
     {
-        this.spawn();
+        if (!this._gameScene._gameOver)
+            this.spawn();
 
         if (this._lilypadsMgr != null)
-            this._lilypadsMgr.update();
+            this._lilypadsMgr.update(this._gameScene._gameOver);
 
-        this.updatePosition();
+        this.updatePosition(this._gameScene._gameOver);
     }
 }

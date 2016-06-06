@@ -4,6 +4,7 @@ import {ctx, canvas, BACKGROUND_SPEED, Powerup_Flags} from "./Defines";
 import Playfield from "./Playfield";
 import {splice} from "./Globals";
 import WorldMgr from "./WorldMgr";
+import GameScene from "./GameScene";
 
 export default class GameScore
 {
@@ -15,8 +16,9 @@ export default class GameScore
     private _fontSize: number;          // size of text
     private _background: Playfield;     // playfield pointer -- so we can position the score in relation to it
     private _worldMgr: WorldMgr;
+    private _gameScene: GameScene;
     
-    constructor(points: number, background: Playfield)
+    constructor(points: number, background: Playfield, gameScene: GameScene)
     {
         this._points = points;
         this._updateTimer = 250;    // .25 seconds
@@ -26,6 +28,8 @@ export default class GameScore
 
         this._x = 10 + canvas.width / 2 + this._background.getSprite(0).width / 2;
         this._y = this._fontSize;
+
+        this._gameScene = gameScene;
 
         this.draw();
     }
@@ -102,7 +106,9 @@ export default class GameScore
     // update score with some number
     public update():void
     {
-        this.updatePoints();
+        if (!this._gameScene._gameOver)
+            this.updatePoints();
+        
         this.draw();
     }
 }

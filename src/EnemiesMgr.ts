@@ -5,13 +5,15 @@ import Hamburger from './Hamburger'
 import Pizza from './Pizza'
 import ObjectsMgr from "./ObjectsMgr";
 import LilypadsMgr from "./LilypadsMgr";
+import GameScene from "./GameScene";
 
 export default class EnemiesMgr extends ObjectsMgr
 {
     private _enemySprites: Enemy[];         // save all powerups we are keeping track of
     private _lilypadsMgr: LilypadsMgr;      // keeps track of and controls lilypads
+    private _gameScene: GameScene;
     
-    constructor()
+    constructor(gameScene: GameScene)
     {
         var time = Date.now(),
             timeDiffMin = 750,
@@ -19,6 +21,7 @@ export default class EnemiesMgr extends ObjectsMgr
         super(time, timeDiffMin, timeDiffMax);
         
         this._enemySprites = [];
+        this._gameScene = gameScene;
         
         this._lilypadsMgr = null;
     }
@@ -77,7 +80,7 @@ export default class EnemiesMgr extends ObjectsMgr
             var e = this._enemySprites[i];
 
             // update each enemy on screen
-            e.update();
+            e.update(this._gameScene._gameOver);
 
             // add to our safe remove array
             if (e.getPositionY() > canvas.height) removeEnemiesList.push(i);
@@ -97,10 +100,11 @@ export default class EnemiesMgr extends ObjectsMgr
 
     public update():void
     {
-        this.spawn();
+        if (!this._gameScene._gameOver)
+            this.spawn();
 
         if (this._lilypadsMgr)
-            this._lilypadsMgr.update();
+            this._lilypadsMgr.update(this._gameScene._gameOver);
         
         this.updatePosition();
     }

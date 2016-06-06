@@ -1,17 +1,21 @@
 import Object from "./Object";
 import {Lane, BACKGROUND_SPEED, DEBUG_SHOW_MOUNT_HITBOX} from "./Defines";
 import Playfield from "./Playfield";
+import GameScene from "./GameScene";
 
 export default class Mount extends Object
 {
     public _isMountable: boolean;       // determines if player and mount can connect
+    private _gameScene: GameScene;
 
-    constructor(sprite: string, x: number, y: number, laneID: Lane)
+    constructor(sprite: string, x: number, y: number, laneID: Lane, gameScene: GameScene)
     {
         super(x, y, sprite, laneID);
 
         this._isMountable = true;
         this.setInitPosition();
+
+        this._gameScene = gameScene;
     }
 
     protected setInitPosition():void
@@ -47,13 +51,17 @@ export default class Mount extends Object
     
     public update(playerIsMounted: boolean, playfield?: Playfield):void
     {
-        if (playerIsMounted) {
-            this.moveWithPlayer(playfield);
-        } else {
-            this.updatePosition(BACKGROUND_SPEED);
+        if (!this._gameScene._gameOver) {
+            if (playerIsMounted) {
+                this.moveWithPlayer(playfield);
+            } else {
+                this.updatePosition(BACKGROUND_SPEED);
+            }
         }
-        
-        if (DEBUG_SHOW_MOUNT_HITBOX) this.drawHitbox();
+
+        if (DEBUG_SHOW_MOUNT_HITBOX)
+            this.drawHitbox();
+
         super.update();
     }
 }

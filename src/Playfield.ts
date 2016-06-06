@@ -2,6 +2,7 @@ import {BACKGROUND_SPEED, canvas, ctx, Theme, Lane_Position, Lane} from "./Defin
 import Mount from "./Mount";
 import {getRandomInt} from "./Globals";
 import WorldMgr from "./WorldMgr";
+import GameScene from "./GameScene";
 
 export default class Playfield
 {
@@ -16,8 +17,9 @@ export default class Playfield
     private _firstThemeSprite: number;                  // first theme sprite where objects can spawn
     private _lastThemeSprite: number;                   // last background sprite where playfield objects should stop
     private _worldMgr: WorldMgr;                        // connection hub between all objects
+    private _gameScene: GameScene;
 
-    constructor()
+    constructor(gameScene: GameScene)
     {
         var source = "images/bg_540_960.png";
         this.loadSprite(source);
@@ -32,6 +34,8 @@ export default class Playfield
         // we start in the forrest
         this._theme = Theme.THEME_FORREST;
         this._spriteTheme = [Theme.THEME_FORREST, Theme.THEME_FORREST];
+
+        this._gameScene = gameScene;
 
         this.init();
     }
@@ -86,7 +90,7 @@ export default class Playfield
             y      = this._y[otherbg] - 90;     // 90 = boat height
         
         this._lastThemeSprite  = null;
-        this._playfieldObject  = new Mount(sprite, x, y, randLane);
+        this._playfieldObject  = new Mount(sprite, x, y, randLane, this._gameScene);
     }
 
     private changeScenery(index: number):void
@@ -175,7 +179,7 @@ export default class Playfield
         ctx.drawImage(this._sprites[1], this._x[1], this._y[1]);
     }
 
-    private updateObjects():void
+    public updateObjects():void
     {
         if (this._playfieldObject != null) {
             var player          = this._worldMgr.getPlayer(),
@@ -194,8 +198,9 @@ export default class Playfield
 
     public update():void
     {
-        this.updatePosition();
+        if (!this._gameScene._gameOver)
+            this.updatePosition();
+
         this.draw();
-        this.updateObjects();
     }
 }

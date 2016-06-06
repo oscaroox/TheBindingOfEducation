@@ -56,10 +56,14 @@ export default class Fruit extends Object
         this.setPosition(newx, newy);
     }
 
-    public update():void
+    public update(isGameOver: boolean):void
     {
-        this.updatePosition(BACKGROUND_SPEED);
-        if (DEBUG_SHOW_FRUIT_HITBOX) this.drawHitbox();
+        if (!isGameOver)
+            this.updatePosition(BACKGROUND_SPEED);
+        
+        if (DEBUG_SHOW_FRUIT_HITBOX) 
+            this.drawHitbox();
+        
         super.update();
     }
 }

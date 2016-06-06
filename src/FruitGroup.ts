@@ -131,7 +131,7 @@ export default class FruitGroup
         this.removeSingleFruit(fruitID);
     }
     
-    private updatePosition():void
+    private updatePosition(isGameOver: boolean):void
     {
         var removeFruitsList: number[] = [];
         
@@ -140,7 +140,7 @@ export default class FruitGroup
         for (var i = length; i >= 0; i -= 1) {
             var f = this._fruitSprites[i];
 
-            f.update();
+            f.update(isGameOver);
 
             // remove fruit from list if out of screen
             if (f.getPositionY() > canvas.height) removeFruitsList.push(i);
@@ -149,9 +149,9 @@ export default class FruitGroup
         if (removeFruitsList.length > 0) this.removeFromArray(this._fruitSprites, removeFruitsList);
     }
     
-    public update():void
+    public update(isGameOver: boolean):void
     {
-        this._lilypadsMgr.update();
-        this.updatePosition();
+        this._lilypadsMgr.update(isGameOver);
+        this.updatePosition(isGameOver);
     }
 }

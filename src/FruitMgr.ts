@@ -2,12 +2,14 @@ import {fruitAmount} from './Defines'
 import {getRandomInt} from './Globals'
 import FruitGroup from './FruitGroup'
 import ObjectsMgr from "./ObjectsMgr";
+import GameScene from "./GameScene";
 
 export default class FruitMgr extends ObjectsMgr
 {
     private _fruitGroups: FruitGroup[];     // save all fruit groups we are keeping track of
+    private _gameScene: GameScene;
     
-    constructor()
+    constructor(gameScene: GameScene)
     {
         var time = Date.now(),
             timeDiffMin = 1000,
@@ -15,8 +17,7 @@ export default class FruitMgr extends ObjectsMgr
         super(time, timeDiffMin, timeDiffMax);
         
         this._fruitGroups = [];
-
-        // this.spawn(true);
+        this._gameScene = gameScene;
     }
     
     public getFruitGroups():FruitGroup[] { return this._fruitGroups; }
@@ -70,13 +71,15 @@ export default class FruitMgr extends ObjectsMgr
                 continue;
             }
 
-            group.update();
+            group.update(this._gameScene._gameOver);
         }
     }
 
     public update():void
     {
-        this.spawn();
+        if (!this._gameScene._gameOver)
+            this.spawn();
+        
         this.updateGroups();
     }
 }

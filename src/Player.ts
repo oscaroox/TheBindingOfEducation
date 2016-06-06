@@ -5,6 +5,7 @@ import {
 import {isCollision} from './Globals'
 import Unit from './Unit';
 import WorldMgr from "./WorldMgr";
+import GameScene from "./GameScene";
 
 // PLAYER
 // all updates and movement is done in this class
@@ -14,6 +15,7 @@ export default class Player extends Unit
     public _isMounted: boolean;                 // is player on a vehicle
 
     private _worldMgr: WorldMgr;                // holds various objects and managers
+    private _gameScene: GameScene;
         
     private _animationStep: number;             // number of step the animation of the sprite is in
     private _spriteAnimations: number;          // max number of steps in an animation
@@ -21,6 +23,7 @@ export default class Player extends Unit
     private _spriteHeight: number;              // how high is a SINGLE sprite
     private _spriteDrawTime: number;            // when we last drawn the animation
     private _spriteDrawTimeDiff: number;        // how often the animation should be redrawn
+    private _spriteDeathOffsetY: number;        // Y offset in sprite image on death
     
     private _speedX: number;                    // speed on X-axis
     private _speedY: number;                    // speed on Y-axis
@@ -33,7 +36,7 @@ export default class Player extends Unit
     private _powerupFlags: number;              // bitwise powerup flag holder
     private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];  // holds information about powerups the player has
     
-    constructor()
+    constructor(gameScene: GameScene)
     {
         var sprite = "images/character_walking_big.png",
             health = 2,
@@ -41,6 +44,8 @@ export default class Player extends Unit
             y      = canvas.height,
             lane   = Lane.LANE_MIDDLE;
         super(x, y, health, sprite, lane);
+        
+        this._gameScene = gameScene;
         
         this._isMounted = false;
 
@@ -50,6 +55,7 @@ export default class Player extends Unit
         this._spriteHeight       = 72;
         this._spriteDrawTime     = Date.now();
         this._spriteDrawTimeDiff = 150;
+        this._spriteDeathOffsetY = 0;
 
         this._speedY = 1;
         this._speedX = 8;
@@ -278,13 +284,11 @@ export default class Player extends Unit
             var sprite = bg.getSprite(firstSpriteIndex),
                 spritePos = bg.getPosition(firstSpriteIndex);
 
-            var edge = spritePos.y + (sprite.height - this.getSprite().height);
+            var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.5);
 
             if (this.getPositionY() < edge) {
-                if (!this._isMounted) {
+                if (!this._isMounted)
                     this.die();
-                    console.log('dead');
-                }
             }
         }
     }
@@ -293,8 +297,11 @@ export default class Player extends Unit
     {
         this.removeHealth(1);
 
+        // GAME OVER
         if (this.getHealth() == 0) {
-            // GAME OVER
+            this.die();
+
+        // remove health
         } else {
             this._timeHit = Date.now();
             this._isInvulnerable = true;
@@ -407,8 +414,8 @@ export default class Player extends Unit
 
     protected draw():void
     {
-        this.drawImage();
         this.animateSprite();
+        this.drawImage();
     }
 
     private drawImage(rounds:number = 1):void
@@ -561,9 +568,44 @@ export default class Player extends Unit
         }
     }
 
+    public deathAnimation():void
+    {
+        ctx.globalAlpha = 1.0;
+        ctx.drawImage(
+            this.getSprite(),
+            this._spriteWidth * this._animationStep,
+            this._spriteDeathOffsetY,
+            this._spriteWidth,
+            this._spriteHeight,
+            this.getPositionX(),
+            this.getPositionY(),
+            this._spriteWidth,
+            this._spriteHeight
+        );
+
+        var curTime = Date.now(),
+            diff    = curTime - this._spriteDrawTime;
+
+        if (diff > this._spriteDrawTimeDiff) {
+            this._spriteDeathOffsetY -= 10;
+            this._spriteDrawTime = curTime;
+        }
+    }
+
+    protected die():void
+    {
+        this._gameScene._gameOver = true;
+        super.die();
+    }
+
     // update everything that changed with our hero
     public update():void
     {
+        if (this._gameScene._gameOver) {
+            this.deathAnimation();
+            return;
+        }
+
         this.collisionCheck();
         this.move();
         this.animationMove();
@@ -575,6 +617,7 @@ export default class Player extends Unit
             this.drawBlinking();
         }
 
-        if (DEBUG_SHOW_PLAYER_HITBOX) this.drawHitbox();
+        if (DEBUG_SHOW_PLAYER_HITBOX)
+            this.drawHitbox();
     }
 }

@@ -59,20 +59,24 @@ export default class LilypadsMgr
         }
     }
 
-    private updatePosition():void
+    private updatePosition(isGameOver: boolean):void
     {
         var removeLilypadsList: number[] = [];
 
         for (var i = 0; i < this._lilypadSprites.length; i += 1) {
             var lilypad = this._lilypadSprites[i];
             
-            lilypad.updatePosition(BACKGROUND_SPEED);
+            if (!isGameOver)
+                lilypad.updatePosition(BACKGROUND_SPEED);
+            
             lilypad.update();
 
-            if (lilypad.getHitbox().y1 > canvas.height) removeLilypadsList.push(i);
+            if (lilypad.getHitbox().y1 > canvas.height) 
+                removeLilypadsList.push(i);
         }
 
-        if (removeLilypadsList.length > 0) this.remove(removeLilypadsList);
+        if (removeLilypadsList.length > 0) 
+            this.remove(removeLilypadsList);
     }
 
     private remove(indexList: number[])
@@ -84,8 +88,8 @@ export default class LilypadsMgr
         }
     }
 
-    public update():void
+    public update(isGameOver: boolean):void
     {
-        this.updatePosition();
+        this.updatePosition(isGameOver);
     }
 }

@@ -1,6 +1,6 @@
 import Player from './Player';
 import GameScore from './GameScore';
-import {canvas, ctx} from './Defines';
+import {canvas, ctx, BACKGROUND_SPEED} from './Defines';
 import Playfield from './Playfield';
 import EnemiesMgr from "./EnemiesMgr";
 import FruitMgr from "./FruitMgr";
@@ -24,31 +24,35 @@ export default class GameScene
     private _worldMgr: WorldMgr;            // connection hub between all objects
 
     private _startTime: number;
+    
+    public _gameOver: boolean;
 
     constructor() 
     {
         this._startTime = Date.now();
+        
+        this._gameOver = false;
 
         // add background
-        this._playfield = new Playfield();
+        this._playfield = new Playfield(this);
         
         // add player to scene
-        this._player = new Player();
+        this._player = new Player(this);
 
         // score handler
-        this._score = new GameScore(0, this._playfield);
+        this._score = new GameScore(0, this._playfield, this);
         
         // add cooking oil
         this._cookingOil = new CookingOil();
 
         // fruits manager
-        this._fruitsMgr = new FruitMgr();
+        this._fruitsMgr = new FruitMgr(this);
         
         // enemies manager
-        this._enemiesMgr = new EnemiesMgr();
+        this._enemiesMgr = new EnemiesMgr(this);
         
         // power up manager
-        this._powerupMgr = new PowerupMgr();
+        this._powerupMgr = new PowerupMgr(this);
         
         // floating points
         this._floatingScoreMgr = new FloatingScoreMgr();
@@ -73,17 +77,6 @@ export default class GameScene
     // what should be drawn in the background first and what should be drawn up front last
     private update():void 
     {
-        // var curTime = Date.now(),
-        //     diff    = curTime - this._startTime;
-        //
-        // if (diff < 1000) {
-        //     console.log('cant start');
-        //     return;
-        // }
-
-        if (this._player.getHealth() == 0)
-            return;
-
         // clear canvas for redraw
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -98,6 +91,9 @@ export default class GameScene
 
         // enemy manager
         this._enemiesMgr.update();
+
+        // mounts
+        this._playfield.updateObjects();
 
         // update player
         this._player.update();

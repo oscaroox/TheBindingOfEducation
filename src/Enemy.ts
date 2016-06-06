@@ -19,10 +19,14 @@ abstract class Enemy extends Unit
         this.setPosition(x, y);
     }
 
-    public update():void
+    public update(isGameOver: boolean):void
     {
-        this.updatePosition(BACKGROUND_SPEED);
-        if (DEBUG_SHOW_ENEMY_HITBOX) this.drawHitbox();
+        if (!isGameOver)
+            this.updatePosition(BACKGROUND_SPEED);
+        
+        if (DEBUG_SHOW_ENEMY_HITBOX) 
+            this.drawHitbox();
+        
         super.update();
     }
 }

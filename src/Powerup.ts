@@ -39,10 +39,14 @@ export default class Powerup extends Object
         this.setPosition(x, y);
     }
     
-    public update():void
+    public update(isGameOver: boolean):void
     {
-        this.updatePosition(BACKGROUND_SPEED);
-        if (DEBUG_SHOW_POWERUP_HITBOX) this.drawHitbox();
+        if (!isGameOver)
+            this.updatePosition(BACKGROUND_SPEED);
+
+        if (DEBUG_SHOW_POWERUP_HITBOX)
+            this.drawHitbox();
+        
         super.update();
     }
 }
