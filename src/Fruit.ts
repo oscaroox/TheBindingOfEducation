@@ -63,11 +63,9 @@ export default class Fruit extends Object
         if (!isGameOver)
             this.updatePosition(gameSpeed);
         
-        if (DEBUG_SHOW_FRUIT_HITBOX) 
-            this.drawHitbox();
-        
         super.update();
+
+        if (DEBUG_SHOW_FRUIT_HITBOX)
+            this.drawHitbox();
     }
 }
-
-// export default Fruit;

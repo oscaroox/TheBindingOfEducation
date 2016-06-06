@@ -16,7 +16,7 @@ export default class Playfield
     private _lastThemeSprite: number;                   // last background sprite where playfield objects should stop
     private _gameScene: GameScene;
 
-    constructor()
+    constructor(gameScene: GameScene)
     {
         var source = "images/bg_540_960.png";
         this.loadSprite(source);
@@ -26,6 +26,8 @@ export default class Playfield
         this._playfieldObject  = null;
         this._firstThemeSprite = null;
         this._lastThemeSprite  = null;
+        
+        this._gameScene = gameScene;
 
         // we start in the forrest
         this._theme = Theme.THEME_FORREST;
@@ -49,7 +51,6 @@ export default class Playfield
     public getSpriteTheme(index: number):Theme { return this._spriteTheme[index]; }
 
     
-    public addGameScene(gameScene: GameScene):void { this._gameScene = gameScene; }
 
     private loadSprite(src):void 
     {

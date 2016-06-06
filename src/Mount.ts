@@ -59,9 +59,9 @@ export default class Mount extends Object
             }
         }
 
+        super.update();
+
         if (DEBUG_SHOW_MOUNT_HITBOX)
             this.drawHitbox();
-
-        super.update();
     }
 }

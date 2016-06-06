@@ -34,7 +34,7 @@ export default class GameScene
         this._gameSpeed = 5;
 
         // add background
-        this._playfield = new Playfield();
+        this._playfield = new Playfield(this);
 
         // score handler
         this._score = new GameScore(0, this);
@@ -43,7 +43,7 @@ export default class GameScene
         this._cookingOil = new CookingOil();
 
         // add player to scene
-        this._player = new Player();
+        this._player = new Player(this);
 
         // fruits manager
         this._fruitsMgr = new FruitMgr(this);
@@ -56,10 +56,6 @@ export default class GameScene
         
         // floating points
         this._floatingScoreMgr = new FloatingScoreMgr(this);
-
-        this._playfield.addGameScene(this);
-        this._score.addGameScene(this);
-        this._player.addGameScene(this);
         
         // start update loop
         this.loop();
@@ -85,10 +81,10 @@ export default class GameScene
     // check collision against every object on the field
     public collisionCheck(object: __Object):boolean
     {
-        var ax1       = object.getHitbox().x1,
-            ax2       = object.getHitbox().x2,
-            ay1       = object.getHitbox().y1,
-            ay2       = object.getHitbox().y2,
+        var ax1 = object.getHitbox().x1,
+            ax2 = object.getHitbox().x2,
+            ay1 = object.getHitbox().y1,
+            ay2 = object.getHitbox().y2,
             bx1,
             bx2,
             by1,

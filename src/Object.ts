@@ -40,10 +40,10 @@ export default class __Object
     public getHitbox():{x1: number, y1: number, x2: number, y2: number}
     {
         return {
-            x1: this._x,
-            y1: this._y,
-            x2: this._x + this._sprite.width,
-            y2: this._y + this._sprite.height
+            x1: this._x + this._sprite.width * 0.1,
+            y1: this._y + this._sprite.height * 0.1,
+            x2: this._x + this._sprite.width - this._sprite.width * 0.1,
+            y2: this._y + this._sprite.height - this._sprite.height * 0.1
         }
     }
 

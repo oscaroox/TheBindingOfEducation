@@ -28,7 +28,7 @@ export default class GameScore
     }
 
 
-    public addGameScene(gameScene: GameScene):void { this._gameScene = gameScene; }
+    // public addGameScene(gameScene: GameScene):void { this._gameScene = gameScene; }
 
     public updatePoints(points: number = 0):void
     {

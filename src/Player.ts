@@ -12,7 +12,7 @@ export default class Player extends Unit
 {
     public _isInvulnerable: boolean;            // can player be hit by enemies or not
     public _isMounted: boolean;                 // is player on a vehicle
-
+    
     private _gameScene: GameScene;
         
     private _animationStep: number;             // number of step the animation of the sprite is in
@@ -34,7 +34,7 @@ export default class Player extends Unit
     private _powerupFlags: number;              // bitwise powerup flag holder
     private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];  // holds information about powerups the player has
     
-    constructor()
+    constructor(gameScene: GameScene)
     {
         var sprite = "images/character_walking_big.png",
             health = 2,
@@ -63,8 +63,11 @@ export default class Player extends Unit
 
         this._powerupFlags = Powerup_Flags.FLAG_NONE;
         this._powerups = [];
+        
+        this._gameScene = gameScene;
     
         this.addEventHandlers();
+        this.init();
     }
     
     public getPowerupFlags():Powerup_Flags { return this._powerupFlags; }
@@ -80,13 +83,9 @@ export default class Player extends Unit
     
     public removePowerupFlag(flag: Powerup_Flags):void { this._powerupFlags &= ~flag; }
 
-
-
-    public addGameScene(gameScene: GameScene):void
-    {
-        this._gameScene = gameScene;
-        this.init();
-    }
+    
+    
+    
     
     public getHitbox():{ x1: number, y1: number, x2: number, y2: number }
     {
