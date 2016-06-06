@@ -1,4 +1,4 @@
-import {BACKGROUND_SPEED, ctx} from "./Defines";
+import {ctx} from "./Defines";
 export default class FloatingScore
 {
     private _x: number;

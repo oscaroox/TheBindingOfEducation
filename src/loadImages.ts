@@ -16,11 +16,14 @@ var imagesArray = [
     'images/boat.png',
     'images/character_walking.png',
     'images/character_walking_big.png',
+    'images/cherry.png',
     'images/cookingoil.png',
     'images/hamburger.png',
     'images/lilypad.gif',
+    'images/pineapple.png',
     'images/pizza.png',
     'images/strawberry.png',
+    'images/tangerine.png',
     'images/watermelon.png'
 ];
 

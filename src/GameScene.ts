@@ -23,8 +23,12 @@ export default class GameScene
     private _floatingScoreMgr: FloatingScoreMgr;
     private _worldMgr: WorldMgr;            // connection hub between all objects
 
+    private _startTime: number;
+
     constructor() 
     {
+        this._startTime = Date.now();
+
         // add background
         this._playfield = new Playfield();
         
@@ -69,6 +73,14 @@ export default class GameScene
     // what should be drawn in the background first and what should be drawn up front last
     private update():void 
     {
+        // var curTime = Date.now(),
+        //     diff    = curTime - this._startTime;
+        //
+        // if (diff < 1000) {
+        //     console.log('cant start');
+        //     return;
+        // }
+
         if (this._player.getHealth() == 0)
             return;
 

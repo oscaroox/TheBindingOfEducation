@@ -46,21 +46,33 @@ export default class FruitGroup
             // properties of fruit
             var uniqueID = i,
                 sprite   = "",
-                points   = 0,
+                points   = FruitPoints[this._fruitType],
                 speed    = BACKGROUND_SPEED;
 
             switch (this._fruitType)
             {
                 case Fruits.FRUIT_APPLE:
                     sprite = "images/apple.png";
-                    points = FruitPoints[this._fruitType];
-                    speed  = BACKGROUND_SPEED;
                     break;
 
                 case Fruits.FRUIT_BANANA:
                     sprite = "images/banana.png";
-                    points = FruitPoints[this._fruitType];
-                    speed  = BACKGROUND_SPEED;
+                    break;
+
+                case Fruits.FRUIT_WATERMELON:
+                    sprite = "images/watermelon.png";
+                    break;
+                
+                case Fruits.FRUIT_TANGERINE:
+                    sprite = "images/tangerine.png";
+                    break;
+
+                case Fruits.FRUIT_CHERRY:
+                    sprite = "images/cherry.png";
+                    break;
+
+                case Fruits.FRUIT_PINEAPPLE:
+                    sprite = "images/pineapple.png";
                     break;
 
                 default:

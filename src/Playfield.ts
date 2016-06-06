@@ -12,7 +12,7 @@ export default class Playfield
     private _speed: number;                             // speed the background will travel along the canvas
     private _theme: Theme;                              // determines what playfield theme sprite to load
     private _time: number;                              // holds time of when we last changed theme
-    // private _loaded: number;                         // sprite loading states
+    private _loaded: number;                         // sprite loading states
     private _playfieldObject: Mount;                    // objects that spawn with certain themes
     private _firstThemeSprite: number;                  // first theme sprite where objects can spawn
     private _lastThemeSprite: number;                   // last background sprite where playfield objects should stop
@@ -20,7 +20,7 @@ export default class Playfield
 
     constructor()
     {
-        // this._loaded = 0;
+        this._loaded = 0;
 
         var source = "images/bg_540_960.png";
         this.loadSprite(source);
@@ -39,14 +39,6 @@ export default class Playfield
         this.init();
     }
 
-    // private loadInit():any
-    // {
-    //     this._loaded += 1;
-    //
-    //     if (this._loaded == 2)
-    //         this.init();
-    // }
-
     public getPlayfieldObject():Mount { return this._playfieldObject; }
 
     public getSprite(index: number):HTMLImageElement { return this._sprites[index]; }
@@ -63,15 +55,26 @@ export default class Playfield
     
     public getSpriteTheme(index: number):Theme { return this._spriteTheme[index]; }
 
-    
     public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
+
+
+    private loadInit():any
+    {
+        this._loaded += 1;
+
+        console.log(this._loaded);
+
+
+        if (this._loaded == 2)
+            this.init();
+    }
 
     private loadSprite(src):void {
         this._sprites[0] = new Image();
         this._sprites[1] = new Image();
 
-        // this._sprites[0].onload = this.loadInit();
-        // this._sprites[1].onload = this.loadInit();
+        this._sprites[0].onload = this.loadInit;
+        this._sprites[1].onload = this.loadInit;
 
         this._sprites[0].src = src;
         this._sprites[1].src = src;
@@ -79,6 +82,8 @@ export default class Playfield
 
     private init():void
     {
+        console.log(this._sprites[0].width);
+
         this._x[0] = (canvas.width / 2) - (this._sprites[0].width / 2);
         this._y[0] = canvas.height / 2;
         this._x[1] = this._x[0];
