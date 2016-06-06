@@ -1,6 +1,6 @@
 import GameScene from './GameScene'
 import {canvas, Lane_Position, Lane} from './Defines'
-import {loadImages} from "./loadImages";
+import Game from './Game'
 
 // START
 // adjust canvas size to screen
@@ -16,9 +16,15 @@ Lane_Position[Lane.LANE_RIGHT]  = Math.floor((760 / 1280) * window.innerWidth);
 
 
 // initialize and start game scene
-if (loadImages()) {
-    console.log('starting game');
-    var gameScene = new GameScene();
-} else {
-    console.log('unable to start game');
-}
+
+console.log('starting game');
+var game = new Game();
+
+
+// in game .ts
+
+// var im = new ImageManager(this);
+//
+// public startGame(){
+//     var gs = new GameScene();
+// }
