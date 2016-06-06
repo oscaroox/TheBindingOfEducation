@@ -124,7 +124,7 @@ export default class FruitGroup
         
         // floating score
         var floatingPoints = this._gameScene.getFloatingScoreMgr();
-        floatingPoints.addFloatingScore(FruitPoints[this._fruitType]);
+        floatingPoints.addFloatingScore(points);
 
         // remove from group and game
         this.removeSingleFruit(fruitID);
