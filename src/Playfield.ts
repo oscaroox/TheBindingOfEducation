@@ -14,6 +14,7 @@ export default class Playfield
     private _time: number;                              // holds time of when we last changed theme
     // private _loaded: number;                         // sprite loading states
     private _playfieldObject: Mount;                    // objects that spawn with certain themes
+    private _firstThemeSprite: number;                  // first theme sprite where objects can spawn
     private _lastThemeSprite: number;                   // last background sprite where playfield objects should stop
     private _worldMgr: WorldMgr;                        // connection hub between all objects
 
@@ -27,8 +28,9 @@ export default class Playfield
         this._speed = BACKGROUND_SPEED;
         this._time  = Date.now();
 
-        this._playfieldObject = null;
-        this._lastThemeSprite = null;
+        this._playfieldObject  = null;
+        this._firstThemeSprite = null;
+        this._lastThemeSprite  = null;
 
         // we start in the forrest
         this._theme = Theme.THEME_FORREST;
@@ -50,6 +52,8 @@ export default class Playfield
     public getSprite(index: number):HTMLImageElement { return this._sprites[index]; }
     
     public getWorldMgr():WorldMgr { return this._worldMgr; }
+
+    public getFirstThemeSprite():number { return this._firstThemeSprite; }
     
     public getLastThemeSprite():number { return this._lastThemeSprite; }
     
@@ -94,8 +98,8 @@ export default class Playfield
             x      = Lane_Position[randLane],
             y      = this._y[otherbg] - 90;     // 90 = boat height
         
-        this._lastThemeSprite = null;
-        this._playfieldObject = new Mount(sprite, x, y, randLane);
+        this._lastThemeSprite  = null;
+        this._playfieldObject  = new Mount(sprite, x, y, randLane);
     }
 
     private changeScenery(index: number):void
@@ -116,6 +120,7 @@ export default class Playfield
             var tempSprite = new Image();
             tempSprite.src = "images/bg_2_mid_540_960.png";
 
+            this._firstThemeSprite = null;
             this._sprites[index] = tempSprite;
             this._spriteTheme[index] = Theme.THEME_RIVER;
         }
@@ -125,6 +130,7 @@ export default class Playfield
             var tempSprite = new Image();
             tempSprite.src = "images/bg_2_start_540_960.png";
 
+            this._firstThemeSprite = index;
             this._sprites[index] = tempSprite;
             this._theme = Theme.THEME_RIVER;
             this._spriteTheme[index] = Theme.THEME_RIVER;

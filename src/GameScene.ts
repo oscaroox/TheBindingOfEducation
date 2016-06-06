@@ -51,6 +51,7 @@ export default class GameScene
         this._powerupMgr.addWorldMgr(this._worldMgr);
         this._player.addWorldMgr(this._worldMgr);
         this._playfield.addWorldMgr(this._worldMgr);
+        this._score.addWorldMgr(this._worldMgr);
         
         // start update loop
         this.loop();
@@ -62,8 +63,8 @@ export default class GameScene
     // what should be drawn in the background first and what should be drawn up front last
     private update():void 
     {
-        // if (this._player.getHealth() == 0)
-        //     return;
+        if (this._player.getHealth() == 0)
+            return;
 
         // clear canvas for redraw
         ctx.clearRect(0, 0, canvas.width, canvas.height);

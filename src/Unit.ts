@@ -17,4 +17,6 @@ export default class Unit extends Object
     protected removeHealth(amount):void { this._health -= amount; }
     
     protected setHealth(amount):void { this._health = amount; }
+    
+    protected die():void { this._health = 0; }
 }

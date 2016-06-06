@@ -1,8 +1,9 @@
 // SCORE
 // everything that has to do with gamescore is done here
-import {ctx, canvas, BACKGROUND_SPEED} from "./Defines";
+import {ctx, canvas, BACKGROUND_SPEED, Powerup_Flags} from "./Defines";
 import Playfield from "./Playfield";
 import {splice} from "./Globals";
+import WorldMgr from "./WorldMgr";
 
 export default class GameScore
 {
@@ -13,6 +14,7 @@ export default class GameScore
     private _lastUpdateTime: number;    // time since we gave (a) point(s)
     private _fontSize: number;          // size of text
     private _background: Playfield;     // playfield pointer -- so we can position the score in relation to it
+    private _worldMgr: WorldMgr;
     
     constructor(points: number, background: Playfield)
     {
@@ -28,6 +30,8 @@ export default class GameScore
         this.draw();
     }
 
+    public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
+
     public updatePoints(points: number = 0):void
     {
         var curTime = Date.now(),
@@ -42,7 +46,13 @@ export default class GameScore
         }
 
         if (diff > this._updateTimer) {
-            this._points += 1;
+            var player       = this._worldMgr.getPlayer(),
+                powerupFlags = player.getPowerupFlags();
+
+            var p = 1;
+            
+            (powerupFlags & Powerup_Flags.FLAG_DOUBLE_POINTS) ? this._points += p * 2 : this._points += 1;
+
             this._lastUpdateTime = curTime;
         }
 

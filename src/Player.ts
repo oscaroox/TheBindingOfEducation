@@ -113,7 +113,8 @@ export default class Player extends Unit
         canvas.addEventListener('click', (e)=> { this.handleClick(e.clientX) });
         window.addEventListener('keydown', (e)=> { this.keyboardInput(e) });
         window.addEventListener('keyup', (e)=> {
-            if (e.keyCode == 38 || e.keyCode == 87) BACKGROUND_SPEED = 5;
+            if (e.keyCode == 38 || e.keyCode == 87)
+                BACKGROUND_SPEED = 5;
         });
     }
 
@@ -267,6 +268,25 @@ export default class Player extends Unit
                 this._isMounted = (object._isMountable) ? true : false;
             }
         }
+
+
+        // edge of theme sprite
+        var bg = this._worldMgr.getPlayfield(),
+            firstSpriteIndex = bg.getFirstThemeSprite();
+
+        if (firstSpriteIndex != null) {
+            var sprite = bg.getSprite(firstSpriteIndex),
+                spritePos = bg.getPosition(firstSpriteIndex);
+
+            var edge = spritePos.y + (sprite.height - this.getSprite().height);
+
+            if (this.getPositionY() < edge) {
+                if (!this._isMounted) {
+                    this.die();
+                    console.log('dead');
+                }
+            }
+        }
     }
 
     private collidedWithEnemy():void
@@ -312,13 +332,13 @@ export default class Player extends Unit
 
     private moveDown():void
     {
-        if (this.getHealth() != 2) this.setHealth(2);
-            
         var oil  = this._worldMgr.getCookingOil(),
             endY = canvas.height - oil.getSprite().height / 2 - this.getSprite().height * 1.5;
 
         if (oil.getState() == Cooking_Oil_State.STATE_LOW) {
             if (this.getPositionY() < endY) {
+                if (this.getHealth() != 2) this.setHealth(2);
+
                 var x = this.getPositionX(),
                     y = this.getPositionY() + this._speedY;
 
@@ -418,7 +438,15 @@ export default class Player extends Unit
 
         if (diff > this._spriteDrawTimeDiff) {
             this._animationStep  = (this._animationStep < this._spriteAnimations) ? this._animationStep += 1 : 0;
-            this._spriteDrawTime = curTime;
+
+            if (BACKGROUND_SPEED > 5) {
+                var mod = BACKGROUND_SPEED / 5;
+                this._spriteDrawTimeDiff = 150 / mod;
+                this._spriteDrawTime = curTime;
+            } else {
+                this._spriteDrawTimeDiff = 150;
+                this._spriteDrawTime = curTime;
+            }
         }
     }
 
@@ -541,10 +569,11 @@ export default class Player extends Unit
         this.animationMove();
         this.powerup();
 
-        if (!this._isInvulnerable)
+        if (!this._isInvulnerable) {
             this.draw();
-        else
+        } else {
             this.drawBlinking();
+        }
 
         if (DEBUG_SHOW_PLAYER_HITBOX) this.drawHitbox();
     }

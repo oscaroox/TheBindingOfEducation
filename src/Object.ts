@@ -100,5 +100,3 @@ export default class __Object
         this.draw();
     }
 }
-
-// export default __Object;
