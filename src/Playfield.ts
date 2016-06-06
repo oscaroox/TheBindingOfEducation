@@ -55,16 +55,12 @@ export default class Playfield
 
     public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
 
-    private loadSprite(src):void {
-        
-        // let fn = this.spriteLoaded.bind(this);
-        
+    private loadSprite(src):void 
+    {
         this._sprites[0] = new Image();
-        // this._sprites[0].onload = fn;
         this._sprites[0].src = src;
 
         this._sprites[1] = new Image();
-        // this._sprites[1].onload = 
         this._sprites[1].src = src;
     }
 
