@@ -15,9 +15,6 @@ export var DEBUG_COLOR        = "#fb31fd",  // purple/pink
 export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
 export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
-// background Y speed
-export var BACKGROUND_SPEED = 5;
-
 // UNUSED
 export enum Animation_State {
     ANIM_IDLE = 0,

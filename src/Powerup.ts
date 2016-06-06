@@ -1,9 +1,8 @@
 import Object from './Object'
-import {Lane, Lane_Position, BACKGROUND_SPEED, DEBUG_SHOW_POWERUP_HITBOX, Powerup_Flags} from "./Defines";
+import {Lane, Lane_Position, DEBUG_SHOW_POWERUP_HITBOX, Powerup_Flags} from "./Defines";
 
 export default class Powerup extends Object
 {
-    private _speed: number;         // speed the sprite travels along the Y-axis
     protected _duration: number;    // how long the powerup should last on the player
     protected _startTime: number;   // defines when it was picked up
     private _flag: Powerup_Flags;   // defines what type of powerup we are
@@ -15,8 +14,6 @@ export default class Powerup extends Object
         super(x, y, sprite, laneID);
         
         this._flag = flag;
-
-        this._speed = BACKGROUND_SPEED;
         this._duration = duration;
         
         this.setInitPosition();
@@ -39,10 +36,10 @@ export default class Powerup extends Object
         this.setPosition(x, y);
     }
     
-    public update(isGameOver: boolean):void
+    public update(isGameOver: boolean, gameSpeed: number):void
     {
         if (!isGameOver)
-            this.updatePosition(BACKGROUND_SPEED);
+            this.updatePosition(gameSpeed);
 
         if (DEBUG_SHOW_POWERUP_HITBOX)
             this.drawHitbox();
@@ -50,5 +47,3 @@ export default class Powerup extends Object
         super.update();
     }
 }
-
-// export default Powerup;

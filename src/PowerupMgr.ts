@@ -9,19 +9,16 @@ export default class PowerupMgr extends ObjectsMgr
 {
     private _powerupSprites: Powerup[];     // save all powerups we are keeping track of
     private _lilypadsMgr: LilypadsMgr;      // keeps track of and controls lilypads
-    private _gameScene: GameScene;
     
     constructor(gameScene: GameScene)
     {
         var time        = Date.now(),
             timeDiffMin = 20000,    // spawn powerup between 20 and 30 seconds
             timeDiffMax = 30000;
-        super(time, timeDiffMin, timeDiffMax);
+        super(time, timeDiffMin, timeDiffMax, gameScene);
         
         this._powerupSprites = [];
         this._lilypadsMgr = null;
-        
-        this._gameScene = gameScene;
     }
 
     public getPowerupSprites():Powerup[] { return this._powerupSprites; }
@@ -68,16 +65,13 @@ export default class PowerupMgr extends ObjectsMgr
             
             // create powerup
             var power = new Powerup(sprite, duration, randLane, flag);
-
-            // checks if our initial Y position is within other objects
-            // this.generatePositionY(power);
-
+            
             // check if we are not colliding with anything, delay spawning otherwise
-            if (!this.getWorldMgr().collisionCheck(power)) {
+            if (!this._gameScene.collisionCheck(power)) {
 
                 // check if it needs a lilypad
                 if (this._lilypadsMgr == null)
-                    this._lilypadsMgr = new LilypadsMgr(this.getWorldMgr());
+                    this._lilypadsMgr = new LilypadsMgr(this._gameScene);
 
                 this._lilypadsMgr.spawnLilypads(power, "powerup");
 
@@ -97,7 +91,7 @@ export default class PowerupMgr extends ObjectsMgr
             var p = this._powerupSprites[i];
 
             // update each powerup on screen
-            p.update(isGameOver);
+            p.update(isGameOver, this._gameScene._gameSpeed);
 
             // remove if we are out of screen
             if (p.getPositionY() > canvas.height) this.remove(i);

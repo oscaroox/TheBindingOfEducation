@@ -11,22 +11,20 @@ export default class EnemiesMgr extends ObjectsMgr
 {
     private _enemySprites: Enemy[];         // save all powerups we are keeping track of
     private _lilypadsMgr: LilypadsMgr;      // keeps track of and controls lilypads
-    private _gameScene: GameScene;
     
     constructor(gameScene: GameScene)
     {
         var time = Date.now(),
             timeDiffMin = 750,
             timeDiffMax = 1500;
-        super(time, timeDiffMin, timeDiffMax);
+        super(time, timeDiffMin, timeDiffMax, gameScene);
         
         this._enemySprites = [];
-        this._gameScene = gameScene;
-        
         this._lilypadsMgr = null;
     }
     
     public getEnemySprites():Enemy[] { return this._enemySprites; }
+    
 
     // add enemies to our game field every x seconds
     private spawn():void
@@ -54,11 +52,11 @@ export default class EnemiesMgr extends ObjectsMgr
             }
 
             // check if we are not colliding with anything, delay spawning otherwise
-            if (!this.getWorldMgr().collisionCheck(enemy)) {
+            if (!this._gameScene.collisionCheck(enemy)) {
 
                 // check if it needs a lilypad
                 if (this._lilypadsMgr == null)
-                    this._lilypadsMgr = new LilypadsMgr(this.getWorldMgr());
+                    this._lilypadsMgr = new LilypadsMgr(this._gameScene);
 
                 this._lilypadsMgr.spawnLilypads(enemy, "enemy");
 
@@ -80,7 +78,7 @@ export default class EnemiesMgr extends ObjectsMgr
             var e = this._enemySprites[i];
 
             // update each enemy on screen
-            e.update(this._gameScene._gameOver);
+            e.update(this._gameScene._gameOver, this._gameScene._gameSpeed);
 
             // add to our safe remove array
             if (e.getPositionY() > canvas.height) removeEnemiesList.push(i);

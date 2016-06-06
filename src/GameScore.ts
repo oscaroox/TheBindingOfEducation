@@ -1,9 +1,5 @@
-// SCORE
-// everything that has to do with gamescore is done here
-import {ctx, canvas, BACKGROUND_SPEED, Powerup_Flags} from "./Defines";
-import Playfield from "./Playfield";
+import {ctx, canvas, Powerup_Flags} from "./Defines";
 import {splice} from "./Globals";
-import WorldMgr from "./WorldMgr";
 import GameScene from "./GameScene";
 
 export default class GameScore
@@ -14,35 +10,33 @@ export default class GameScore
     private _updateTimer: number;       // time interval for adding point(s)
     private _lastUpdateTime: number;    // time since we gave (a) point(s)
     private _fontSize: number;          // size of text
-    private _background: Playfield;     // playfield pointer -- so we can position the score in relation to it
-    private _worldMgr: WorldMgr;
     private _gameScene: GameScene;
     
-    constructor(points: number, background: Playfield, gameScene: GameScene)
+    constructor(points: number, gameScene: GameScene)
     {
         this._points = points;
         this._updateTimer = 250;    // .25 seconds
         this._fontSize = 40;
         this._lastUpdateTime = Date.now();
-        this._background = background;
-
-        this._x = 10 + canvas.width / 2 + this._background.getSprite(0).width / 2;
-        this._y = this._fontSize;
 
         this._gameScene = gameScene;
+
+        this._x = 10 + canvas.width / 2 + this._gameScene.getPlayfield().getSprite(0).width / 2;
+        this._y = this._fontSize;
 
         this.draw();
     }
 
-    public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
+
+    public addGameScene(gameScene: GameScene):void { this._gameScene = gameScene; }
 
     public updatePoints(points: number = 0):void
     {
         var curTime = Date.now(),
             diff    = curTime - this._lastUpdateTime;
 
-        if (BACKGROUND_SPEED > 5) {
-            var mod = BACKGROUND_SPEED / 5;
+        if (this._gameScene._gameSpeed > 5) {
+            var mod = this._gameScene._gameSpeed / 5;
 
             this._updateTimer = 250 / mod;
         } else {
@@ -50,7 +44,7 @@ export default class GameScore
         }
 
         if (diff > this._updateTimer) {
-            var player       = this._worldMgr.getPlayer(),
+            var player       = this._gameScene.getPlayer(),
                 powerupFlags = player.getPowerupFlags();
 
             var p = 1;

@@ -7,17 +7,15 @@ import GameScene from "./GameScene";
 export default class FruitMgr extends ObjectsMgr
 {
     private _fruitGroups: FruitGroup[];     // save all fruit groups we are keeping track of
-    private _gameScene: GameScene;
     
     constructor(gameScene: GameScene)
     {
         var time = Date.now(),
             timeDiffMin = 1000,
             timeDiffMax = 2000;
-        super(time, timeDiffMin, timeDiffMax);
+        super(time, timeDiffMin, timeDiffMax, gameScene);
         
         this._fruitGroups = [];
-        this._gameScene = gameScene;
     }
     
     public getFruitGroups():FruitGroup[] { return this._fruitGroups; }
@@ -33,11 +31,11 @@ export default class FruitMgr extends ObjectsMgr
             var randFruit = getRandomInt(1, fruitAmount),
                 randLane  = getRandomInt(0, 2);
 
-            var group = new FruitGroup(randFruit, randLane, this.getWorldMgr()),
+            var group = new FruitGroup(randFruit, randLane, this._gameScene),
                 fruit = group.getFruitSprites()[0];
 
             // check if we are not colliding with anything, delay spawning otherwise
-            if (!this.getWorldMgr().collisionCheck(fruit)) {
+            if (!this._gameScene.collisionCheck(fruit)) {
                 this._fruitGroups.push(group);
 
                 this.generateRandomSpawnTime();

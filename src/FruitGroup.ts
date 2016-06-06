@@ -1,30 +1,30 @@
-import {BACKGROUND_SPEED, Lane_Position, Fruits, canvas, FruitPoints} from "./Defines";
+import {Lane_Position, Fruits, canvas, FruitPoints} from "./Defines";
 import {getRandomInt} from './Globals'
 import Fruit from './Fruit'
 import {Powerup_Flags} from "./Defines";
-import WorldMgr from "./WorldMgr";
 import LilypadsMgr from "./LilypadsMgr";
+import GameScene from "./GameScene";
 
 export default class FruitGroup
 {
     private _size: number;                              // max size of this group
     private _groupSizes: { min: number, max: number };  // min and max group size
-    private _fruitType: number;                           // identifier of the fruit we have in this group
+    private _fruitType: number;                         // identifier of the fruit we have in this group
     private _fruitSprites: Fruit[];                     // array to hold our fruits
     private _curLane: number;                           // identifier of our lane
     private _x: number;                                 // what X this group will travel along
-    private _worldMgr: WorldMgr;                        // holds all object managers
+    private _gameScene: GameScene;                      // holds all object managers
     private _lilypadsMgr: LilypadsMgr;                  // manages lilypads of our fruits
     
-    constructor(fruitType: Fruits, lanePos: number, worldMgr: WorldMgr)
+    constructor(fruitType: Fruits, lanePos: number, gameScene: GameScene)
     {
         this._fruitSprites   = [];
         this._fruitType      = fruitType;
         this._groupSizes     = { min: 5, max: 10 };
         this._curLane        = lanePos;
         this._x              = Lane_Position[lanePos];
-        this._worldMgr       = worldMgr;
-        this._lilypadsMgr    = new LilypadsMgr(this._worldMgr);
+        this._gameScene      = gameScene;
+        this._lilypadsMgr    = new LilypadsMgr(this._gameScene);
 
         this.generateSize();
         this.generateGroup();
@@ -46,8 +46,7 @@ export default class FruitGroup
             // properties of fruit
             var uniqueID = i,
                 sprite   = "",
-                points   = FruitPoints[this._fruitType],
-                speed    = BACKGROUND_SPEED;
+                points   = FruitPoints[this._fruitType];
 
             switch (this._fruitType)
             {
@@ -79,7 +78,7 @@ export default class FruitGroup
                     console.log('ERROR: generateGroup defaulted');
             }
 
-            var fruit = new Fruit(uniqueID, this._x, sprite, points, speed, this._curLane, offSetY);
+            var fruit = new Fruit(uniqueID, this._x, sprite, points, this._curLane, offSetY, this._gameScene);
 
             // check if it needs a lilypad
             this._lilypadsMgr.spawnLilypads(fruit, "fruit");
@@ -112,7 +111,7 @@ export default class FruitGroup
     {
         var mod = 1;
         
-        if (this._worldMgr.getPlayer().getPowerupFlags() & Powerup_Flags.FLAG_DOUBLE_POINTS)
+        if (this._gameScene.getPlayer().getPowerupFlags() & Powerup_Flags.FLAG_DOUBLE_POINTS)
             mod = 2;
 
         // there is always a 0th fruit in the array and all fruits are the same in a group
@@ -121,10 +120,10 @@ export default class FruitGroup
         var points = this._fruitSprites[0].getPoints() * mod;
 
         // update score with fruit points
-        this._worldMgr.getScore().updatePoints(points);
+        this._gameScene.getScore().updatePoints(points);
         
         // floating score
-        var floatingPoints = this._worldMgr.getFloatingScoreMgr();
+        var floatingPoints = this._gameScene.getFloatingScoreMgr();
         floatingPoints.addFloatingScore(FruitPoints[this._fruitType]);
 
         // remove from group and game
@@ -140,7 +139,7 @@ export default class FruitGroup
         for (var i = length; i >= 0; i -= 1) {
             var f = this._fruitSprites[i];
 
-            f.update(isGameOver);
+            f.update(isGameOver, this._gameScene._gameSpeed);
 
             // remove fruit from list if out of screen
             if (f.getPositionY() > canvas.height) removeFruitsList.push(i);

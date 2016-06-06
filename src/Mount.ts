@@ -1,5 +1,5 @@
 import Object from "./Object";
-import {Lane, BACKGROUND_SPEED, DEBUG_SHOW_MOUNT_HITBOX} from "./Defines";
+import {Lane, DEBUG_SHOW_MOUNT_HITBOX} from "./Defines";
 import Playfield from "./Playfield";
 import GameScene from "./GameScene";
 
@@ -29,7 +29,7 @@ export default class Mount extends Object
     public moveWithPlayer(playfield: Playfield):void
     {
         if (this._isMountable) {
-            var player = playfield.getWorldMgr().getPlayer(),
+            var player = this._gameScene.getPlayer(),
                 px = player.getPositionX(),
                 py = player.getPositionY();
 
@@ -55,7 +55,7 @@ export default class Mount extends Object
             if (playerIsMounted) {
                 this.moveWithPlayer(playfield);
             } else {
-                this.updatePosition(BACKGROUND_SPEED);
+                this.updatePosition(this._gameScene._gameSpeed);
             }
         }
 

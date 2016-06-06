@@ -1,14 +1,11 @@
-import {BACKGROUND_SPEED, DEBUG_SHOW_ENEMY_HITBOX} from "./Defines";
+import {DEBUG_SHOW_ENEMY_HITBOX} from "./Defines";
 import Unit from './Unit';
 
 abstract class Enemy extends Unit
 {
-    protected _speed: number;   // the speed this enemy will travel across the screen
-    
     constructor(x: number, y: number, health: number, sprite: string, lane: number)
     {
         super(x, y, health, sprite, lane);
-        this._speed = BACKGROUND_SPEED;
     }
     
     protected setInitPosition():void
@@ -19,10 +16,10 @@ abstract class Enemy extends Unit
         this.setPosition(x, y);
     }
 
-    public update(isGameOver: boolean):void
+    public update(isGameOver: boolean, gameSpeed: number):void
     {
         if (!isGameOver)
-            this.updatePosition(BACKGROUND_SPEED);
+            this.updatePosition(gameSpeed);
         
         if (DEBUG_SHOW_ENEMY_HITBOX) 
             this.drawHitbox();

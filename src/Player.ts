@@ -1,10 +1,9 @@
 import {
     canvas, ctx, Lane, Lane_Position, Cooking_Oil_State,
-    DEBUG_SHOW_PLAYER_HITBOX, DEBUG_STROKE_WIDTH, DEBUG_COLOR, Powerup_Flags, DEBUG_SHOW_MAGNET_HITBOX, BACKGROUND_SPEED
+    DEBUG_SHOW_PLAYER_HITBOX, DEBUG_STROKE_WIDTH, DEBUG_COLOR, Powerup_Flags, DEBUG_SHOW_MAGNET_HITBOX
 } from "./Defines";
 import {isCollision} from './Globals'
 import Unit from './Unit';
-import WorldMgr from "./WorldMgr";
 import GameScene from "./GameScene";
 
 // PLAYER
@@ -14,7 +13,6 @@ export default class Player extends Unit
     public _isInvulnerable: boolean;            // can player be hit by enemies or not
     public _isMounted: boolean;                 // is player on a vehicle
 
-    private _worldMgr: WorldMgr;                // holds various objects and managers
     private _gameScene: GameScene;
         
     private _animationStep: number;             // number of step the animation of the sprite is in
@@ -36,7 +34,7 @@ export default class Player extends Unit
     private _powerupFlags: number;              // bitwise powerup flag holder
     private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];  // holds information about powerups the player has
     
-    constructor(gameScene: GameScene)
+    constructor()
     {
         var sprite = "images/character_walking_big.png",
             health = 2,
@@ -44,8 +42,6 @@ export default class Player extends Unit
             y      = canvas.height,
             lane   = Lane.LANE_MIDDLE;
         super(x, y, health, sprite, lane);
-        
-        this._gameScene = gameScene;
         
         this._isMounted = false;
 
@@ -84,6 +80,14 @@ export default class Player extends Unit
     
     public removePowerupFlag(flag: Powerup_Flags):void { this._powerupFlags &= ~flag; }
 
+
+
+    public addGameScene(gameScene: GameScene):void
+    {
+        this._gameScene = gameScene;
+        this.init();
+    }
+    
     public getHitbox():{ x1: number, y1: number, x2: number, y2: number }
     {
         var y2 = this.getPositionY() + this.getSprite().height;
@@ -95,17 +99,11 @@ export default class Player extends Unit
         }
     }
     
-    public addWorldMgr(worldMgr: WorldMgr):void
-    {
-        this._worldMgr = worldMgr;
-        this.init();
-    }
-    
     // initialize
     private init():void
     {
         // adjust position to middle
-        var oil = this._worldMgr.getCookingOil().getSprite(),
+        var oil = this._gameScene.getCookingOil().getSprite(),
             x   = this.getPositionX() - this._spriteWidth / 2,
             y   = canvas.height - oil.height / 2 - this.getSprite().height * 1.5;
 
@@ -120,7 +118,7 @@ export default class Player extends Unit
         window.addEventListener('keydown', (e)=> { this.keyboardInput(e) });
         window.addEventListener('keyup', (e)=> {
             if (e.keyCode == 38 || e.keyCode == 87)
-                BACKGROUND_SPEED = 5;
+                this._gameScene._gameSpeed = 5;
         });
     }
 
@@ -130,7 +128,7 @@ export default class Player extends Unit
         // up arrow and W key
         if (event.keyCode == 38 || event.keyCode == 87) {
             // go twice as fast
-            BACKGROUND_SPEED = 10;
+            this._gameScene._gameSpeed = 10;
         }
 
         // left arrow and A key
@@ -191,9 +189,9 @@ export default class Player extends Unit
     
     private collisionCheck():void
     {
-        var fruitsMgr   = this._worldMgr.getFruitsMgr(),
-            enemiesMgr  = this._worldMgr.getEnemiesMgr(),
-            powerupsMgr = this._worldMgr.getPowerUpsMgr(),
+        var fruitsMgr   = this._gameScene.getFruitsMgr(),
+            enemiesMgr  = this._gameScene.getEnemiesMgr(),
+            powerupsMgr = this._gameScene.getPowerUpsMgr(),
             fruitGroups = fruitsMgr.getFruitGroups(),
             enemies     = enemiesMgr.getEnemySprites(),
             powerups    = powerupsMgr.getPowerupSprites(),
@@ -263,7 +261,7 @@ export default class Player extends Unit
         }
         
         // playfield objects
-        var object = this._worldMgr.getPlayfield().getPlayfieldObject();
+        var object = this._gameScene.getPlayfield().getPlayfieldObject();
         if (object != null) {
             var ox1 = object.getHitbox().x1,
                 oy1 = object.getHitbox().y1,
@@ -277,7 +275,7 @@ export default class Player extends Unit
 
 
         // edge of theme sprite
-        var bg = this._worldMgr.getPlayfield(),
+        var bg = this._gameScene.getPlayfield(),
             firstSpriteIndex = bg.getFirstThemeSprite();
 
         if (firstSpriteIndex != null) {
@@ -307,13 +305,13 @@ export default class Player extends Unit
             this._isInvulnerable = true;
 
             this.moveUp();
-            this._worldMgr.getCookingOil().setState(Cooking_Oil_State.STATE_HIGH);
+            this._gameScene.getCookingOil().setState(Cooking_Oil_State.STATE_HIGH);
         }
     }
 
     private move():void
     {
-        var oilState = this._worldMgr.getCookingOil().getState();
+        var oilState = this._gameScene.getCookingOil().getState();
 
         if (oilState == Cooking_Oil_State.STATE_HIGH) {
             this.moveUp();
@@ -324,7 +322,7 @@ export default class Player extends Unit
 
     private moveUp():void
     {
-        var oil  = this._worldMgr.getCookingOil(),
+        var oil  = this._gameScene.getCookingOil(),
             endY = canvas.height - oil.getSprite().height - this.getSprite().height * 1.5;
 
         if (oil.getState() == Cooking_Oil_State.STATE_HIGH) {
@@ -339,7 +337,7 @@ export default class Player extends Unit
 
     private moveDown():void
     {
-        var oil  = this._worldMgr.getCookingOil(),
+        var oil  = this._gameScene.getCookingOil(),
             endY = canvas.height - oil.getSprite().height / 2 - this.getSprite().height * 1.5;
 
         if (oil.getState() == Cooking_Oil_State.STATE_LOW) {
@@ -446,8 +444,9 @@ export default class Player extends Unit
         if (diff > this._spriteDrawTimeDiff) {
             this._animationStep  = (this._animationStep < this._spriteAnimations) ? this._animationStep += 1 : 0;
 
-            if (BACKGROUND_SPEED > 5) {
-                var mod = BACKGROUND_SPEED / 5;
+            if (this._gameScene._gameSpeed > 5) {
+                var mod = this._gameScene._gameSpeed / 5;
+                
                 this._spriteDrawTimeDiff = 150 / mod;
                 this._spriteDrawTime = curTime;
             } else {
@@ -490,7 +489,7 @@ export default class Player extends Unit
             rady1  = this.getHitbox().y1 - radius,
             rady2  = this.getHitbox().y2 + radius;
 
-        var fruitgroups = this._worldMgr.getFruitsMgr().getFruitGroups();
+        var fruitgroups = this._gameScene.getFruitsMgr().getFruitGroups();
         for (var i = 0; i < fruitgroups.length; i += 1) {
             var group  = fruitgroups[i],
                 fruits = group.getFruitSprites();

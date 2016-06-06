@@ -1,22 +1,21 @@
-import {ctx, canvas} from "./Defines";
-import WorldMgr from "./WorldMgr";
+import {canvas} from "./Defines";
 import FloatingScore from "./FloatingScore";
+import GameScene from "./GameScene";
 
 export default class FloatingScoreMgr
 {
     private _scores: FloatingScore[];
-    private _worldMgr: WorldMgr;
+    private _gameScene: GameScene;
 
-    constructor()
+    constructor(gameScene: GameScene)
     {
         this._scores = [];
+        this._gameScene = gameScene;
     }
-
-    public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
 
     public addFloatingScore(points: number):void 
     {
-        var playerPos = this._worldMgr.getPlayer().getPosition(),
+        var playerPos = this._gameScene.getPlayer().getPosition(),
             x = playerPos.x,
             y = playerPos.y;
         

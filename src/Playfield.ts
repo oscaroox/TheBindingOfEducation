@@ -1,7 +1,6 @@
-import {BACKGROUND_SPEED, canvas, ctx, Theme, Lane_Position, Lane} from "./Defines";
-import Mount from "./Mount";
+import {canvas, ctx, Theme, Lane_Position} from "./Defines";
 import {getRandomInt} from "./Globals";
-import WorldMgr from "./WorldMgr";
+import Mount from "./Mount";
 import GameScene from "./GameScene";
 
 export default class Playfield
@@ -10,21 +9,18 @@ export default class Playfield
     private _y: number[] = [];                          // y coordinates
     private _sprites: HTMLImageElement[] = [];          // path to sprite(sheet) files
     private _spriteTheme: Theme[];                      // holds theme ID for each individual sprite
-    private _speed: number;                             // speed the background will travel along the canvas
     private _theme: Theme;                              // determines what playfield theme sprite to load
     private _time: number;                              // holds time of when we last changed theme
     private _playfieldObject: Mount;                    // objects that spawn with certain themes
     private _firstThemeSprite: number;                  // first theme sprite where objects can spawn
     private _lastThemeSprite: number;                   // last background sprite where playfield objects should stop
-    private _worldMgr: WorldMgr;                        // connection hub between all objects
     private _gameScene: GameScene;
 
-    constructor(gameScene: GameScene)
+    constructor()
     {
         var source = "images/bg_540_960.png";
         this.loadSprite(source);
         
-        this._speed = BACKGROUND_SPEED;
         this._time  = Date.now();
 
         this._playfieldObject  = null;
@@ -35,16 +31,12 @@ export default class Playfield
         this._theme = Theme.THEME_FORREST;
         this._spriteTheme = [Theme.THEME_FORREST, Theme.THEME_FORREST];
 
-        this._gameScene = gameScene;
-
         this.init();
     }
 
     public getPlayfieldObject():Mount { return this._playfieldObject; }
 
     public getSprite(index: number):HTMLImageElement { return this._sprites[index]; }
-    
-    public getWorldMgr():WorldMgr { return this._worldMgr; }
 
     public getFirstThemeSprite():number { return this._firstThemeSprite; }
     
@@ -56,8 +48,8 @@ export default class Playfield
     
     public getSpriteTheme(index: number):Theme { return this._spriteTheme[index]; }
 
-
-    public addWorldMgr(worldMgr: WorldMgr):void { this._worldMgr = worldMgr; }
+    
+    public addGameScene(gameScene: GameScene):void { this._gameScene = gameScene; }
 
     private loadSprite(src):void 
     {
@@ -150,8 +142,8 @@ export default class Playfield
 
     private updatePosition():void
     {
-        this._y[0] += BACKGROUND_SPEED;
-        this._y[1] += BACKGROUND_SPEED;
+        this._y[0] += this._gameScene._gameSpeed;
+        this._y[1] += this._gameScene._gameSpeed;
 
         this.shuffle();
     }
@@ -182,7 +174,7 @@ export default class Playfield
     public updateObjects():void
     {
         if (this._playfieldObject != null) {
-            var player          = this._worldMgr.getPlayer(),
+            var player          = this._gameScene.getPlayer(),
                 playerIsMounted = player._isMounted;
 
             if (playerIsMounted) {

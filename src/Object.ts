@@ -68,13 +68,6 @@ export default class __Object
         this.draw();
     }
 
-    protected drawMotionBlur():void
-    {
-        for (var i = 0; i < 10; ++i) {
-            ctx.drawImage(this._sprite, this._x, this._y, i);
-        }
-    }
-
     protected drawHitbox():void
     {
         var hitbox = this.getHitbox(),

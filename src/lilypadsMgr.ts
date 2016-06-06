@@ -1,21 +1,21 @@
-import WorldMgr from "./WorldMgr";
-import {Theme, Lane_Position, BACKGROUND_SPEED, canvas} from "./Defines";
+import {Theme, Lane_Position, canvas} from "./Defines";
 import __Object from "./Object";
 import Unit from "./Unit";
+import GameScene from "./GameScene";
 
 export default class LilypadsMgr
 {
-    private _worldMgr: WorldMgr;
+    private _gameScene: GameScene;
     private _lilypadSprites: Unit[] = [];
 
-    constructor(worldMgr: WorldMgr)
+    constructor(gameScene: GameScene)
     {
-        this._worldMgr = worldMgr;
+        this._gameScene = gameScene;
     }
 
     public spawnLilypads(object: __Object, type: string):void
     {
-        var playfield         = this._worldMgr.getPlayfield(),
+        var playfield         = this._gameScene.getPlayfield(),
             playfieldSpritesY = playfield.getPositionYArray();
 
         for (var j = 0; j < playfieldSpritesY.length; j += 1) {
@@ -67,7 +67,7 @@ export default class LilypadsMgr
             var lilypad = this._lilypadSprites[i];
             
             if (!isGameOver)
-                lilypad.updatePosition(BACKGROUND_SPEED);
+                lilypad.updatePosition(this._gameScene._gameSpeed);
             
             lilypad.update();
 
