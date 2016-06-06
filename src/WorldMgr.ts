@@ -7,6 +7,7 @@ import PowerupMgr from "./PowerupMgr";
 import Playfield from "./Playfield";
 import __Object from "./Object";
 import {isCollision} from "./Globals";
+import FloatingScoreMgr from "./FloatingScoreMgr";
 
 export default class WorldMgr
 {
@@ -17,10 +18,11 @@ export default class WorldMgr
     private _cookingOil: CookingOil;        // keeps track of and controls the oil on the bottom
     private _score: GameScore;              // keeps track of and controls the score
     private _playfield: Playfield;
+    private _floatingScoreMgr: FloatingScoreMgr;
     
     constructor(player: Player, fruitsMgr: FruitMgr, enemiesMgr: EnemiesMgr, 
-                powerupsMgr: PowerupMgr, cookingOil: CookingOil, score: GameScore,
-                playfield: Playfield)
+                powerupsMgr: PowerupMgr, floatingScoreMgr: FloatingScoreMgr, 
+                cookingOil: CookingOil, score: GameScore, playfield: Playfield)
     {
         this._player      = player;
         this._fruitsMgr   = fruitsMgr;
@@ -29,6 +31,7 @@ export default class WorldMgr
         this._cookingOil  = cookingOil;
         this._score       = score;
         this._playfield   = playfield;
+        this._floatingScoreMgr = floatingScoreMgr;
     }
     
     public getPlayer():Player { return this._player; }
@@ -44,6 +47,8 @@ export default class WorldMgr
     public getScore():GameScore { return this._score; }
     
     public getPlayfield():Playfield { return this._playfield; }
+    
+    public getFloatingScoreMgr():FloatingScoreMgr { return this._floatingScoreMgr; }
 
 
     // check collision against every object on the field

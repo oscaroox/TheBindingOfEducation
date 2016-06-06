@@ -7,6 +7,7 @@ import FruitMgr from "./FruitMgr";
 import CookingOil from "./CookingOil";
 import PowerupMgr from "./PowerupMgr";
 import WorldMgr from "./WorldMgr";
+import FloatingScoreMgr from "./FloatingScoreMgr";
 
 // GAMESCENE
 // Controls what is shown on screen
@@ -19,6 +20,7 @@ export default class GameScene
     private _playfield: Playfield;          // keeps track of the background and its themes and theme objects
     private _cookingOil: CookingOil;        // keeps track of and controls the oil on the bottom
     private _powerupMgr: PowerupMgr;        // keeps track of and controls the powerup sprites (effects in player class)
+    private _floatingScoreMgr: FloatingScoreMgr;
     private _worldMgr: WorldMgr;            // connection hub between all objects
 
     constructor() 
@@ -44,14 +46,18 @@ export default class GameScene
         // power up manager
         this._powerupMgr = new PowerupMgr();
         
+        // floating points
+        this._floatingScoreMgr = new FloatingScoreMgr();
+        
         // objects manager and objects holder
-        this._worldMgr = new WorldMgr(this._player, this._fruitsMgr, this._enemiesMgr, this._powerupMgr, this._cookingOil, this._score, this._playfield);
+        this._worldMgr = new WorldMgr(this._player, this._fruitsMgr, this._enemiesMgr, this._powerupMgr, this._floatingScoreMgr, this._cookingOil, this._score, this._playfield);
         this._enemiesMgr.addWorldMgr(this._worldMgr);
         this._fruitsMgr.addWorldMgr(this._worldMgr);
         this._powerupMgr.addWorldMgr(this._worldMgr);
         this._player.addWorldMgr(this._worldMgr);
         this._playfield.addWorldMgr(this._worldMgr);
         this._score.addWorldMgr(this._worldMgr);
+        this._floatingScoreMgr.addWorldMgr(this._worldMgr);
         
         // start update loop
         this.loop();
@@ -71,7 +77,7 @@ export default class GameScene
 
         // background
         this._playfield.update();
-        
+
         // fruit manager
         this._fruitsMgr.update();
 
@@ -83,9 +89,12 @@ export default class GameScene
 
         // update player
         this._player.update();
-        
+
         // update cooking oil
         this._cookingOil.update();
+
+        // floating points
+        this._floatingScoreMgr.update();
 
         // update points
         this._score.update();

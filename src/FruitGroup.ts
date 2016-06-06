@@ -1,4 +1,4 @@
-import {BACKGROUND_SPEED, Lane_Position, Fruits, canvas} from "./Defines";
+import {BACKGROUND_SPEED, Lane_Position, Fruits, canvas, FruitPoints} from "./Defines";
 import {getRandomInt} from './Globals'
 import Fruit from './Fruit'
 import {Powerup_Flags} from "./Defines";
@@ -9,17 +9,17 @@ export default class FruitGroup
 {
     private _size: number;                              // max size of this group
     private _groupSizes: { min: number, max: number };  // min and max group size
-    private _fruitID: number;                           // identifier of the fruit we have in this group
+    private _fruitType: number;                           // identifier of the fruit we have in this group
     private _fruitSprites: Fruit[];                     // array to hold our fruits
     private _curLane: number;                           // identifier of our lane
     private _x: number;                                 // what X this group will travel along
     private _worldMgr: WorldMgr;                        // holds all object managers
     private _lilypadsMgr: LilypadsMgr;                  // manages lilypads of our fruits
     
-    constructor(fruitID: number, lanePos: number, worldMgr: WorldMgr)
+    constructor(fruitType: Fruits, lanePos: number, worldMgr: WorldMgr)
     {
         this._fruitSprites   = [];
-        this._fruitID        = fruitID;
+        this._fruitType      = fruitType;
         this._groupSizes     = { min: 5, max: 10 };
         this._curLane        = lanePos;
         this._x              = Lane_Position[lanePos];
@@ -49,17 +49,17 @@ export default class FruitGroup
                 points   = 0,
                 speed    = BACKGROUND_SPEED;
 
-            switch (this._fruitID)
+            switch (this._fruitType)
             {
                 case Fruits.FRUIT_APPLE:
                     sprite = "images/apple.png";
-                    points = 10;
+                    points = FruitPoints[this._fruitType];
                     speed  = BACKGROUND_SPEED;
                     break;
 
                 case Fruits.FRUIT_BANANA:
                     sprite = "images/banana.png";
-                    points = 15;
+                    points = FruitPoints[this._fruitType];
                     speed  = BACKGROUND_SPEED;
                     break;
 
@@ -110,6 +110,10 @@ export default class FruitGroup
 
         // update score with fruit points
         this._worldMgr.getScore().updatePoints(points);
+        
+        // floating score
+        var floatingPoints = this._worldMgr.getFloatingScoreMgr();
+        floatingPoints.addFloatingScore(FruitPoints[this._fruitType]);
 
         // remove from group and game
         this.removeSingleFruit(fruitID);

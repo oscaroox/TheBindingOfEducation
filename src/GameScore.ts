@@ -88,12 +88,15 @@ export default class GameScore
             points = splice(6, 0, str, ",");
         }
 
+        ctx.beginPath();
         ctx.font = this._fontSize + "px Verdana";
+        ctx.fillStyle = "white";
         ctx.fillText(
             points,
             this._x,
             this._y
         );
+        ctx.closePath();
     }
     
     // update score with some number

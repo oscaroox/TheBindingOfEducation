@@ -59,6 +59,13 @@ export enum Fruits {
     FRUIT_APPLE
 }
 
+// points per fruit type
+export var FruitPoints: number[] = [
+    0,
+    15, // banana
+    10  // apple
+];
+
 export var powerupAmount = 3;
 export enum Powerups {
     POWER_MAGNET = 1,
