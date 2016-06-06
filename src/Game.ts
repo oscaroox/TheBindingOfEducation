@@ -1,5 +1,5 @@
 import GameScene from "./GameScene";
-import ImageManager from "./ImageManager";
+import ImageMgr from "./ImageMgr";
 import {canvas, Lane_Position, Lane} from "./Defines";
 
 export default class Game
@@ -7,7 +7,7 @@ export default class Game
     constructor()
     {
         this.init();
-        var imageMgr = new ImageManager(this);
+        var imageMgr = new ImageMgr(this);
     }
 
     private init():void

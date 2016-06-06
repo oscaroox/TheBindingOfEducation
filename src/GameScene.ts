@@ -107,10 +107,8 @@ export default class GameScene
                 by2 = fruit.getHitbox().y2;
 
                 // check for collision
-                if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2)) {
-                    console.log('spawn collision with fruit');
+                if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2))
                     return true;
-                }
             }
         }
 
@@ -126,10 +124,8 @@ export default class GameScene
             by2 = enemy.getHitbox().y2;
 
             // check for collision
-            if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2)) {
-                console.log('spawn collision with enemy');
+            if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2))
                 return true;
-            }
         }
 
         // powerups
@@ -144,10 +140,8 @@ export default class GameScene
             by2 = power.getHitbox().y2;
 
             // check for collision
-            if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2)) {
-                console.log('spawn collision with powerup');
+            if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2))
                 return true;
-            }
         }
 
         // playfield objects (mounts)
@@ -159,10 +153,8 @@ export default class GameScene
             by2 = mount.getHitbox().y2 + mount.getSprite().height * 1.5;
 
             // check for collision
-            if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2)) {
-                console.log('spawn collision with mount');
+            if (isCollision(ax1, ax2, ay1, ay2, bx1, bx2, by1, by2))
                 return true;
-            }
         }
 
         // found no collision!

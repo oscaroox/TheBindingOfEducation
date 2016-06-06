@@ -282,7 +282,7 @@ export default class Player extends Unit
                 spritePos = bg.getPosition(firstSpriteIndex);
 
             // if player reaches edge of first theme sprite, player dies
-            var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.5);
+            var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.25);
 
             if (this.getPositionY() < edge) {
                 if (!this._isMounted)
