@@ -117,7 +117,7 @@ export default class Player extends Unit
         // adjust position to middle
         var oil = this._gameScene.getCookingOil().getSprite(),
             x   = this.getPositionX() - this._spriteWidth / 2,
-            y   = canvas.height - oil.height / 2 - this.getSprite().height * 1.5;
+            y   = canvas.height - oil.height / 6 - this.getSprite().height * 1.5;
 
         this.setPosition(x, y);
         this.spawn();
@@ -339,7 +339,7 @@ export default class Player extends Unit
     private moveUp():void
     {
         var oil  = this._gameScene.getCookingOil(),
-            endY = canvas.height - oil.getSprite().height - this.getSprite().height * 1.5;
+            endY = canvas.height - oil.getSprite().height / 3 - this.getSprite().height * 1.5;
 
         if (oil.getState() == Cooking_Oil_State.STATE_HIGH) {
             if (this.getPositionY() > endY) {
@@ -354,7 +354,7 @@ export default class Player extends Unit
     private moveDown():void
     {
         var oil  = this._gameScene.getCookingOil(),
-            endY = canvas.height - oil.getSprite().height / 2 - this.getSprite().height * 1.5;
+            endY = canvas.height - oil.getSprite().height / 6 - this.getSprite().height * 1.5;
 
         if (oil.getState() == Cooking_Oil_State.STATE_LOW) {
             if (this.getPositionY() < endY) {

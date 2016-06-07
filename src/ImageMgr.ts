@@ -28,7 +28,7 @@ export default class ImageManager
             'images/character_walking.png',
             'images/character_walking_big.png',
             'images/cherry.png',
-            'images/cookingoil.png',
+            'images/cookingoil_sprites.png',
             'images/doublePoints.png',
             'images/hamburger.png',
             'images/invulnerable.png',
