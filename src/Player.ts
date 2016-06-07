@@ -32,7 +32,9 @@ export default class Player extends Unit
     private _tickStartValue: number;            // what value should the ticker start at
     
     private _powerupFlags: number;              // bitwise powerup flag holder
-    private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];  // holds information about powerups the player has
+
+    // holds information about powerups the player has
+    private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];
     
     constructor(gameScene: GameScene)
     {
@@ -72,18 +74,37 @@ export default class Player extends Unit
     
     public getPowerupFlags():Powerup_Flags { return this._powerupFlags; }
     
-    public addPowerupFlag(flag: Powerup_Flags):void
+    public addPowerupFlag(flag: Powerup_Flags):boolean
     {
-        this._powerupFlags |= flag;
+        if (this._powerupFlags & flag)
+            return false;
 
-        // if (flag & Powerup_Flags.FLAG_DOUBLE_POINTS) console.log('double points');
-        // if (flag & Powerup_Flags.FLAG_INVULNERABLE) console.log('invul');
-        // if (flag & Powerup_Flags.FLAG_MAGNET) console.log('magnet');
+        this._powerupFlags |= flag;
+        
+        this._gameScene.getPowerupIcons().updateFlags(flag);
+
+        if (flag & Powerup_Flags.FLAG_DOUBLE_POINTS) console.log('double points');
+        if (flag & Powerup_Flags.FLAG_INVULNERABLE) console.log('invul');
+        if (flag & Powerup_Flags.FLAG_MAGNET) console.log('magnet');
+
+        return true;
     }
     
     public removePowerupFlag(flag: Powerup_Flags):void { this._powerupFlags &= ~flag; }
 
-    
+    // refresh powerup timer
+    private extendPowerup(flag: Powerup_Flags):void
+    {
+        for (var i = 0; i < this._powerups.length; i += 1) {
+            var p = this._powerups[i];
+
+            if (p.flag & flag) {
+                p.startTime = Date.now();
+
+                console.log('powerup extended');
+            }
+        }
+    }
     
     
     
@@ -251,10 +272,13 @@ export default class Player extends Unit
 
                     // grab and add powerup flag to player
                     var flag = power.getFlag();
-                    this.addPowerupFlag(flag);
+                    if (this.addPowerupFlag(flag)) {
 
-                    // add powerup data (duration, startTime, etc) to player's powerup list
-                    this._powerups.push(power.getData());
+                        // add powerup data (duration, startTime, etc) to player's powerup list
+                        this._powerups.push(power.getData());
+                    } else {
+                        this.extendPowerup(flag);
+                    }
                 }
             }
         }
@@ -282,7 +306,7 @@ export default class Player extends Unit
                 spritePos = bg.getPosition(firstSpriteIndex);
 
             // if player reaches edge of first theme sprite, player dies
-            var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.25);
+            var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.1);
 
             if (this.getPositionY() < edge) {
                 if (!this._isMounted)
@@ -540,8 +564,12 @@ export default class Player extends Unit
             diff    = curTime - startTime;
 
         if (diff > duration) {
+            if (flag & Powerup_Flags.FLAG_INVULNERABLE)
+                this._isInvulnerable = false;
+
             this.removePowerupFlag(flag);
             this.removePowerup(index);
+            this._gameScene.getPowerupIcons().removeFlag(index);
         }
     }
 

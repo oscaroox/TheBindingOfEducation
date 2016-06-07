@@ -91,7 +91,10 @@ export default class Mount extends Object
 
             super.update();
         } else {
-            this.deathAnimation();
+            if (this._gameScene.getPlayer()._isMounted)
+                this.deathAnimation();
+            else
+                super.update();
         }
 
         if (DEBUG_SHOW_MOUNT_HITBOX)

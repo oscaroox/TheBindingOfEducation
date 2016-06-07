@@ -13,7 +13,7 @@ export default class PowerupMgr extends ObjectsMgr
     constructor(gameScene: GameScene)
     {
         var time        = Date.now(),
-            timeDiffMin = 20000,    // spawn powerup between 20 and 30 seconds
+            timeDiffMin = 5000,         // spawn powerup between 5 and 30 seconds
             timeDiffMax = 30000;
         super(time, timeDiffMin, timeDiffMax, gameScene);
         

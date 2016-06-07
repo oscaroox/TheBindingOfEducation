@@ -27,9 +27,10 @@ export default class GameScore
         this.draw();
     }
 
-
-    // public addGameScene(gameScene: GameScene):void { this._gameScene = gameScene; }
-
+    public getPosition():{x:number, y:number} { return { x: this._x, y: this._y }; }
+    
+    
+    
     public updatePoints(points: number = 0):void
     {
         var curTime = Date.now(),

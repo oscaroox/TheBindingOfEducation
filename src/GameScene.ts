@@ -9,6 +9,7 @@ import PowerupMgr from "./PowerupMgr";
 import FloatingScoreMgr from "./FloatingScoreMgr";
 import {isCollision} from "./Globals";
 import __Object from "./Object";
+import PowerupIcons from "./PowerupIcons";
 
 // GAMESCENE
 // Controls what is shown on screen
@@ -26,6 +27,7 @@ export default class GameScene
     private _cookingOil: CookingOil;        // keeps track of and controls the oil on the bottom
     private _powerupMgr: PowerupMgr;        // keeps track of and controls the powerup sprites (effects in player class)
     private _floatingScoreMgr: FloatingScoreMgr;
+    private _powerupIcons: PowerupIcons;
 
     constructor() 
     {
@@ -57,6 +59,9 @@ export default class GameScene
         // floating points
         this._floatingScoreMgr = new FloatingScoreMgr(this);
         
+        // active powerup icons
+        this._powerupIcons = new PowerupIcons(this);
+        
         // start update loop
         this.loop();
     }
@@ -76,6 +81,8 @@ export default class GameScene
     public getPlayfield():Playfield { return this._playfield; }
 
     public getFloatingScoreMgr():FloatingScoreMgr { return this._floatingScoreMgr; }
+    
+    public getPowerupIcons():PowerupIcons { return this._powerupIcons; }
 
 
     // check collision against every object on the field
@@ -195,6 +202,9 @@ export default class GameScene
 
         // update points
         this._score.update();
+
+        // powerup icons
+        this.getPowerupIcons().update();
     }
 
     // constant update loop
