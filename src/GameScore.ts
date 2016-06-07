@@ -7,7 +7,7 @@ export default class GameScore
     private _x: number;                 // position x
     private _y: number;                 // position y
     private _points: number;            // total displayed score
-    private _updateTimer: number;       // time interval for adding point(s)
+    private _updateInterval: number;    // time interval for adding point(s)
     private _lastUpdateTime: number;    // time since we gave (a) point(s)
     private _fontSize: number;          // size of text
     private _gameScene: GameScene;
@@ -15,7 +15,7 @@ export default class GameScore
     constructor(points: number, gameScene: GameScene)
     {
         this._points = points;
-        this._updateTimer = 250;    // .25 seconds
+        this._updateInterval = 250;    // .25 seconds
         this._fontSize = 40;
         this._lastUpdateTime = Date.now();
 
@@ -39,18 +39,18 @@ export default class GameScore
         if (this._gameScene._gameSpeed > 5) {
             var mod = this._gameScene._gameSpeed / 5;
 
-            this._updateTimer = 250 / mod;
+            this._updateInterval = 250 / mod;
         } else {
-            this._updateTimer = 250;
+            this._updateInterval = 250;
         }
 
-        if (diff > this._updateTimer) {
+        if (diff > this._updateInterval) {
             var player       = this._gameScene.getPlayer(),
                 powerupFlags = player.getPowerupFlags();
 
             var p = 1;
             
-            (powerupFlags & Powerup_Flags.FLAG_DOUBLE_POINTS) ? this._points += p * 2 : this._points += 1;
+            (powerupFlags & Powerup_Flags.FLAG_DOUBLE_POINTS) ? this._points += p * 2 : this._points += p;
 
             this._lastUpdateTime = curTime;
         }
@@ -90,11 +90,7 @@ export default class GameScore
         ctx.beginPath();
         ctx.font = this._fontSize + "px Verdana";
         ctx.fillStyle = "white";
-        ctx.fillText(
-            points,
-            this._x,
-            this._y
-        );
+        ctx.fillText(points, this._x, this._y);
         ctx.closePath();
     }
     

@@ -18,7 +18,6 @@ export default class GameScene
     public _gameSpeed: number;
     public _gameOver: boolean;
 
-    private _startTime: number;
     private _score: GameScore;              // keeps track of and controls the score
     private _enemiesMgr: EnemiesMgr;        // keeps track of and spawns enemies
     private _fruitsMgr: FruitMgr;           // keeps track of and spawns group of fruits
@@ -28,42 +27,16 @@ export default class GameScene
     private _powerupMgr: PowerupMgr;        // keeps track of and controls the powerup sprites (effects in player class)
     private _floatingScoreMgr: FloatingScoreMgr;
     private _powerupIcons: PowerupIcons;
+    private _loop: any;
 
     constructor() 
     {
-        this._startTime = Date.now();
         this._gameOver = false;
         this._gameSpeed = 5;
 
-        // add background
-        this._playfield = new Playfield(this);
+        window.addEventListener("keydown", (e)=> { this.resetGameScene(e) });
 
-        // score handler
-        this._score = new GameScore(0, this);
-        
-        // add cooking oil
-        this._cookingOil = new CookingOil();
-
-        // add player to scene
-        this._player = new Player(this);
-
-        // fruits manager
-        this._fruitsMgr = new FruitMgr(this);
-        
-        // enemies manager
-        this._enemiesMgr = new EnemiesMgr(this);
-        
-        // power up manager
-        this._powerupMgr = new PowerupMgr(this);
-        
-        // floating points
-        this._floatingScoreMgr = new FloatingScoreMgr(this);
-        
-        // active powerup icons
-        this._powerupIcons = new PowerupIcons(this);
-        
-        // start update loop
-        this.loop();
+        this.loadGame();
     }
 
     public getPlayer():Player { return this._player; }
@@ -84,6 +57,56 @@ export default class GameScene
     
     public getPowerupIcons():PowerupIcons { return this._powerupIcons; }
 
+
+
+    private loadGame():void
+    {
+        cancelAnimationFrame(this._loop);
+        
+        this._gameOver = false;
+        this._gameSpeed = 5;
+
+        // add background
+        this._playfield = new Playfield(this);
+
+        // score handler
+        this._score = new GameScore(0, this);
+
+        // add cooking oil
+        this._cookingOil = new CookingOil();
+
+        // add player to scene
+        this._player = new Player(this);
+
+        // fruits manager
+        this._fruitsMgr = new FruitMgr(this);
+
+        // enemies manager
+        this._enemiesMgr = new EnemiesMgr(this);
+
+        // power up manager
+        this._powerupMgr = new PowerupMgr(this);
+
+        // floating points
+        this._floatingScoreMgr = new FloatingScoreMgr(this);
+
+        // active powerup icons
+        this._powerupIcons = new PowerupIcons(this);
+
+        // start update loop
+        this.loop();
+    }
+
+    private resetGameScene(event: KeyboardEvent):void
+    {
+        // needs to be button R
+        if (event.keyCode != 82) return;
+
+        // game needs to be over if we want to reset
+        if (!this._gameOver) return;
+
+        this.loadGame();
+    }
 
     // check collision against every object on the field
     public collisionCheck(object: __Object):boolean
@@ -167,6 +190,46 @@ export default class GameScene
         // found no collision!
         return false;
     }
+
+    private gameOver():void
+    {
+        var fontSize = 30;
+
+        // rectangle
+        var w = this._playfield.getSprite(0).width,
+            h = 150,
+            x = canvas.width / 2 - w / 2,
+            y = canvas.height / 4;
+
+        ctx.save();
+        ctx.globalAlpha = 0.75;
+        ctx.beginPath();
+        ctx.fillStyle = "black";
+        ctx.fillRect(x, y, w, h);
+        ctx.restore();
+
+
+        // game over text
+        ctx.font = fontSize + "px Arial";
+
+        var str = "GAME OVER";
+        x = canvas.width / 2 - ctx.measureText(str).width / 2;
+        y = y + h / 2;
+
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.fillText(str, x, y);
+        ctx.closePath();
+
+
+        str = "Druk op R om nog een keer te spelen!";
+        x = canvas.width / 2 - ctx.measureText(str).width / 2;
+        y = y + fontSize;
+
+        ctx.beginPath();
+        ctx.fillText(str, x, y);
+        ctx.closePath();
+    }
     
     // update current game scene
     // update in order of Z-axis
@@ -205,12 +268,15 @@ export default class GameScene
 
         // powerup icons
         this.getPowerupIcons().update();
+
+        // game over text
+        if (this._gameOver) this.gameOver();
     }
 
     // constant update loop
     private loop():void
     {
-        requestAnimationFrame(() => this.loop());
+        this._loop = requestAnimationFrame(() => this.loop());
         this.update();
     }
 }
