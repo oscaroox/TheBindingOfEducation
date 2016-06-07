@@ -42,19 +42,19 @@ export default class PowerupMgr extends ObjectsMgr
             switch(randPower)
             {
                 case Powerups.POWER_MAGNET:
-                    sprite   = "images/strawberry.png";
+                    sprite   = "images/box.png";
                     flag     = Powerup_Flags.FLAG_MAGNET;
                     duration = 10000;
                     break;
 
                 case Powerups.POWER_INVULNERABLE:
-                    sprite   = "images/strawberry.png";
+                    sprite   = "images/box.png";
                     flag     = Powerup_Flags.FLAG_INVULNERABLE;
                     duration = 5000;
                     break;
 
                 case Powerups.POWER_DOUBLE_POINTS:
-                    sprite   = "images/strawberry.png";
+                    sprite   = "images/box.png";
                     flag     = Powerup_Flags.FLAG_DOUBLE_POINTS;
                     duration = 10000;
                     break;
@@ -119,6 +119,15 @@ export default class PowerupMgr extends ObjectsMgr
     // collision
     public collided(index: number):void
     {
+        if (this._powerupSprites[index].getFlag() & Powerup_Flags.FLAG_DOUBLE_POINTS)
+            this._gameScene.getFloatingScoreMgr().addFloatingScore("Dubbele Punten!");
+
+        if (this._powerupSprites[index].getFlag() & Powerup_Flags.FLAG_INVULNERABLE)
+            this._gameScene.getFloatingScoreMgr().addFloatingScore("Onsterfelijk!");
+
+        if (this._powerupSprites[index].getFlag() & Powerup_Flags.FLAG_MAGNET)
+            this._gameScene.getFloatingScoreMgr().addFloatingScore("Fruit Magneet!");
+        
         this.addDespawnInfo(index);
         this.remove(index);
     }

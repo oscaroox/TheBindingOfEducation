@@ -13,13 +13,13 @@ export default class FloatingScoreMgr
         this._gameScene = gameScene;
     }
 
-    public addFloatingScore(points: number):void 
+    public addFloatingScore(text: string):void 
     {
         var playerPos = this._gameScene.getPlayer().getPosition(),
             x = playerPos.x,
             y = playerPos.y;
         
-        var score = new FloatingScore(x, y, points);
+        var score = new FloatingScore(x, y, text);
         this._scores.push(score); 
     }
 
@@ -40,7 +40,7 @@ export default class FloatingScoreMgr
 
             s.update();
 
-            if (s.getPosition().y > canvas.height)
+            if (s.getPosition().y - 50 > canvas.height)
                 removeScoresList.push(i);
         }
 

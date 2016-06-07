@@ -74,6 +74,10 @@ export default class FruitGroup
                     sprite = "images/pineapple.png";
                     break;
 
+                case Fruits.FRUIT_STRAWBERRY:
+                    sprite = "images/strawberry.png";
+                    break;
+
                 default:
                     console.log('ERROR: generateGroup defaulted');
             }
@@ -124,7 +128,7 @@ export default class FruitGroup
         
         // floating score
         var floatingPoints = this._gameScene.getFloatingScoreMgr();
-        floatingPoints.addFloatingScore(points);
+        floatingPoints.addFloatingScore(String(points));
 
         // remove from group and game
         this.removeSingleFruit(fruitID);

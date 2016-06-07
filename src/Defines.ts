@@ -50,25 +50,27 @@ export enum Enemies {
 }
 
 // amount of different fruits and fruit ID
-export var fruitAmount = 6;
+export var fruitAmount = 7;
 export enum Fruits {
     FRUIT_BANANA = 1,
     FRUIT_APPLE,
     FRUIT_WATERMELON,
     FRUIT_TANGERINE,
     FRUIT_CHERRY,
-    FRUIT_PINEAPPLE
+    FRUIT_PINEAPPLE,
+    FRUIT_STRAWBERRY
 }
 
 // points per fruit type
 export var FruitPoints: number[] = [
     0,
     10,  // banana
-    10,  // apple
+    30,  // apple
     15,  // watermelon
     50,  // tangerine
     5,   // cherry
-    100  // ananas 
+    100, // ananas
+    25,  // strawberry
 ];
 
 export var powerupAmount = 3;

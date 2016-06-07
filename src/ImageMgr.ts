@@ -24,6 +24,7 @@ export default class ImageManager
             'images/bg_720_1280.png',
             'images/bg_1080_1920.png',
             'images/boat.png',
+            'images/box.png',
             'images/character_walking.png',
             'images/character_walking_big.png',
             'images/cherry.png',

@@ -3,14 +3,14 @@ export default class FloatingScore
 {
     private _x: number;
     private _y: number;
-    private _points: number;
+    private _text: string;
     private _size: number;
 
-    constructor(x: number, y: number, points: number)
+    constructor(x: number, y: number, text: string)
     {
         this._x = x;
         this._y = y;
-        this._points = points;
+        this._text = text;
         this._size = 10;
     }
     
@@ -18,7 +18,7 @@ export default class FloatingScore
 
     private updatePosition():void
     {
-        this._y += 5;
+        this._y += 3;
     }
 
     private animate():void
@@ -28,10 +28,10 @@ export default class FloatingScore
 
     private draw():void
     {
-        var str = "+" + this._points;
+        var str = "+" + this._text;
 
         ctx.beginPath();
-        ctx.font = this._size + "px Arial";                // test
+        ctx.font = this._size + "px Arial";
         ctx.fillStyle = "white";
         ctx.fillText(str, this._x, this._y);
         ctx.closePath();

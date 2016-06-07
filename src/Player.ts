@@ -80,12 +80,7 @@ export default class Player extends Unit
             return false;
 
         this._powerupFlags |= flag;
-        
         this._gameScene.getPowerupIcons().updateFlags(flag);
-
-        if (flag & Powerup_Flags.FLAG_DOUBLE_POINTS) console.log('double points');
-        if (flag & Powerup_Flags.FLAG_INVULNERABLE) console.log('invul');
-        if (flag & Powerup_Flags.FLAG_MAGNET) console.log('magnet');
 
         return true;
     }
@@ -98,11 +93,8 @@ export default class Player extends Unit
         for (var i = 0; i < this._powerups.length; i += 1) {
             var p = this._powerups[i];
 
-            if (p.flag & flag) {
+            if (p.flag & flag)
                 p.startTime = Date.now();
-
-                console.log('powerup extended');
-            }
         }
     }
     
