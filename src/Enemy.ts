@@ -1,11 +1,12 @@
-import {DEBUG_SHOW_ENEMY_HITBOX} from "./Defines";
+import {DEBUG_SHOW_ENEMY_HITBOX, Lane} from "./Defines";
 import Unit from './Unit';
 
-abstract class Enemy extends Unit
+export default class Enemy extends Unit
 {
-    constructor(x: number, y: number, health: number, sprite: string, lane: number)
+    constructor(x: number, y: number, health: number, sprite: string, lane: Lane)
     {
         super(x, y, health, sprite, lane);
+        this.setInitPosition();
     }
     
     protected setInitPosition():void
@@ -27,5 +28,3 @@ abstract class Enemy extends Unit
             this.drawHitbox();
     }
 }
-
-export default Enemy;

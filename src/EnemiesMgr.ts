@@ -40,11 +40,23 @@ export default class EnemiesMgr extends ObjectsMgr
             switch(randEnemy)
             {
                 case Enemies.ENEMY_HAMBURGER:
-                    var enemy = new Hamburger(Lane_Position[randLane], randLane);
+                    var enemy = new Enemy(Lane_Position[randLane], -1000, 1, "images/hamburger.png", randLane);
                     break;
 
                 case Enemies.ENEMY_PIZZA:
-                    var enemy = new Pizza(Lane_Position[randLane], randLane);
+                    var enemy = new Enemy(Lane_Position[randLane], -1000, 1, "images/pizza.png", randLane);
+                    break;
+
+                case Enemies.ENEMY_PANCAKE:
+                    var enemy = new Enemy(Lane_Position[randLane], -1000, 1, "images/pannekoek.png", randLane);
+                    break;
+
+                case Enemies.ENEMY_DONUT:
+                    var enemy = new Enemy(Lane_Position[randLane], -1000, 1, "images/Donut.png", randLane);
+                    break;
+
+                case Enemies.ENEMY_HOTDOG:
+                    var enemy = new Enemy(Lane_Position[randLane], -1000, 1, "images/hotdog.png", randLane);
                     break;
 
                 default:

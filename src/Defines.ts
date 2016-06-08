@@ -43,10 +43,13 @@ export var Lane_Position = [
 ];
 
 // amount of different enemies and enemy ID
-export var enemiesAmount = 2;
+export var enemiesAmount = 5;
 export enum Enemies {
     ENEMY_HAMBURGER = 1,
-    ENEMY_PIZZA
+    ENEMY_PIZZA,
+    ENEMY_PANCAKE,
+    ENEMY_DONUT,
+    ENEMY_HOTDOG
 }
 
 // amount of different fruits and fruit ID

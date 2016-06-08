@@ -5,7 +5,7 @@ export default class ImageManager
     private _game: Game;
     private _images: string[];
     private _loaded: number;
-    
+
     constructor(g: Game)
     {
         this._game = g;
@@ -29,11 +29,14 @@ export default class ImageManager
             'images/character_walking_big.png',
             'images/cherry.png',
             'images/cookingoil_sprites.png',
+            'images/Donut.png',
             'images/doublePoints.png',
             'images/hamburger.png',
+            'images/hotdog.png',
             'images/invulnerable.png',
             'images/lilypad.gif',
             'images/magnet.png',
+            'images/pannekoek.png',
             'images/pineapple.png',
             'images/pizza.png',
             'images/strawberry.png',
@@ -41,10 +44,11 @@ export default class ImageManager
             'images/watermelon.png'
         ];
 
+        console.log('Loading images...');
         this.loadImages();
     }
 
-    private loadImages():void
+    private loadImages(): void
     {
         let fn = this.imageLoaded.bind(this);
 
@@ -54,14 +58,14 @@ export default class ImageManager
             image.src = this._images[i];
         }
     }
-    
-    private imageLoaded():void
+
+    private imageLoaded(): void
     {
         this._loaded += 1;
-        console.log('image loaded');
 
-        if(this._loaded == this._images.length) {
-            console.log('starting game');
+        if (this._loaded == this._images.length) {
+            console.log('loading Audio...');
+            // this._game.loadAudio();
             this._game.startGame();
         }
     }

@@ -1,6 +1,7 @@
 import GameScene from "./GameScene";
 import ImageMgr from "./ImageMgr";
 import {canvas, Lane_Position, Lane} from "./Defines";
+import AudioMgr from "./AudioMgr";
 
 export default class Game
 {
@@ -20,6 +21,11 @@ export default class Game
         Lane_Position[Lane.LANE_LEFT]   = Math.floor((510 / 1280) * window.innerWidth);
         Lane_Position[Lane.LANE_MIDDLE] = Math.floor((640 / 1280) * window.innerWidth);
         Lane_Position[Lane.LANE_RIGHT]  = Math.floor((760 / 1280) * window.innerWidth);
+    }
+    
+    public loadAudio():void
+    {
+        var audioMgr = new AudioMgr(this);
     }
     
     public startGame():void

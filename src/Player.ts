@@ -6,15 +6,14 @@ import {isCollision} from './Globals'
 import Unit from './Unit';
 import GameScene from "./GameScene";
 
-// PLAYER
-// all updates and movement is done in this class
+
 export default class Player extends Unit
 {
     public _isInvulnerable: boolean;            // can player be hit by enemies or not
     public _isMounted: boolean;                 // is player on a vehicle
-    
+
     private _gameScene: GameScene;
-        
+
     private _animationStep: number;             // number of step the animation of the sprite is in
     private _spriteAnimations: number;          // max number of steps in an animation
     private _spriteWidth: number;               // how wide is a SINGLE sprite
@@ -22,20 +21,20 @@ export default class Player extends Unit
     private _spriteDrawTime: number;            // when we last drawn the animation
     private _spriteDrawTimeDiff: number;        // how often the animation should be redrawn
     private _spriteDeathOffsetY: number;        // Y offset in sprite image on death
-    
+
     private _speedX: number;                    // speed on X-axis
     private _speedY: number;                    // speed on Y-axis
-    
+
     private _timeHit: number;                   // time when we were hit by an object
     private _maxInvulnerableTimer: number;      // how long we can not be hit for
     private _tick: number;                      // ticker for cos function for opacity change when we are invulnerable
     private _tickStartValue: number;            // what value should the ticker start at
-    
+
     private _powerupFlags: number;              // bitwise powerup flag holder
 
     // holds information about powerups the player has
     private _powerups: { duration: number, startTime: number, flag: Powerup_Flags }[];
-    
+
     constructor(gameScene: GameScene)
     {
         var sprite = "images/character_walking_big.png",
@@ -44,7 +43,7 @@ export default class Player extends Unit
             y      = canvas.height,
             lane   = Lane.LANE_MIDDLE;
         super(x, y, health, sprite, lane);
-        
+
         this._isMounted = false;
 
         this._animationStep      = 0;
@@ -65,15 +64,15 @@ export default class Player extends Unit
 
         this._powerupFlags = Powerup_Flags.FLAG_NONE;
         this._powerups = [];
-        
+
         this._gameScene = gameScene;
-    
+
         this.addEventHandlers();
         this.init();
     }
-    
+
     public getPowerupFlags():Powerup_Flags { return this._powerupFlags; }
-    
+
     public addPowerupFlag(flag: Powerup_Flags):boolean
     {
         if (this._powerupFlags & flag)
@@ -84,7 +83,7 @@ export default class Player extends Unit
 
         return true;
     }
-    
+
     public removePowerupFlag(flag: Powerup_Flags):void { this._powerupFlags &= ~flag; }
 
     // refresh powerup timer
@@ -97,9 +96,9 @@ export default class Player extends Unit
                 p.startTime = Date.now();
         }
     }
-    
-    
-    
+
+
+
     public getHitbox():{ x1: number, y1: number, x2: number, y2: number }
     {
         var y2 = this.getPositionY() + this.getSprite().height;
@@ -110,7 +109,7 @@ export default class Player extends Unit
             y2: y2
         }
     }
-    
+
     // initialize
     private init():void
     {
@@ -163,7 +162,7 @@ export default class Player extends Unit
             if (this._curLane < Lane.LANE_RIGHT) this._curLane += 1;
         }
     }
-    
+
     private powerup():void
     {
         // count down in case any powerup gets removed from array
@@ -198,7 +197,7 @@ export default class Player extends Unit
             if(i === index) this._powerups.splice(i, 1);
         }
     }
-    
+
     private collisionCheck():void
     {
         var fruitsMgr   = this._gameScene.getFruitsMgr(),
@@ -208,14 +207,14 @@ export default class Player extends Unit
             enemies     = enemiesMgr.getEnemySprites(),
             powerups    = powerupsMgr.getPowerupSprites(),
             hitbox      = this.getHitbox();
-        
+
         // fruits
-        for (var i = 0; i < fruitGroups.length; i += 1) 
+        for (var i = 0; i < fruitGroups.length; i += 1)
         {
             var fruitGroup = fruitGroups[i];
             if (fruitGroup) {
                 var fruits = fruitGroups[i].getFruitSprites();
-                for (var j = fruits.length - 1; j >= 0; j -= 1) 
+                for (var j = fruits.length - 1; j >= 0; j -= 1)
                 {
                     var fruit = fruits[j];
                     if (fruit) {
@@ -248,7 +247,7 @@ export default class Player extends Unit
                 }
             }
         }
-        
+
         //powerups
         for (var i = powerups.length-1; i >= 0; i -= 1)
         {
@@ -274,7 +273,7 @@ export default class Player extends Unit
                 }
             }
         }
-        
+
         // playfield objects
         var object = this._gameScene.getPlayfield().getPlayfieldObject();
         if (object != null) {
@@ -384,7 +383,7 @@ export default class Player extends Unit
                     x = this.getPositionX() - this._speedX;
                 }
             }
-            
+
             if (this.getPositionX() <= goal) {
                 // in case we over- or undershoot our goal
                 if (this.getPositionX() + this._speedX > goal) {
@@ -393,7 +392,7 @@ export default class Player extends Unit
                     x = this.getPositionX() + this._speedX;
                 }
             }
-            
+
             this.setPosition(x, y);
         }
     }
@@ -453,7 +452,7 @@ export default class Player extends Unit
     {
         if (this._isMounted)
             return;
-        
+
         var curTime = Date.now(),
             diff    = curTime - this._spriteDrawTime;
 
@@ -462,7 +461,7 @@ export default class Player extends Unit
 
             if (this._gameScene._gameSpeed > 5) {
                 var mod = this._gameScene._gameSpeed / 5;
-                
+
                 this._spriteDrawTimeDiff = 150 / mod;
                 this._spriteDrawTime = curTime;
             } else {
@@ -534,7 +533,7 @@ export default class Player extends Unit
         // powerup timing
         this.powerUpTimer(index);
     }
-    
+
     private invulnerability(index: number):void
     {
         this._isInvulnerable = true;
