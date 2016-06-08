@@ -1,8 +1,6 @@
 import {canvas, enemiesAmount, Enemies, Lane_Position} from './Defines'
 import {getRandomInt} from './Globals'
 import Enemy from './Enemy'
-import Hamburger from './Hamburger'
-import Pizza from './Pizza'
 import ObjectsMgr from "./ObjectsMgr";
 import LilypadsMgr from "./LilypadsMgr";
 import GameScene from "./GameScene";

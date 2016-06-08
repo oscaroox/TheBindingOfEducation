@@ -15,13 +15,6 @@ export var DEBUG_COLOR        = "#fb31fd",  // purple/pink
 export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
 export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
-// UNUSED
-export enum Animation_State {
-    ANIM_IDLE = 0,
-    ANIM_RUN,
-    ANIM_JUMP
-}
-
 // background theme/level ID
 export enum Theme {
     THEME_FORREST = 0,
