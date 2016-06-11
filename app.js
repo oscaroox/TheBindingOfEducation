@@ -5,7 +5,7 @@ var app = express();
 
 //var env = (process.env.NODE_ENV).trim();
 var js = '/js';
-var env  = "development"
+var env  = "development";
 if(env == "development") js = 'http://localhost:8080';
 
 app.use(express.static(path.resolve(__dirname, './public/assets')));

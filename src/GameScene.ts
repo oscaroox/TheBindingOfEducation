@@ -31,9 +31,6 @@ export default class GameScene
 
     constructor() 
     {
-        this._gameOver = false;
-        this._gameSpeed = 5;
-
         window.addEventListener("keydown", (e)=> { this.resetGameScene(e) });
 
         this.loadGame();
@@ -57,12 +54,13 @@ export default class GameScene
     
     public getPowerupIcons():PowerupIcons { return this._powerupIcons; }
 
-
+    
 
     private loadGame():void
     {
-        cancelAnimationFrame(this._loop);
-        
+        if (this._loop != null)
+            cancelAnimationFrame(this._loop);
+
         this._gameOver = false;
         this._gameSpeed = 5;
 
@@ -229,6 +227,16 @@ export default class GameScene
         ctx.beginPath();
         ctx.fillText(str, x, y);
         ctx.closePath();
+        
+        this.saveScore();
+    }
+    
+    private saveScore():void
+    {
+        var curHighscore = parseInt(localStorage.getItem('highscore')),
+            curScore     = this._score.getScore();
+
+        if (curScore > curHighscore) localStorage.setItem('highscore', String(this._score.getScore()));
     }
     
     // update current game scene

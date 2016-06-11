@@ -128,8 +128,9 @@ export default class Player extends Unit
         canvas.addEventListener('click', (e)=> { this.handleClick(e.clientX) });
         window.addEventListener('keydown', (e)=> { this.keyboardInput(e) });
         window.addEventListener('keyup', (e)=> {
-            if (e.keyCode == 38 || e.keyCode == 87)
+            if (e.keyCode == 38 || e.keyCode == 87) {
                 this._gameScene._gameSpeed = 5;
+            }
         });
     }
 
@@ -138,7 +139,6 @@ export default class Player extends Unit
     {
         // up arrow and W key
         if (event.keyCode == 38 || event.keyCode == 87) {
-            // go twice as fast
             this._gameScene._gameSpeed = 10;
         }
 
@@ -183,9 +183,6 @@ export default class Player extends Unit
                 this.doublePoints(i);
             }
         }
-
-        // TEST
-        // this.magnet(0);
     }
 
     public removePowerup(index: number):void

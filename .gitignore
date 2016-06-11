@@ -5,3 +5,4 @@ node_modules/
 *.js
 
 *.map
+public/assets/js/game.js
