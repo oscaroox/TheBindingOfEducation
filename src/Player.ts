@@ -1,6 +1,6 @@
 import {
     canvas, ctx, Lane, Lane_Position, Cooking_Oil_State,
-    DEBUG_SHOW_PLAYER_HITBOX, DEBUG_STROKE_WIDTH, DEBUG_COLOR, Powerup_Flags, DEBUG_SHOW_MAGNET_HITBOX
+    DEBUG_SHOW_PLAYER_HITBOX, DEBUG_STROKE_WIDTH, DEBUG_COLOR, Powerup_Flags, DEBUG_SHOW_MAGNET_HITBOX, Theme
 } from "./Defines";
 import {isCollision} from './Globals'
 import Unit from './Unit';
@@ -285,20 +285,32 @@ export default class Player extends Unit
         }
 
 
-        // edge of theme sprite
-        var bg = this._gameScene.getPlayfield(),
-            firstSpriteIndex = bg.getFirstThemeSprite();
+        // river
+        var bg               = this._gameScene.getPlayfield(),
+            firstSpriteIndex = bg.getFirstThemeSprite(),
+            spriteTheme      = bg.getSpriteTheme(firstSpriteIndex);
 
-        if (firstSpriteIndex != null) {
-            var sprite = bg.getSprite(firstSpriteIndex),
+        if (firstSpriteIndex != null && spriteTheme == Theme.THEME_RIVER) {
+            var sprite    = bg.getSprite(firstSpriteIndex),
                 spritePos = bg.getPosition(firstSpriteIndex);
 
             // if player reaches edge of first theme sprite, player dies
             var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.1);
 
-            if (this.getPositionY() < edge) {
-                if (!this._isMounted)
-                    this.die();
+            if (this.getPositionY() < edge && !this._isMounted) this.die();
+        }
+
+        // beach
+        for (var i = 0; i < 2; i += 1) {
+            if (bg.getSpriteTheme(i) == Theme.THEME_BEACH) {
+                var sprite    = bg.getSprite(i),
+                    spritePos = bg.getPosition(i),
+                    edge      = spritePos.y + (sprite.height - this.getSprite().height * 1.1);
+
+                if (this.getPositionY() < edge) {
+                    var goal = Math.floor(Lane_Position[0] - (this.getSprite().width / 2) / 2);
+                    if (this.getPositionX() == goal) this.die();
+                }
             }
         }
     }
@@ -599,7 +611,7 @@ export default class Player extends Unit
             return;
         }
 
-        // this.collisionCheck();
+        this.collisionCheck();
         this.move();
         this.animationMove();
         this.powerup();

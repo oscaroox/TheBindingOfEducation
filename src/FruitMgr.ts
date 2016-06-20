@@ -1,4 +1,4 @@
-import {fruitAmount} from './Defines'
+import {fruitAmount, Theme} from './Defines'
 import {getRandomInt} from './Globals'
 import FruitGroup from './FruitGroup'
 import ObjectsMgr from "./ObjectsMgr";
@@ -27,9 +27,13 @@ export default class FruitMgr extends ObjectsMgr
 
         // check if it is time to spawn a new group
         if (diff > this.getNextSpawnTime() || forceSpawn) {
+            var playfield = this._gameScene.getPlayfield();
+            var isBeach   = playfield.getSpriteTheme(0) == Theme.THEME_BEACH ||
+                            playfield.getSpriteTheme(1) == Theme.THEME_BEACH;
+
             // get a random fruit and lane ID
             var randFruit = getRandomInt(1, fruitAmount),
-                randLane  = getRandomInt(0, 2);
+                randLane  = (isBeach) ? getRandomInt(1, 2) : getRandomInt(0, 2);
 
             var group = new FruitGroup(randFruit, randLane, this._gameScene),
                 fruit = group.getFruitSprites()[0];

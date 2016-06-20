@@ -1,4 +1,4 @@
-import {canvas, enemiesAmount, Enemies, Lane_Position} from './Defines'
+import {canvas, enemiesAmount, Enemies, Lane_Position, Theme} from './Defines'
 import {getRandomInt} from './Globals'
 import Enemy from './Enemy'
 import ObjectsMgr from "./ObjectsMgr";
@@ -27,13 +27,17 @@ export default class EnemiesMgr extends ObjectsMgr
     // add enemies to our game field every x seconds
     private spawn():void
     {
+        var playfield = this._gameScene.getPlayfield();
+        var isBeach   = playfield.getSpriteTheme(0) == Theme.THEME_BEACH ||
+                        playfield.getSpriteTheme(1) == Theme.THEME_BEACH;
+
         var curTime = Date.now(),
             diff    = curTime - this._time;
 
         if (diff > this._timeDiff.min) {
             // get a random enemy and lane ID
             var randEnemy = getRandomInt(1, enemiesAmount),
-                randLane  = getRandomInt(0, 2);
+                randLane  = (isBeach) ? getRandomInt(1, 2) : getRandomInt(0, 2);
             
             switch(randEnemy)
             {

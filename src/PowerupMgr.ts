@@ -1,4 +1,4 @@
-import {Powerups, powerupAmount, canvas, Powerup_Flags} from "./Defines";
+import {Powerups, powerupAmount, canvas, Powerup_Flags, Theme} from "./Defines";
 import {getRandomInt} from "./Globals";
 import ObjectsMgr from "./ObjectsMgr";
 import Powerup from "./Powerup";
@@ -30,9 +30,13 @@ export default class PowerupMgr extends ObjectsMgr
 
         if (diff > this._timeDiff.min) 
         {
+            var playfield = this._gameScene.getPlayfield();
+            var isBeach   = playfield.getSpriteTheme(0) == Theme.THEME_BEACH ||
+                            playfield.getSpriteTheme(1) == Theme.THEME_BEACH;
+            
             // get a random powerup and lane ID
             var randPower = getRandomInt(1, powerupAmount),
-                randLane  = getRandomInt(0, 2);
+                randLane  = (isBeach) ? getRandomInt(1, 2) : getRandomInt(0, 2);
             
             // power up information
             var sprite    = "",

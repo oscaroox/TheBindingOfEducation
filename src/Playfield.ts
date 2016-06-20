@@ -84,11 +84,11 @@ export default class Playfield
             x      = Lane_Position[randLane],
             y      = this._y[otherbg] - 90;     // 90 = boat height
         
-        this._lastThemeSprite  = null;
-        this._playfieldObject  = new Mount(sprite, x, y, randLane, this._gameScene);
+        this._lastThemeSprite = null;
+        this._playfieldObject = new Mount(sprite, x, y, randLane, this._gameScene);
     }
 
-    private changeScenery(index: number):void
+    private changeTheme(index: number):void
     {
         var diff = Date.now() - this._time;
 
@@ -112,10 +112,10 @@ export default class Playfield
         }
 
         // start random playfield
-        if (diff > 5000 && this._theme == Theme.THEME_FORREST) {
+        if (diff > 15000 && this._theme == Theme.THEME_FORREST) {
             this._theme = getRandomInt(1, themesCount - 1);
-            var themeStart  = "images/bg_" + this._theme + "_start_540_960.png";
 
+            var themeStart = "images/bg_" + this._theme + "_start_540_960.png";
             var tempSprite = new Image();
             tempSprite.src = themeStart;
 
@@ -131,7 +131,7 @@ export default class Playfield
         }
 
         // end random playfield
-        else if (diff > 5000 && this._theme != Theme.THEME_FORREST) {
+        else if (diff > 10000 && this._theme != Theme.THEME_FORREST) {
             var tempSprite = new Image();
             tempSprite.src = "images/bg_" + this._theme + "_end_540_960.png";
             this._sprites[index] = tempSprite;
@@ -165,7 +165,7 @@ export default class Playfield
                 // put the image that is off screen on top of the other image.
                 this._y[i] = this._y[j] - this._sprites[i].height;
 
-                this.changeScenery(i);
+                this.changeTheme(i);
             }
         }
     }

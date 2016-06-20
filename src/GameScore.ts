@@ -82,57 +82,57 @@ export default class GameScore
 
         // CURRENT SCORE TEXT
         if (this._score >= 1000) {
-            score = splice(1, 0, str, ",");
+            score = splice(1, 0, str, ".");
         }
 
         // 10k
         if (this._score >= 10000) {
-            score = splice(2, 0, str, ",");
+            score = splice(2, 0, str, ".");
         }
 
         // 100k
         if (this._score >= 100000) {
-            score = splice(3, 0, str, ",");
+            score = splice(3, 0, str, ".");
         }
 
         // 1m
         if (this._score >= 1000000 && this._score < 10000000) {
-            str = splice(1, 0, str, ",");
-            score = splice(5, 0, str, ",");
+            str = splice(1, 0, str, ".");
+            score = splice(5, 0, str, ".");
         }
 
         // 10m
         if (this._score >= 10000000) {
-            str = splice(2, 0, str, ",");
-            score = splice(6, 0, str, ",");
+            str = splice(2, 0, str, ".");
+            score = splice(6, 0, str, ".");
         }
 
 
         // HIGHSCORE TEXT
         if (this._highscore >= 1000) {
-            highscore = splice(1, 0, str2, ",");
+            highscore = splice(1, 0, str2, ".");
         }
 
         // 10k
         if (this._highscore >= 10000) {
-            highscore = splice(2, 0, str2, ",");
+            highscore = splice(2, 0, str2, ".");
         }
 
         // 100k
         if (this._highscore >= 100000) {
-            highscore = splice(3, 0, str2, ",");
+            highscore = splice(3, 0, str2, ".");
         }
 
         // 1m
         if (this._highscore >= 1000000 && this._highscore < 10000000) {
-            str2 = splice(1, 0, str2, ",");
-            highscore = splice(5, 0, str2, ",");
+            str2 = splice(1, 0, str2, ".");
+            highscore = splice(5, 0, str2, ".");
         }
 
         // 10m
         if (this._highscore >= 10000000) {
-            str2 = splice(2, 0, str2, ",");
-            highscore = splice(6, 0, str2, ",");
+            str2 = splice(2, 0, str2, ".");
+            highscore = splice(6, 0, str2, ".");
         }
 
         // current score
