@@ -11,20 +11,42 @@ export default class Mount extends Object
     private _spriteDeathOffsetY: number;
     private _spriteDrawTime: number;
     private _spriteDrawTimeDiff: number;
+    private _name: string;
+    private _scale: number;
 
-    constructor(sprite: string, x: number, y: number, laneID: Lane, gameScene: GameScene)
+    // private _spawnHeight: number;
+    // private _spawnWidth: number;
+    //
+    // private _spriteWidth: number;
+    // private _spriteHeight: number;
+
+    constructor(name: string, sprite: string, x: number, y: number, laneID: Lane, gameScene: GameScene)
     {
         super(x, y, sprite, laneID);
 
+        this._name = name;
         this._isMountable = true;
         this._spriteDeathOffsetY = 0;
         this._spriteDrawTime = Date.now();
         this._spriteDrawTimeDiff = 150;
+        this._scale = 1.0;
+
+        // this._spriteWidth  = this.getSprite().width;
+        // this._spriteHeight = this.getSprite().height;
+        // this._spawnWidth   = this._spriteWidth;
+        // this._spawnHeight  = this._spriteHeight;
 
         this._gameScene = gameScene;
 
         this.setInitPosition();
     }
+    
+    public getName():string { return this._name; }
+    public setScale(scale: number) { this._scale = scale; }
+
+
+    // public setWidth(w: number):void { this._spriteWidth = w; }
+    // public setHeight(h: number):void { this._spriteHeight = h; }
 
     protected setInitPosition():void
     {
@@ -52,6 +74,7 @@ export default class Mount extends Object
                 if (sy > this.getPositionY()) {
                     this._isMountable = false;
                     player._isMounted = false;
+                    player.setSprite(player.getSpawnSprite());
                 }
             }
         }
@@ -79,6 +102,24 @@ export default class Mount extends Object
             this._spriteDrawTime = curTime;
         }
     }
+
+    public draw():void
+    {
+        ctx.save();
+        ctx.scale(this._scale, this._scale);
+        ctx.drawImage(
+            this.getSprite(),
+            0,
+            0,
+            this.getSprite().width,
+            this.getSprite().height,
+            this.getPositionX(),
+            this.getPositionY(),
+            this.getSprite().width,
+            this.getSprite().height
+        );
+        ctx.restore();
+    }
     
     public update(playerIsMounted: boolean, playfield?: Playfield):void
     {
@@ -89,12 +130,14 @@ export default class Mount extends Object
                 this.updatePosition(this._gameScene._gameSpeed);
             }
 
-            super.update();
+            // super.update();
+            this.draw();
         } else {
             if (this._gameScene.getPlayer()._isMounted)
                 this.deathAnimation();
             else
-                super.update();
+                // super.update();
+                this.draw();
         }
 
         if (DEBUG_SHOW_MOUNT_HITBOX)

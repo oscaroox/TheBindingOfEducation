@@ -38,8 +38,7 @@ export default class GameScore
     {
         this._curScorePos.x = 10 + canvas.width / 2 + this._gameScene.getPlayfield().getSprite(0).width / 2;
         this._curScorePos.y = this._fontSize;
-
-        var textWidth = ctx.measureText(String(this._highscore));
+        
         this._highscorePos.x = 10;
         this._highscorePos.y = this._fontSize * 1.5;
     }

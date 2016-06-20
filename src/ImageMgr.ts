@@ -28,6 +28,7 @@ export default class ImageManager
             'images/bg_3_end_540_960.png',
             'images/boat.png',
             'images/box.png',
+            'images/character_snowboard.png',
             'images/character_walking.png',
             'images/character_walking_big.png',
             'images/cherry.png',
@@ -43,6 +44,7 @@ export default class ImageManager
             'images/pineapple.png',
             'images/pizza.png',
             'images/shark.png',
+            'images/snowboard.png',
             'images/strawberry.png',
             'images/tangerine.png',
             'images/watermelon.png'

@@ -37,21 +37,13 @@ export default class GameScene
     }
 
     public getPlayer():Player { return this._player; }
-
     public getCookingOil():CookingOil { return this._cookingOil; }
-
     public getFruitsMgr():FruitMgr { return this._fruitsMgr; }
-
     public getEnemiesMgr():EnemiesMgr { return this._enemiesMgr; }
-
     public getPowerUpsMgr():PowerupMgr { return this._powerupMgr; }
-
     public getScore():GameScore { return this._score; }
-
     public getPlayfield():Playfield { return this._playfield; }
-
     public getFloatingScoreMgr():FloatingScoreMgr { return this._floatingScoreMgr; }
-    
     public getPowerupIcons():PowerupIcons { return this._powerupIcons; }
 
     
@@ -259,14 +251,14 @@ export default class GameScene
         // enemy manager
         this._enemiesMgr.update();
 
+        // update cooking oil
+        this._cookingOil.update();
+
         // mounts
         this._playfield.updateObjects();
 
         // update player
         this._player.update();
-
-        // update cooking oil
-        this._cookingOil.update();
 
         // floating points
         this._floatingScoreMgr.update();

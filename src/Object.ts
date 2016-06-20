@@ -36,6 +36,7 @@ export default class __Object
     }
 
     public getSprite():HTMLImageElement { return this._sprite; }
+    public setSprite(src: string):void { this.loadSprite(src); }
 
     public getHitbox():{x1: number, y1: number, x2: number, y2: number}
     {
@@ -49,9 +50,6 @@ export default class __Object
 
     private loadSprite(src):void {
         this._sprite = new Image();
-        // this._sprite.onload = function() {
-        //     console.log('loaded sprite ' + src);
-        // };
         this._sprite.src = src;
     }
     

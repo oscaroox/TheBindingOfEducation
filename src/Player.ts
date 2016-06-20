@@ -1,6 +1,7 @@
 import {
     canvas, ctx, Lane, Lane_Position, Cooking_Oil_State,
-    DEBUG_SHOW_PLAYER_HITBOX, DEBUG_STROKE_WIDTH, DEBUG_COLOR, Powerup_Flags, DEBUG_SHOW_MAGNET_HITBOX, Theme
+    DEBUG_SHOW_PLAYER_HITBOX, DEBUG_STROKE_WIDTH, DEBUG_COLOR, Powerup_Flags, DEBUG_SHOW_MAGNET_HITBOX, Theme,
+    Animation_State
 } from "./Defines";
 import {isCollision} from './Globals'
 import Unit from './Unit';
@@ -14,6 +15,9 @@ export default class Player extends Unit
 
     private _gameScene: GameScene;
 
+    private _animState: Animation_State;
+    private _animTick: number;
+    
     private _animationStep: number;             // number of step the animation of the sprite is in
     private _spriteAnimations: number;          // max number of steps in an animation
     private _spriteWidth: number;               // how wide is a SINGLE sprite
@@ -21,6 +25,10 @@ export default class Player extends Unit
     private _spriteDrawTime: number;            // when we last drawn the animation
     private _spriteDrawTimeDiff: number;        // how often the animation should be redrawn
     private _spriteDeathOffsetY: number;        // Y offset in sprite image on death
+
+    private _spawnSprite: string;
+    private _spawnHeight: number;
+    private _spawnWidth: number;
 
     private _speedX: number;                    // speed on X-axis
     private _speedY: number;                    // speed on Y-axis
@@ -44,8 +52,10 @@ export default class Player extends Unit
             lane   = Lane.LANE_MIDDLE;
         super(x, y, health, sprite, lane);
 
+        this._animState = Animation_State.ANIM_RUNNING;
+        this._animTick  = 0;
         this._isMounted = false;
-
+        
         this._animationStep      = 0;
         this._spriteAnimations   = 1;
         this._spriteWidth        = 45;
@@ -53,6 +63,10 @@ export default class Player extends Unit
         this._spriteDrawTime     = Date.now();
         this._spriteDrawTimeDiff = 150;
         this._spriteDeathOffsetY = 0;
+
+        this._spawnSprite = sprite;
+        this._spawnHeight = this._spriteHeight;
+        this._spawnWidth  = this._spriteWidth;
 
         this._speedY = 1;
         this._speedX = 8;
@@ -70,6 +84,8 @@ export default class Player extends Unit
         this.addEventHandlers();
         this.init();
     }
+
+    public getSpawnSprite():string { return this._spawnSprite; }
 
     public getPowerupFlags():Powerup_Flags { return this._powerupFlags; }
 
@@ -96,9 +112,7 @@ export default class Player extends Unit
                 p.startTime = Date.now();
         }
     }
-
-
-
+    
     public getHitbox():{ x1: number, y1: number, x2: number, y2: number }
     {
         var y2 = this.getPositionY() + this.getSprite().height;
@@ -109,6 +123,8 @@ export default class Player extends Unit
             y2: y2
         }
     }
+    
+    
 
     // initialize
     private init():void
@@ -151,6 +167,17 @@ export default class Player extends Unit
         if (event.keyCode == 39 || event.keyCode == 68) {
             if (this._curLane < Lane.LANE_RIGHT) this._curLane += 1;
         }
+
+        // space bar
+        if (event.keyCode == 32) {
+            var fieldObject = this._gameScene.getPlayfield().getPlayfieldObject();
+
+            if (fieldObject != null) {
+                var mount = fieldObject.getName();
+                if (this._isMounted && mount === "snowboard")
+                    this.jump();
+            }
+        }
     }
 
     // what to do when screen is clicked
@@ -160,6 +187,33 @@ export default class Player extends Unit
             if (this._curLane > Lane.LANE_LEFT) this._curLane -= 1;
         } else {
             if (this._curLane < Lane.LANE_RIGHT) this._curLane += 1;
+        }
+    }
+
+    private jump():void
+    {
+        if (this._animState == Animation_State.ANIM_JUMPING) {
+            var baseHeight = { min: this._spawnHeight, max: this._spawnHeight * 1.08 },
+                baseWidth  = { min: this._spawnWidth, max: this._spawnWidth * 1.08 };
+
+            var osc = 0.5 + Math.sin(this._animTick / 15);
+            var height = baseHeight.min + ((baseHeight.max - baseHeight.min) * osc),
+                width  = baseWidth.min + ((baseWidth.max - baseWidth.min) * osc);
+
+            this._animTick += 1;
+
+            this._spriteHeight = height;
+            this._spriteWidth  = width;
+
+            // reset
+            if (this._spriteHeight < this._spawnHeight) {
+                this._animTick = 0;
+                this._spriteHeight = this._spawnHeight;
+                this._spriteWidth = this._spawnWidth;
+                this._animState = Animation_State.ANIM_RUNNING;
+            }
+        } else {
+            this._animState = Animation_State.ANIM_JUMPING;
         }
     }
 
@@ -197,6 +251,9 @@ export default class Player extends Unit
 
     private collisionCheck():void
     {
+        if (this._animState == Animation_State.ANIM_JUMPING)
+            return;
+        
         var fruitsMgr   = this._gameScene.getFruitsMgr(),
             enemiesMgr  = this._gameScene.getEnemiesMgr(),
             powerupsMgr = this._gameScene.getPowerUpsMgr(),
@@ -280,6 +337,10 @@ export default class Player extends Unit
                 oy2 = object.getHitbox().y2;
 
             if (isCollision(hitbox.x1, hitbox.x2, hitbox.y1, hitbox.y2, ox1, ox2, oy1, oy2)) {
+                // change sprite on snowboard
+                if (!this._isMounted && object.getName() == "snowboard" && object._isMountable)
+                    this.setSprite("images/character_snowboard.png");
+                
                 this._isMounted = (object._isMountable) ? true : false;
             }
         }
@@ -296,8 +357,8 @@ export default class Player extends Unit
 
             // if player reaches edge of first theme sprite, player dies
             var edge = spritePos.y + (sprite.height - this.getSprite().height * 1.1);
-
-            if (this.getPositionY() < edge && !this._isMounted) this.die();
+            if (this.getPositionY() < edge && !this._isMounted) 
+                this.die();
         }
 
         // beach
@@ -308,8 +369,9 @@ export default class Player extends Unit
                     edge      = spritePos.y + (sprite.height - this.getSprite().height * 1.1);
 
                 if (this.getPositionY() < edge) {
-                    var goal = Math.floor(Lane_Position[0] - (this.getSprite().width / 2) / 2);
-                    if (this.getPositionX() == goal) this.die();
+                    var goal = Math.floor((Lane_Position[0] - (this.getSprite().width / 2) / 2) * 1.1);
+                    if (this.getPositionX() <= goal) 
+                        this.die();
                 }
             }
         }
@@ -442,18 +504,77 @@ export default class Player extends Unit
 
     private drawImage(rounds:number = 1):void
     {
-        for (var i = 0; i < rounds; ++i) {
-            ctx.drawImage(
-                this.getSprite(),
-                this._spriteWidth * this._animationStep,
-                i,
-                this._spriteWidth,
-                this._spriteHeight,
-                this.getPositionX(),
-                this.getPositionY(),
-                this._spriteWidth,
-                this._spriteHeight
-            );
+        // cut off legs and stop animation so it looks like he "sits" in the boat
+        if (this._isMounted) {
+            var fieldObject = this._gameScene.getPlayfield().getPlayfieldObject(),
+                mount       = fieldObject.getName();
+
+            switch (mount)
+            {
+                case "boat":
+                    ctx.drawImage(
+                        this.getSprite(),
+                        this._spriteWidth * this._animationStep,
+                        0,
+                        this._spriteWidth,
+                        this._spriteHeight * 0.8,
+                        this.getPositionX(),
+                        this.getPositionY(),
+                        this._spriteWidth,
+                        this._spriteHeight * 0.8
+                    );
+                    break;
+
+                case "snowboard":
+                    var scale = this._spriteWidth / this._spawnWidth;
+                    
+                    ctx.save();
+                    ctx.scale(scale, scale);
+                    ctx.drawImage(
+                        this.getSprite(),
+                        0,
+                        0,
+                        this._spriteWidth,
+                        this._spriteHeight,
+                        this.getPositionX(),
+                        this.getPositionY(),
+                        this._spriteWidth,
+                        this._spriteHeight
+                    );
+                    
+                    fieldObject.setScale(scale);
+                    ctx.restore();
+                    break;
+
+                default:
+                    console.log('player drawImage defaulted');
+                    ctx.drawImage(
+                        this.getSprite(),
+                        this._spriteWidth * this._animationStep,
+                        0,
+                        this._spriteWidth,
+                        this._spriteHeight,
+                        this.getPositionX(),
+                        this.getPositionY(),
+                        this._spriteWidth,
+                        this._spriteHeight
+                    );
+            }
+        } else {
+            // normal walking animation
+            for (var i = 0; i < rounds; ++i) {
+                ctx.drawImage(
+                    this.getSprite(),
+                    this._spriteWidth * this._animationStep,
+                    i,
+                    this._spriteWidth,
+                    this._spriteHeight,
+                    this.getPositionX(),
+                    this.getPositionY(),
+                    this._spriteWidth,
+                    this._spriteHeight
+                );
+            }
         }
     }
 
@@ -615,6 +736,9 @@ export default class Player extends Unit
         this.move();
         this.animationMove();
         this.powerup();
+
+        if (this._animState == Animation_State.ANIM_JUMPING)
+            this.jump();
 
         if (!this._isInvulnerable) {
             this.draw();

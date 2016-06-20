@@ -39,19 +39,12 @@ export default class Playfield
     }
 
     public getPlayfieldObject():Mount { return this._playfieldObject; }
-
     public getSprite(index: number):HTMLImageElement { return this._sprites[index]; }
-
     public getFirstThemeSprite():number { return this._firstThemeSprite; }
-    
     public getLastThemeSprite():number { return this._lastThemeSprite; }
-    
     public getPosition(index: number):{ x: number, y: number } { return { x: this._x[index], y: this._y[index] }; }
-    
     public getPositionYArray():number[] { return this._y; }
-    
     public getSpriteTheme(index: number):Theme { return this._spriteTheme[index]; }
-
     
 
     private loadSprite(src):void 
@@ -75,17 +68,17 @@ export default class Playfield
     
     
 
-    private spawnBoat(index: number):void
+    private spawnObject(object: string, index: number):void
     {
         var randLane = getRandomInt(0, 2),
             otherbg  = (index) ? 0 : 1;
 
-        var sprite = "images/boat.png",
+        var sprite = "images/" + object + ".png",
             x      = Lane_Position[randLane],
-            y      = this._y[otherbg] - 90;     // 90 = boat height
+            y      = this._y[otherbg] - 90;     // 90 = object height
         
         this._lastThemeSprite = null;
-        this._playfieldObject = new Mount(sprite, x, y, randLane, this._gameScene);
+        this._playfieldObject = new Mount(object, sprite, x, y, randLane, this._gameScene);
     }
 
     private changeTheme(index: number):void
@@ -112,8 +105,11 @@ export default class Playfield
         }
 
         // start random playfield
-        if (diff > 15000 && this._theme == Theme.THEME_FORREST) {
+        if (diff > 10000 && this._theme == Theme.THEME_FORREST) {
             this._theme = getRandomInt(1, themesCount - 1);
+
+            // force theme test
+            // this._theme = Theme.THEME_SNOW;
 
             var themeStart = "images/bg_" + this._theme + "_start_540_960.png";
             var tempSprite = new Image();
@@ -127,7 +123,8 @@ export default class Playfield
             this._time  = Date.now();
 
             // add boat to start of river
-            if (this._theme == Theme.THEME_RIVER) this.spawnBoat(index);
+            if (this._theme == Theme.THEME_RIVER) this.spawnObject("boat", index);
+            if (this._theme == Theme.THEME_SNOW) this.spawnObject("snowboard", index);
         }
 
         // end random playfield
