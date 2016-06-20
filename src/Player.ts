@@ -153,6 +153,9 @@ export default class Player extends Unit
     // what to do with certain keypresses
     private keyboardInput(event: KeyboardEvent):void
     {
+        if (this._animState == Animation_State.ANIM_JUMPING)
+            return;
+        
         // up arrow and W key
         if (event.keyCode == 38 || event.keyCode == 87) {
             this._gameScene._gameSpeed = 10;
@@ -183,6 +186,9 @@ export default class Player extends Unit
     // what to do when screen is clicked
     private handleClick(clickX: number):void
     {
+        if (this._animState == Animation_State.ANIM_JUMPING)
+            return;
+
         if (clickX < canvas.width / 2) {
             if (this._curLane > Lane.LANE_LEFT) this._curLane -= 1;
         } else {
