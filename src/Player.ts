@@ -35,8 +35,8 @@ export default class Player extends Unit
 
     private _timeHit: number;                   // time when we were hit by an object
     private _maxInvulnerableTimer: number;      // how long we can not be hit for
-    private _tick: number;                      // ticker for cos function for opacity change when we are invulnerable
-    private _tickStartValue: number;            // what value should the ticker start at
+    private _alphaTick: number;                      // ticker for cos function for opacity change when we are invulnerable
+    private _alphaTickStartValue: number;            // what value should the ticker start at
 
     private _powerupFlags: number;              // bitwise powerup flag holder
 
@@ -73,8 +73,8 @@ export default class Player extends Unit
 
         this._maxInvulnerableTimer = 3000;  // 3 seconds
         this._isInvulnerable = false;
-        this._tickStartValue = 30;
-        this._tick = this._tickStartValue;
+        this._alphaTickStartValue = 30;
+        this._alphaTick = this._alphaTickStartValue;
 
         this._powerupFlags = Powerup_Flags.FLAG_NONE;
         this._powerups = [];
@@ -155,7 +155,7 @@ export default class Player extends Unit
     {
         if (this._animState == Animation_State.ANIM_JUMPING)
             return;
-        
+
         // up arrow and W key
         if (event.keyCode == 38 || event.keyCode == 87) {
             this._gameScene._gameSpeed = 10;
@@ -484,14 +484,16 @@ export default class Player extends Unit
 
         if (diff > this._maxInvulnerableTimer) {
             this._isInvulnerable = false;
-            this._tick = this._tickStartValue;
+            this._alphaTick = this._alphaTickStartValue;
         }
     }
 
     protected drawBlinking():void
     {
-        var alpha = 1 + Math.sin(this._tick / 10);
-        this._tick += 1;
+        var baseAlpha  = { min: 0.35, max: 0.75 };
+        var osc = 0.5 + Math.sin(this._alphaTick / 10);
+        var alpha = baseAlpha.min + ((baseAlpha.max - baseAlpha.min) * osc);
+        this._alphaTick += 1;
 
         ctx.save();
         ctx.globalAlpha = alpha;

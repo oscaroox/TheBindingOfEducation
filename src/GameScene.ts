@@ -214,7 +214,7 @@ export default class GameScene
 
         str = "Druk op R om nog een keer te spelen!";
         x = canvas.width / 2 - ctx.measureText(str).width / 2;
-        y = y + fontSize;
+        y = y + fontSize * 1.5;
 
         ctx.beginPath();
         ctx.fillText(str, x, y);
