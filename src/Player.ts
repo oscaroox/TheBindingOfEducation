@@ -599,7 +599,7 @@ export default class Player extends Unit
             return;
         }
 
-        this.collisionCheck();
+        // this.collisionCheck();
         this.move();
         this.animationMove();
         this.powerup();

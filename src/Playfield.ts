@@ -1,4 +1,4 @@
-import {canvas, ctx, Theme, Lane_Position} from "./Defines";
+import {canvas, ctx, Theme, Lane_Position, themesCount} from "./Defines";
 import {getRandomInt} from "./Globals";
 import Mount from "./Mount";
 import GameScene from "./GameScene";
@@ -18,7 +18,7 @@ export default class Playfield
 
     constructor(gameScene: GameScene)
     {
-        var source = "images/bg_540_960.png";
+        var source = "images/bg_" + Theme.THEME_FORREST + "_start_540_960.png";
         this.loadSprite(source);
         
         this._time  = Date.now();
@@ -32,6 +32,8 @@ export default class Playfield
         // we start in the forrest
         this._theme = Theme.THEME_FORREST;
         this._spriteTheme = [Theme.THEME_FORREST, Theme.THEME_FORREST];
+
+
 
         this.init();
     }
@@ -93,48 +95,50 @@ export default class Playfield
         // forrest playfield (start, mid and end)
         if (this._theme == Theme.THEME_FORREST) {
             var tempSprite = new Image();
-            tempSprite.src = "images/bg_540_960.png";
+            tempSprite.src = "images/bg_" + Theme.THEME_FORREST + "_start_540_960.png";
 
             this._sprites[index] = tempSprite;
             this._spriteTheme[index] = Theme.THEME_FORREST;
         }
 
-        // mid river playfield
-        if (this._theme == Theme.THEME_RIVER) {
+        // mid random playfield
+        if (this._theme != Theme.THEME_FORREST) {
             var tempSprite = new Image();
-            tempSprite.src = "images/bg_2_mid_540_960.png";
+            tempSprite.src = "images/bg_" + this._theme + "_mid_540_960.png";
 
             this._firstThemeSprite = null;
+            this._spriteTheme[index] = this._theme;
             this._sprites[index] = tempSprite;
-            this._spriteTheme[index] = Theme.THEME_RIVER;
         }
 
-        // start river playfield
-        if (diff > 10000 && this._theme == Theme.THEME_FORREST) {
+        // start random playfield
+        if (diff > 5000 && this._theme == Theme.THEME_FORREST) {
+            this._theme = getRandomInt(1, themesCount - 1);
+            var themeStart  = "images/bg_" + this._theme + "_start_540_960.png";
+
             var tempSprite = new Image();
-            tempSprite.src = "images/bg_2_start_540_960.png";
+            tempSprite.src = themeStart;
 
             this._firstThemeSprite = index;
             this._sprites[index] = tempSprite;
-            this._theme = Theme.THEME_RIVER;
-            this._spriteTheme[index] = Theme.THEME_RIVER;
+            this._spriteTheme[index] = this._theme;
 
             // reset timer
             this._time  = Date.now();
 
             // add boat to start of river
-            this.spawnBoat(index);
+            if (this._theme == Theme.THEME_RIVER) this.spawnBoat(index);
         }
 
-        // end river playfield
-        else if (diff > 10000 && this._theme == Theme.THEME_RIVER) {
+        // end random playfield
+        else if (diff > 5000 && this._theme != Theme.THEME_FORREST) {
             var tempSprite = new Image();
-            tempSprite.src = "images/bg_2_end_540_960.png";
+            tempSprite.src = "images/bg_" + this._theme + "_end_540_960.png";
             this._sprites[index] = tempSprite;
 
             this._lastThemeSprite = index;
-            this._theme = Theme.THEME_FORREST;              // next sprite should be forrest
-            this._spriteTheme[index] = Theme.THEME_RIVER;   // but current sprite is still river
+            this._spriteTheme[index] = this._theme;   // current sprite is still random
+            this._theme = Theme.THEME_FORREST;        // but next sprite should be forrest
 
             // reset timer
             this._time  = Date.now();

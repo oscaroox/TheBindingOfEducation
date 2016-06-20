@@ -16,9 +16,12 @@ export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
 export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
 // background theme/level ID
+export var themesCount = 4;
 export enum Theme {
-    THEME_FORREST = 0,
-    THEME_RIVER
+    THEME_FORREST           = 0,
+    THEME_RIVER,
+    THEME_SNOW,
+    THEME_BEACH
 }
 
 // Lane ID

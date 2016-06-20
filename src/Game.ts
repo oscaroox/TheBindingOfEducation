@@ -25,6 +25,7 @@ export default class Game
     
     public loadAudio():void
     {
+        console.log('loading Audio...');
         var audioMgr = new AudioMgr(this);
     }
     

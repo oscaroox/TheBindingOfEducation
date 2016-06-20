@@ -14,15 +14,18 @@ export default class ImageManager
         this._images = [
             'images/apple.png',
             'images/banana.png',
-            'images/bg_2_end_540_960.png',
-            'images/bg_2_end_1080_1920.png',
-            'images/bg_2_mid_540_960.png',
-            'images/bg_2_mid_1080_1920.png',
+            'images/bg_0_start_540_960.png',
+            'images/bg_0_mid_540_960.png',
+            'images/bg_0_end_540_960.png',
+            'images/bg_1_start_540_960.png',
+            'images/bg_1_mid_540_960.png',
+            'images/bg_1_end_540_960.png',
             'images/bg_2_start_540_960.png',
-            'images/bg_2_start_1080_1920.png',
-            'images/bg_540_960.png',
-            'images/bg_720_1280.png',
-            'images/bg_1080_1920.png',
+            'images/bg_2_mid_540_960.png',
+            'images/bg_2_end_540_960.png',
+            'images/bg_3_start_540_960.png',
+            'images/bg_3_mid_540_960.png',
+            'images/bg_3_end_540_960.png',
             'images/boat.png',
             'images/box.png',
             'images/character_walking.png',
@@ -39,17 +42,19 @@ export default class ImageManager
             'images/pannekoek.png',
             'images/pineapple.png',
             'images/pizza.png',
+            'images/shark.png',
             'images/strawberry.png',
             'images/tangerine.png',
             'images/watermelon.png'
         ];
-
-        console.log('Loading images...');
+        
         this.loadImages();
     }
 
     private loadImages(): void
     {
+        console.log('Loading images...');
+        
         let fn = this.imageLoaded.bind(this);
 
         for (var i = 0; i < this._images.length; i += 1) {
@@ -64,7 +69,7 @@ export default class ImageManager
         this._loaded += 1;
 
         if (this._loaded == this._images.length) {
-            console.log('loading Audio...');
+            console.log('All images loaded.');
             // this._game.loadAudio();
             this._game.startGame();
         }
