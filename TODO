@@ -1,0 +1,24 @@
+SCORE
+- Meer feedback wanneer er fruit gepakt wordt. Zoals:
+    - "+10 punten" boven speler's hoofd of bij locatie van het fruit waar het gepakt wordt
+    - score die bubbelt (grotere tekst voor een paar tellen)
+
+POWERUPS
+- Sprites voor elke powerup
+- Powerup icoon ergens op het scherm wanneer de speler een powerup heeft
+- Betere visual voor invulnerability. Nu lijkt het alsof je geraakt wordt door iets slechts
+  want het heeft dezelfde feedback, behalve bewegende olie, als wanneer je geraakt wordt
+- Visueel effect, ring oid, voor de magneet powerup
+
+SPELER
+- Toetsen voor beweging (zowel pijltjes als WASD)
+
+PLAYFIELD
+- Meer thema's?
+- Herken waar de player loopt zodat de sprite zich aan de omgeving kan aanpassen. Bijv. op water = sprite in boot
+
+* Mssn een boot sprite neerzetten op rand van water en wanneer de player de boot aanraakt beweegt de boot met de speler
+  mee?
+
+MANAGERS
+- Als speler omhoog indrukt en de snelheid verdubbelt moet de spawntime ook sneller
