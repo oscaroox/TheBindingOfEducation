@@ -1,4 +1,12 @@
 node_modules/
 .idea/
 
+<<<<<<< HEAD
 npm-debug.log
+=======
+
+*.js
+
+*.map
+public/assets/js/game.js
+>>>>>>> sander
