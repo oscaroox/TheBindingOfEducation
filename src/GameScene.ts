@@ -103,7 +103,7 @@ export default class GameScene
     {
         var ax1 = object.getHitbox().x1,
             ax2 = object.getHitbox().x2,
-            ay1 = object.getHitbox().y1,
+            ay1 = object.getHitbox().y1 * 0.8,
             ay2 = object.getHitbox().y2,
             bx1,
             bx2,

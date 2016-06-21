@@ -108,9 +108,6 @@ export default class Playfield
         if (diff > 10000 && this._theme == Theme.THEME_FORREST) {
             this._theme = getRandomInt(1, themesCount - 1);
 
-            // force theme test
-            // this._theme = Theme.THEME_SNOW;
-
             var themeStart = "images/bg_" + this._theme + "_start_540_960.png";
             var tempSprite = new Image();
             tempSprite.src = themeStart;

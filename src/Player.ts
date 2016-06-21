@@ -372,11 +372,13 @@ export default class Player extends Unit
             if (bg.getSpriteTheme(i) == Theme.THEME_BEACH) {
                 var sprite    = bg.getSprite(i),
                     spritePos = bg.getPosition(i),
-                    edge      = spritePos.y + (sprite.height - this.getSprite().height * 1.1);
+                    top       = spritePos.y,
+                    bottom    = spritePos.y + (sprite.height - this.getSprite().height);
 
-                if (this.getPositionY() < edge) {
+                if (this.getPositionY() < bottom && this.getPositionY() > top) {
                     var goal = Math.floor((Lane_Position[0] - (this.getSprite().width / 2) / 2) * 1.1);
-                    if (this.getPositionX() <= goal) 
+
+                    if (this.getPositionX() <= goal)
                         this.die();
                 }
             }
