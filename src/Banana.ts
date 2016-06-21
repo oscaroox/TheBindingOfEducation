@@ -2,12 +2,15 @@ import Fruit from './Fruit';
 
 export default class Banana extends Fruit
 {
-    constructor(x: number, y: number)
+    constructor(id: number, x: number)
     {
         // static starting values
-        var sprite = "banana.png",
-            points = 5;
+        var sprite = "images/banana.png",
+            points = 5,
+            y = 0 - 1000;
 
-        super(x, y, sprite, points);
+        super(id, x, y, sprite, points);
+
+        this.setInitPosition();
     }
 }

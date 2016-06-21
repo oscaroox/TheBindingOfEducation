@@ -35,13 +35,21 @@ abstract class __Object
     getPositionX():number { return this._x; }
 
     // return only the y coordinate
-    getPositionY():number { return this._y; }
+    getPositionY():number { return this._y }
 
     // set position of unit
     setPosition(x:number, y:number)
     {
         this._x = x;
         this._y = y;
+    }
+    
+    updatePosition(speed: number)
+    {
+        var x = this._x,
+            y = this._y + speed;
+        
+        this.setPosition(x, y);
     }
     
     getSprite():HTMLImageElement { return this._sprite; }
@@ -64,7 +72,7 @@ abstract class __Object
     }
 
     // draw enemy on screen
-    draw():void
+    protected draw():void
     {
         this._stage.drawImage(this._sprite, this._x, this._y);
     }

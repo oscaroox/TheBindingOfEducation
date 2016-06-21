@@ -1,22 +1,22 @@
 export var canvas = <HTMLCanvasElement> document.getElementById('canvas');
 export var ctx: CanvasRenderingContext2D = canvas.getContext('2d');
 
+<<<<<<< HEAD
 export var BACKGROUND_SPEED = 5; 
+=======
+export var BACKGROUND_SPEED = 5;
+export var PLAYER_SPEED = 80;
+
+>>>>>>> origin/master
 
 export enum Animation_State {
-    ANIM_IDLE,
+    ANIM_IDLE = 0,
     ANIM_RUN,
     ANIM_JUMP
 }
 
-export enum Input_State {
-    INPUT_NONE,
-    INPUT_TOUCH,
-    INPUT_CLICK
-}
-
 export enum Click_Position {
-    POS_LEFT,
+    POS_LEFT = 0,
     POS_RIGHT
 }
 
@@ -27,9 +27,15 @@ export enum Lane {
 }
 
 export var Lane_Position = [
+<<<<<<< HEAD
     510,
     639,
     760
+=======
+    710,
+    840,
+    970
+>>>>>>> origin/master
 ];
 
 export var enemiesAmount = 2;
@@ -38,6 +44,7 @@ export enum Enemies {
     ENEMY_PIZZA
 }
 
+<<<<<<< HEAD
 export var fruitAmount = 2;
 export enum Fruits {
     FRUIT_BANANA = 1,
@@ -55,3 +62,12 @@ export enum Fruits {
 //         sprite: 'images/apple.jpg'
 //     }
 // };
+=======
+export var fruitAmount = 4;
+export enum Fruits{
+    FRUIT_BANANA = 1,
+    FRUIT_APPLE,
+    FRUIT_STRAWBERRY,
+    FRUIT_WATERMELON
+}
+>>>>>>> origin/master
