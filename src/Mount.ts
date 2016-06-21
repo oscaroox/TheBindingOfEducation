@@ -14,12 +14,6 @@ export default class Mount extends Object
     private _name: string;
     private _scale: number;
 
-    // private _spawnHeight: number;
-    // private _spawnWidth: number;
-    //
-    // private _spriteWidth: number;
-    // private _spriteHeight: number;
-
     constructor(name: string, sprite: string, x: number, y: number, laneID: Lane, gameScene: GameScene)
     {
         super(x, y, sprite, laneID);
@@ -31,11 +25,6 @@ export default class Mount extends Object
         this._spriteDrawTimeDiff = 150;
         this._scale = 1.0;
 
-        // this._spriteWidth  = this.getSprite().width;
-        // this._spriteHeight = this.getSprite().height;
-        // this._spawnWidth   = this._spriteWidth;
-        // this._spawnHeight  = this._spriteHeight;
-
         this._gameScene = gameScene;
 
         this.setInitPosition();
@@ -45,8 +34,6 @@ export default class Mount extends Object
     public setScale(scale: number) { this._scale = scale; }
 
 
-    // public setWidth(w: number):void { this._spriteWidth = w; }
-    // public setHeight(h: number):void { this._spriteHeight = h; }
 
     protected setInitPosition():void
     {
@@ -129,14 +116,12 @@ export default class Mount extends Object
             } else {
                 this.updatePosition(this._gameScene._gameSpeed);
             }
-
-            // super.update();
+            
             this.draw();
         } else {
             if (this._gameScene.getPlayer()._isMounted)
                 this.deathAnimation();
             else
-                // super.update();
                 this.draw();
         }
 
