@@ -6,3 +6,5 @@ node_modules/
 
 *.map
 public/assets/js/game.js
+
+npm-debug.log
