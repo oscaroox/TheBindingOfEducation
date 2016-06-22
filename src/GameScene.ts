@@ -227,8 +227,12 @@ export default class GameScene
     {
         var curHighscore = parseInt(localStorage.getItem('highscore')),
             curScore     = this._score.getScore();
+        
+        if (localStorage.getItem('highscore') == null)
+            localStorage.setItem('highscore', '0');
 
-        if (curScore > curHighscore) localStorage.setItem('highscore', String(this._score.getScore()));
+        if (curScore > curHighscore) 
+            localStorage.setItem('highscore', String(this._score.getScore()));
     }
     
     // update current game scene
